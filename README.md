@@ -6,13 +6,13 @@
 
 ## 🔗 Acesso rápido
 
-- 📲 **Protótipo (Figma):** https://www.figma.com/design/DGb7c0RmOmOCkEB8EFKvUK/ROOMI%C3%8A?node-id=0-1&t=z5ZfftR03nRm7SOH-1  
-- 📄 **Documento de Requisitos (V1):** https://docs.google.com/document/d/1xKwrXNIDa-8gP6puTsLHHXviSZ059ORM33PhJtQTdDY/edit?usp=drive_link  
-- 🗓️ **Cronograma / Sprints (V1):** https://docs.google.com/spreadsheets/d/1PyaJ2X6koHX5hzBK8WGPBXVN5_KcumqvEyi_-TPyL_s/edit?usp=drive_link  
-- 🗂️ **Drive do Projeto:** https://drive.google.com/drive/u/1/folders/18dUYSGzleAyHZLVjhjfoBI5Kx5x08U2s  
-- 🧭 **Notion (controle do projeto e processos):** https://www.notion.so/HDC-Home-2714386361d28090a9f2ff1c101d4c72?source=copy_link  
-- 💻 **Repositório (GitHub):** https://github.com/WendelRodriguesz/Roomie_Android  
-- 📞 **Reuniões:** Quartas, 19:00 — meet.google.com/sbv-vkqh-ut
+* 📲 **Protótipo (Figma):** [Abrir protótipo no Figma](https://www.figma.com/design/DGb7c0RmOmOCkEB8EFKvUK/ROOMI%C3%8A?node-id=0-1&t=z5ZfftR03nRm7SOH-1)
+* 📄 **Documento de Requisitos (V1):** [Abrir Documento de Requisitos (V1)](https://docs.google.com/document/d/1xKwrXNIDa-8gP6puTsLHHXviSZ059ORM33PhJtQTdDY/edit?usp=drive_link)
+* 🗓️ **Cronograma / Sprints (V1):** [Abrir Cronograma / Sprints (V1)](https://docs.google.com/spreadsheets/d/1PyaJ2X6koHX5hzBK8WGPBXVN5_KcumqvEyi_-TPyL_s/edit?usp=drive_link)
+* 🗂️ **Drive do Projeto:** [Abrir pasta no Google Drive](https://drive.google.com/drive/u/1/folders/18dUYSGzleAyHZLVjhjfoBI5Kx5x08U2s)
+* 🧭 **Notion (controle do projeto e processos):** [Abrir workspace no Notion](https://www.notion.so/HDC-Home-2714386361d28090a9f2ff1c101d4c72?source=copy_link)
+* 💻 **Repositório (GitHub):** [Abrir Roomie_Android no GitHub](https://github.com/WendelRodriguesz/Roomie_Android)
+* 📞 **Reuniões:** Quartas, 19:00 — [Entrar no Google Meet (sbv-vkqh-ut)](https://meet.google.com/sbv-vkqh-ut)
 
 ---
 
