@@ -1,6 +1,5 @@
 package com.project.roomie.infra.persistence.entity;
 
-import com.project.roomie.core.model.enums.Role;
 import com.project.roomie.infra.persistence.entity.enums.RoleJpaEntity;
 import jakarta.persistence.DiscriminatorValue;
 import jakarta.persistence.Entity;
@@ -13,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-@DiscriminatorValue("RECEPCIONISTA")
+@DiscriminatorValue("INTERESSADO")
 @Entity
 public class UsuarioInteressadoJpaEntity extends UsuarioJpaEntity{
 

@@ -12,7 +12,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 @Getter
 @Setter
-@DiscriminatorValue("RECEPCIONISTA")
+@DiscriminatorValue("OFERTANTE")
 @Entity
 public class UsuarioOfertanteJpaEntity extends UsuarioJpaEntity{
 

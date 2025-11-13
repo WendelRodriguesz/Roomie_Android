@@ -1,13 +1,24 @@
 package com.project.roomie.mapper;
 
 import com.project.roomie.core.model.UsuarioInteressado;
-import com.project.roomie.dto.UsuarioInteressadoDTO;
+import com.project.roomie.dto.create.UsuarioInteressadoCreateDTO;
+import com.project.roomie.dto.response.UsuarioInteressadoResponseDTO;
 import com.project.roomie.infra.persistence.entity.UsuarioInteressadoJpaEntity;
+import com.project.roomie.util.DateFormatter;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = { DateFormatter.class })
 public interface UsuarioInteressadoMapper {
 
-    UsuarioInteressado DTOtoModel(UsuarioInteressadoDTO usuarioInteressadoDTO);
+    @Mapping(source = "data_de_nascimento", target = "data_de_nascimento", qualifiedByName = "toLocalDate")
+    UsuarioInteressado CreateDTOtoModel(UsuarioInteressadoCreateDTO usuarioInteressadoCreateDTO);
+
+    @Mapping(target = "authorities", ignore = true)
     UsuarioInteressadoJpaEntity ModeltoJpaEntity(UsuarioInteressado usuarioInteressado);
+
+    UsuarioInteressado JpaEntitytoModel(UsuarioInteressadoJpaEntity usuarioInteressadoJpaEntity);
+
+    @Mapping(source = "data_de_nascimento", target = "data_de_nascimento", qualifiedByName = "toStringDate")
+    UsuarioInteressadoResponseDTO ModeltoResponseDTO(UsuarioInteressado usuarioInteressado);
 }
