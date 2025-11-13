@@ -1,0 +1,2 @@
+include ':roomie'
+project('roomie').projectDir = new File(rootDir, 'frontend/')
