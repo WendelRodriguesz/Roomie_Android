@@ -13,6 +13,5 @@ public class UsuarioOfertanteResponseDTO {
 
     private String nome;
     private String email;
-    private String senha;
     private String data_de_nascimento;
 }
