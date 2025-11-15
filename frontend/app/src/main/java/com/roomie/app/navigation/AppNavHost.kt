@@ -12,6 +12,7 @@ import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.roomie.app.core.ui.components.BottomBar
 import com.roomie.app.feature.home.ui.HomeScreen
+import com.roomie.app.feature.welcome_screen.ui.WelcomeScreen
 
 @Composable
 fun AppNavHost() {
@@ -38,6 +39,7 @@ fun AppNavHost() {
             modifier = Modifier.padding(inner)
         ) {
             composable(Routes.HOME)   { HomeScreen() }
+            composable(Routes.WELCOME_SCREEN) { WelcomeScreen() }
             // composable(Routes.CHAT)   { ChatScreen() }
             // composable(Routes.LIKES)  { LikesScreen() }
             // composable(Routes.NOTIFS) { NotifsScreen() }
