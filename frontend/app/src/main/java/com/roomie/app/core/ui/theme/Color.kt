@@ -1,4 +1,4 @@
-package com.example.roomie_android.ui.theme
+package com.roomie.app.core.ui.theme
 
 import androidx.compose.ui.graphics.Color
 
