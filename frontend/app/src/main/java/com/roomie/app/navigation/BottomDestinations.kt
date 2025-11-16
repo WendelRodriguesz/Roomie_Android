@@ -15,9 +15,5 @@ data class BottomDest(
 )
 
 val bottomDestinations = listOf(
-    BottomDest(Routes.HOME,  Icons.Filled.Home,          "Home"),
-    BottomDest(Routes.CHAT,  Icons.Filled.Chat,          "Conversas"),
-    BottomDest(Routes.LIKES, Icons.Filled.Favorite,      "Likes"),
-    BottomDest(Routes.NOTIFS,Icons.Filled.Notifications, "Notificações"),
-    BottomDest(Routes.ACCOUNT, Icons.Filled.Person,      "Conta")
+    BottomDest(Routes.HOME,  Icons.Filled.Home,          "Home")
 )
