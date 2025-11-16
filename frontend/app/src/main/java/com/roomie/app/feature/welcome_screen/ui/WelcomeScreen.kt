@@ -17,7 +17,7 @@ import com.roomie.app.R
 import com.roomie.app.core.ui.components.GradientButton
 
 @Composable
-fun WelcomeScreen() {
+fun WelcomeScreen(onClick: () -> Unit = {}) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -64,7 +64,7 @@ fun WelcomeScreen() {
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 16.dp, vertical = 24.dp),
             buttonTextSize = 20,
-            onClick = {}
+            onClick = {onClick()}
         )
     }
 }
