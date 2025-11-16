@@ -13,11 +13,13 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.roomie.app.R
 import com.roomie.app.core.ui.components.GradientButton
+import com.roomie.app.navigation.Routes
 
 @Composable
-fun WelcomeScreen(onClick: () -> Unit = {}) {
+fun WelcomeScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -64,7 +66,7 @@ fun WelcomeScreen(onClick: () -> Unit = {}) {
                 .align(Alignment.BottomCenter)
                 .padding(horizontal = 16.dp, vertical = 24.dp),
             buttonTextSize = 20,
-            onClick = {onClick()}
+            onClick = {navController.navigate(Routes.LOGIN)}
         )
     }
 }
