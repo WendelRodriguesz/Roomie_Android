@@ -15,17 +15,15 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.roomie.app.R
 import com.roomie.app.core.ui.components.GradientButton
 import com.roomie.app.core.ui.components.RoomieTextField
 import com.roomie.app.core.ui.theme.Pink
+import com.roomie.app.navigation.Routes
 
 @Composable
-fun LoginScreen(
-    onLoginClick: () -> Unit = {},
-    onForgotPasswordClick: () -> Unit = {},
-    onRegisterClick: () -> Unit = {}
-) {
+fun LoginScreen(navController: NavController) {
     var email by remember { mutableStateOf("") }
     var senha by remember { mutableStateOf("") }
     var rememberMe by remember { mutableStateOf(false) }
@@ -102,7 +100,7 @@ fun LoginScreen(
                 text = "Esqueceu sua senha?",
                 fontSize = 12.sp,
                 color = Pink,
-                modifier = Modifier.clickable { onForgotPasswordClick() }
+                modifier = Modifier.clickable {  }
             )
         }
 
@@ -114,7 +112,7 @@ fun LoginScreen(
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
-            onClick = onLoginClick
+            onClick = {}
         )
 
         Spacer(Modifier.height(10.dp))
@@ -129,7 +127,7 @@ fun LoginScreen(
                 color = Pink,
                 fontWeight = FontWeight.Bold,
                 fontSize = 13.sp,
-                modifier = Modifier.clickable { onRegisterClick() }
+                modifier = Modifier.clickable { navController.navigate(Routes.REGISTER) }
             )
         }
     }

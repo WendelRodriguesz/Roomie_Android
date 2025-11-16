@@ -13,6 +13,7 @@ import androidx.navigation.compose.rememberNavController
 import com.roomie.app.core.ui.components.BottomBar
 import com.roomie.app.feature.home.ui.HomeScreen
 import com.roomie.app.feature.login.ui.LoginScreen
+import com.roomie.app.feature.register.ui.RegisterScreen
 import com.roomie.app.feature.welcome_screen.ui.WelcomeScreen
 
 @Composable
@@ -44,13 +45,16 @@ fun AppNavHost(startDestination: String) {
             composable(Routes.HOME)   { HomeScreen() }
 
             composable(Routes.WELCOME_SCREEN) {
-                WelcomeScreen(
-                    onClick = { navController.navigate(Routes.LOGIN) }
+                WelcomeScreen(navController
                 )
             }
 
             composable(Routes.LOGIN) {
-                LoginScreen()
+                LoginScreen(navController)
+            }
+
+            composable(Routes.REGISTER) {
+                RegisterScreen(navController)
             }
         }
     }
