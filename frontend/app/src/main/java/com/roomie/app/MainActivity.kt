@@ -9,6 +9,7 @@ import com.roomie.app.navigation.AppNavHost
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 import com.roomie.app.feature.welcome_screen.ui.WelcomeScreen
+import com.roomie.app.navigation.Routes
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -19,14 +20,15 @@ class MainActivity : ComponentActivity() {
         setContent {
             Roomie_AndroidTheme {
                 Surface {
-                    var loggedIn : Boolean = true
+                    var loggedIn : Boolean = false // simulando
 
-                    if(loggedIn) {
-                        AppNavHost()
+                    val startDestination = if (loggedIn) {
+                        Routes.HOME
+                    } else {
+                        Routes.WELCOME_SCREEN
                     }
-                    else {
-                        WelcomeScreen()
-                    }
+
+                    AppNavHost(startDestination)
                 }
             }
         }
