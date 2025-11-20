@@ -111,7 +111,8 @@ fun LoginScreen(navController: NavController) {
             buttonTextSize = 18,
             modifier = Modifier
                 .fillMaxWidth()
-                .height(50.dp),
+                .height(50.dp)
+                .clickable { navController.navigate(Routes.HOME)},
             onClick = {}
         )
 
