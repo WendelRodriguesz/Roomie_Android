@@ -14,7 +14,6 @@ public interface UsuarioOfertanteMapper {
     @Mapping(source = "data_de_nascimento", target = "data_de_nascimento", qualifiedByName = "toLocalDate")
     UsuarioOfertante CreateDTOtoModel(UsuarioOfertanteCreateDTO usuarioOfertanteCreateDTO);
 
-    @Mapping(target = "authorities", ignore = true)
     UsuarioOfertanteJpaEntity ModeltoJpaEntity(UsuarioOfertante usuarioOfertante);
 
     UsuarioOfertante JpaEntitytoModel(UsuarioOfertanteJpaEntity usuarioOfertanteJpaEntity);
