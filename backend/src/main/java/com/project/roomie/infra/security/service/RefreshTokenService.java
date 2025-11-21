@@ -5,8 +5,6 @@ import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
 import com.auth0.jwt.exceptions.JWTVerificationException;
 import com.project.roomie.core.model.Usuario;
-import com.project.roomie.ports.out.UsuarioPortOut;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -17,17 +15,8 @@ import java.time.ZoneOffset;
 @Service
 public class RefreshTokenService {
 
-    private final TokenService tokenService;
-    private final UsuarioPortOut usuarioPortOut;
     @Value("${api.security.token.secret}")
     private String secret;
-
-    @Autowired
-    public RefreshTokenService(TokenService tokenService,
-                               UsuarioPortOut usuarioPortOut){
-        this.tokenService = tokenService;
-        this.usuarioPortOut = usuarioPortOut;
-    }
 
     public String generateRefreshToken(Usuario usuario) {
         try {
@@ -59,17 +48,5 @@ public class RefreshTokenService {
 
     private Instant getRefreshExpirationDate() {
         return LocalDateTime.now().plusDays(30).toInstant(ZoneOffset.of("-03:00"));
-    }
-
-    public String generateNewAccessTokenFromRefresh(String refreshToken) {
-
-        String username = validateRefreshToken(refreshToken);
-
-        if (username == null || username.isBlank()) {
-            throw new RuntimeException("Refresh token inválido ou expirado.");
-        }
-
-        Usuario usuario = usuarioPortOut.findByEmail(username);
-        return tokenService.generatedToken(usuario);
     }
 }
