@@ -4,13 +4,12 @@ on:
   push:
     branches:
       - main
-      - developer
-      - feat/ci-backend
+      - dev
 
   pull_request:
     branches:
       - main
-      - developer
+      - dev
 
 jobs:
   build:
@@ -32,10 +31,6 @@ jobs:
         run: |
           docker-compose -f docker-compose.yml up --build -d
           sleep 30
-
-      #      - name: Run Tests
-      #        run: |
-      #          curl --fail localhost:8080/api/produtos/visualizarTodos || exit 1
 
       - name: Stop and remove containers
         run: |
