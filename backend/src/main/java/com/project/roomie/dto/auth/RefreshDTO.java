@@ -1,6 +1,5 @@
-package com.project.roomie.dto.response;
+package com.project.roomie.dto.auth;
 
-import com.project.roomie.core.model.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,9 +9,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @Getter
 @Setter
-public class AuthResponseDTO {
+public class RefreshDTO {
 
-    private String token;
     private String refresh_token;
-    private Role role;
 }
