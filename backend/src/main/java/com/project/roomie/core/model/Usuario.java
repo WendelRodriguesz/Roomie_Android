@@ -17,6 +17,7 @@ public class Usuario implements UserDetails {
     private String senha;
     private LocalDate data_de_nascimento;
     private Role role;
+    private String foto_de_perfil;
 
     public Usuario() {
     }
@@ -28,6 +29,16 @@ public class Usuario implements UserDetails {
         this.senha = senha;
         this.data_de_nascimento = data_de_nascimento;
         this.role = role;
+    }
+
+    public Usuario(Integer id, String nome, String email, String senha, LocalDate data_de_nascimento, Role role, String foto_de_perfil) {
+        this.id = id;
+        this.nome = nome;
+        this.email = email;
+        this.senha = senha;
+        this.data_de_nascimento = data_de_nascimento;
+        this.role = role;
+        this.foto_de_perfil = foto_de_perfil;
     }
 
     @Override
@@ -111,5 +122,13 @@ public class Usuario implements UserDetails {
 
     public void setRole(Role role) {
         this.role = role;
+    }
+
+    public String getFoto_de_perfil(){
+        return foto_de_perfil;
+    }
+
+    public void setFoto_de_perfil(String foto_de_perfil) {
+        this.foto_de_perfil = foto_de_perfil;
     }
 }

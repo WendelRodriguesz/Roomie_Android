@@ -9,6 +9,8 @@ import com.project.roomie.ports.out.UsuarioInteressadoPortOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.Optional;
+
 @Repository
 public class UsuarioInteressadoAdapterOut implements UsuarioInteressadoPortOut {
 
@@ -25,5 +27,13 @@ public class UsuarioInteressadoAdapterOut implements UsuarioInteressadoPortOut {
     @Override
     public UsuarioInteressado save(UsuarioInteressadoJpaEntity usuarioInteressadoJpaEntity){
         return usuarioInteressadoMapper.JpaEntitytoModel(usuarioInteressadoRepository.save(usuarioInteressadoJpaEntity));
+    }
+
+    @Override
+    public UsuarioInteressado findById(Integer id){
+        UsuarioInteressadoJpaEntity usuarioInteressadoJpaEntity = usuarioInteressadoRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        return usuarioInteressadoMapper.JpaEntitytoModel(usuarioInteressadoJpaEntity);
     }
 }

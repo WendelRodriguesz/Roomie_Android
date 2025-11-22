@@ -1,10 +1,12 @@
 package com.project.roomie.core.service;
 
+import com.project.roomie.core.model.Usuario;
 import com.project.roomie.core.model.UsuarioInteressado;
 import com.project.roomie.mapper.UsuarioInteressadoMapper;
 import com.project.roomie.ports.in.UsuarioInteressadoPortIn;
 import com.project.roomie.ports.out.BucketPortOut;
 import com.project.roomie.ports.out.UsuarioInteressadoPortOut;
+import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -38,7 +40,7 @@ public class UsuarioInteressadoService implements UsuarioInteressadoPortIn {
     }
 
     @Override
-    public ResponseEntity<String> uploadFotoDePerfil(MultipartFile file, Integer IdUsuario){
+    public ResponseEntity<String> uploadFotoDePerfil(MultipartFile file, Integer idUsuario){
 
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("Arquivo vazio");
@@ -46,7 +48,8 @@ public class UsuarioInteressadoService implements UsuarioInteressadoPortIn {
 
         try {
             String url = bucketPortOut.upload(file);
-            // Salvar no banco
+            Usuario usuario = usuarioInteressadoPortOut.findById(idUsuario);
+            usuario.setFoto_de_perfil(url);
             return ResponseEntity.ok(url);
 
         } catch (Exception e) {
