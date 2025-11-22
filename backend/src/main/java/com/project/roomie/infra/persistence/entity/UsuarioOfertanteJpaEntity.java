@@ -16,7 +16,7 @@ import java.time.LocalDate;
 @Entity
 public class UsuarioOfertanteJpaEntity extends UsuarioJpaEntity{
 
-    public UsuarioOfertanteJpaEntity(Integer id, String nome, String email, String senha, LocalDate data_de_nascimento, RoleJpaEntity role){
-        super(id, nome, email, senha, data_de_nascimento, role);
+    public UsuarioOfertanteJpaEntity(Integer id, String nome, String email, String senha, LocalDate data_de_nascimento, RoleJpaEntity role, String foto_de_perfil){
+        super(id, nome, email, senha, data_de_nascimento, role, foto_de_perfil);
     }
 }

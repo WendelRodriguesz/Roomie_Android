@@ -22,15 +22,6 @@ public class Usuario implements UserDetails {
     public Usuario() {
     }
 
-    public Usuario(Integer id, String nome, String email, String senha, LocalDate data_de_nascimento, Role role) {
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
-        this.senha = senha;
-        this.data_de_nascimento = data_de_nascimento;
-        this.role = role;
-    }
-
     public Usuario(Integer id, String nome, String email, String senha, LocalDate data_de_nascimento, Role role, String foto_de_perfil) {
         this.id = id;
         this.nome = nome;

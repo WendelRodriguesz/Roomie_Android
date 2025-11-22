@@ -43,15 +43,6 @@ public class UsuarioJpaEntity {
     @Column(nullable = false, length = 50, insertable = false, updatable = false)
     private RoleJpaEntity role;
 
-    @Column(length = 255)
+    @Column(length = 500)
     private String foto_de_perfil;
-
-    public UsuarioJpaEntity(Integer id, String nome, String email, String senha, LocalDate data_de_nascimento, RoleJpaEntity role) {
-        this.id = id;
-        this.nome = nome;
-        this.email = email;
-        this.senha = senha;
-        this.data_de_nascimento = data_de_nascimento;
-        this.role = role;
-    }
 }

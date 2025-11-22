@@ -5,5 +5,5 @@ CREATE TABLE usuarios(
     senha VARCHAR(255) NOT NULL,
     role VARCHAR(50) NOT NULL,
     data_de_nascimento DATE NOT NULL,
-    foto_de_perfil VARCHAR(255)
+    foto_de_perfil VARCHAR(500)
 );
