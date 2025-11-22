@@ -42,7 +42,7 @@ public class SecurityConfigurationsProd {
 
                         // Usuário Ofertante
                         .requestMatchers(HttpMethod.POST, "/api/usuarioOfertante/cadastrar").permitAll()
-                        //.requestMatchers(HttpMethod.POST, "/api/usuarioOfertante/cadastrar").hasAnyRole("OFERTANTE")
+                        .requestMatchers(HttpMethod.POST, "/api/usuarioOfertante/uploadFotoDePerfil/{idUsuario}").hasAnyRole("OFERTANTE")
                 )
 
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
