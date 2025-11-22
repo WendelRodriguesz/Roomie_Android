@@ -2,6 +2,7 @@ package com.project.roomie.adapters.out;
 
 import com.project.roomie.core.model.UsuarioOfertante;
 import com.project.roomie.infra.persistence.entity.UsuarioOfertanteJpaEntity;
+import com.project.roomie.infra.persistence.entity.UsuarioOfertanteJpaEntity;
 import com.project.roomie.infra.persistence.repository.UsuarioOfertanteRepository;
 import com.project.roomie.mapper.UsuarioOfertanteMapper;
 import com.project.roomie.ports.out.UsuarioOfertantePortOut;
@@ -24,5 +25,13 @@ public class UsuarioOfertanteAdapterOut implements UsuarioOfertantePortOut {
     @Override
     public UsuarioOfertante save(UsuarioOfertanteJpaEntity usuarioOfertanteJpaEntity){
         return usuarioOfertanteMapper.JpaEntitytoModel(usuarioOfertanteRepository.save(usuarioOfertanteJpaEntity));
+    }
+
+    @Override
+    public UsuarioOfertante findById(Integer id){
+        UsuarioOfertanteJpaEntity usuarioOfertanteJpaEntity = usuarioOfertanteRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        return usuarioOfertanteMapper.JpaEntitytoModel(usuarioOfertanteJpaEntity);
     }
 }
