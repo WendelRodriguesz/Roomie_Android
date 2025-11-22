@@ -4,10 +4,9 @@ import com.project.roomie.core.service.UsuarioInteressadoService;
 import com.project.roomie.dto.create.UsuarioInteressadoCreateDTO;
 import com.project.roomie.dto.response.UsuarioInteressadoResponseDTO;
 import com.project.roomie.mapper.UsuarioInteressadoMapper;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("/api/usuarioInteressado")
@@ -28,5 +27,10 @@ public class UsuarioInteressadoAdapterIn {
                 usuarioInteressadoService.cadastrar(
                         usuarioInteressadoMapper.CreateDTOtoModel(
                                 usuarioInteressadoCreateDTO)));
+    }
+
+    @PostMapping("/uploadFotoDePerfil/{idUsuario}")
+    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, @PathVariable Integer idUsuario) {
+        return usuarioInteressadoService.uploadFotoDePerfil(file, idUsuario);
     }
 }

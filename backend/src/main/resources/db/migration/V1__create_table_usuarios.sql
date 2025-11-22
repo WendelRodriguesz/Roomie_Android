@@ -4,5 +4,6 @@ CREATE TABLE usuarios(
     email VARCHAR(50) NOT NULL UNIQUE,
     senha VARCHAR(255) NOT NULL,
     role VARCHAR(50) NOT NULL,
-    data_de_nascimento DATE NOT NULL
+    data_de_nascimento DATE NOT NULL,
+    foto_de_perfil VARCHAR(500)
 );
