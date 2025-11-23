@@ -32,34 +32,38 @@ android {
         targetCompatibility = JavaVersion.VERSION_17
     }
     kotlinOptions { jvmTarget = "17" }
+
     buildFeatures { compose = true }
 }
 
 dependencies {
-    // BOM do Compose via catálogo (trava versões coerentes entre libs Compose)
+    // BOM do Compose (trava versões coerentes)
+    implementation("androidx.core:core-splashscreen:1.2.0")
+    implementation("com.google.android.material:material:1.13.0")
     implementation(platform(libs.androidx.compose.bom))
 
-    // Compose + Material3 + Navigation Compose
+    // Compose + Material3 + Navigation
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.material3)
-    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.compose.foundation)
     implementation(libs.androidx.compose.runtime)
+    implementation(libs.androidx.material3)
+    implementation(libs.androidx.navigation.compose)
     implementation(libs.androidx.activity.compose)
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
-    implementation(libs.androidx.core.splashscreen)
 
-    // Ícones estendidos (Material)
+    // Ícones estendidos (entra no BOM)
     implementation("androidx.compose.material:material-icons-extended")
+
+    // Preview (obrigatório para o painel de Preview do Studio)
+    implementation("androidx.compose.ui:ui-tooling-preview")
+    debugImplementation("androidx.compose.ui:ui-tooling")
 
     // Testes
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-    debugImplementation(libs.androidx.compose.ui.tooling)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
 }
