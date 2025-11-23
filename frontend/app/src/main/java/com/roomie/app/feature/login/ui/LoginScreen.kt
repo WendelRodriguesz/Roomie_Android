@@ -3,23 +3,27 @@ package com.roomie.app.feature.login.ui
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.roomie.app.R
 import com.roomie.app.core.ui.components.GradientButton
 import com.roomie.app.core.ui.components.RoomieTextField
-import com.roomie.app.core.ui.theme.Pink
+import com.roomie.app.core.ui.preview.RoomiePreview
+import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 import com.roomie.app.navigation.Routes
 
 @Composable
@@ -31,14 +35,13 @@ fun LoginScreen(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 28.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center
     ) {
-
         Image(
-            painter = painterResource(id = R.drawable.roomie_logo_cortada),
+            painter = painterResource(R.drawable.logo),
             contentDescription = "Roomie Logo",
             modifier = Modifier.size(160.dp)
         )
@@ -49,13 +52,13 @@ fun LoginScreen(navController: NavController) {
             text = "Login",
             fontSize = 26.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Black
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Text(
             text = "faça login para acessar sua conta",
             fontSize = 14.sp,
-            color = Color.Gray,
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center
         )
 
@@ -99,7 +102,7 @@ fun LoginScreen(navController: NavController) {
             Text(
                 text = "Esqueceu sua senha?",
                 fontSize = 12.sp,
-                color = Pink,
+                color = MaterialTheme.colorScheme.primary,
                 modifier = Modifier.clickable {  }
             )
         }
@@ -125,11 +128,22 @@ fun LoginScreen(navController: NavController) {
             )
             Text(
                 text = "Cadastre-se",
-                color = Pink,
+                color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold,
                 fontSize = 13.sp,
                 modifier = Modifier.clickable { navController.navigate(Routes.REGISTER) }
             )
+        }
+    }
+}
+
+@RoomiePreview
+@Composable
+private fun LoginScreenPreview(){
+    Roomie_AndroidTheme (dynamicColor = false){
+        Surface {
+            val navController = rememberNavController()
+            LoginScreen(navController)
         }
     }
 }

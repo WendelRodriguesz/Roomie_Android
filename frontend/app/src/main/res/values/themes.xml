@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="Theme.MySplashScreen" parent="Theme.SplashScreen">
-        <item name="windowSplashScreenBackground">@color/white</item>
+    <style name="Theme.Roomie.Splash" parent="Theme.SplashScreen">
+        <item name="windowSplashScreenBackground">@color/material_on_background_disabled</item>
         <item name="windowSplashScreenAnimatedIcon">@drawable/roomie_logo</item>
-        <item name="postSplashScreenTheme">@style/Theme.Roomie_Android</item>
+        <item name="postSplashScreenTheme">@style/Theme.Roomie.Splash</item>
     </style>
     <style name="Theme.Roomie_Android" parent="android:Theme.Material.Light.NoActionBar" />
 </resources>

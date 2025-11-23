@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -25,9 +27,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.roomie.app.core.ui.components.GradientButton
 import com.roomie.app.core.ui.components.RoomieTextField
+import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.Pink
+import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 import com.roomie.app.navigation.Routes
 
 @Composable
@@ -41,7 +46,7 @@ fun RegisterScreen(navController: NavController) {
 
     Column(modifier = Modifier
         .fillMaxSize()
-        .background(Color.White)
+        .background(MaterialTheme.colorScheme.background)
         .padding(horizontal = 28.dp),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center) {
@@ -50,13 +55,13 @@ fun RegisterScreen(navController: NavController) {
             text = "Cadastre-se",
             fontSize = 28.sp,
             fontWeight = FontWeight.Bold,
-            color = Color.Black
+            color = MaterialTheme.colorScheme.onBackground
         )
 
         Text(
             text = "Encontre o colega de quarto perfeito para você!",
             fontSize = 14.sp,
-            color = Color.Gray,
+            color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center
         )
 
@@ -127,11 +132,22 @@ fun RegisterScreen(navController: NavController) {
             )
             Text(
                 text = "Faça Login",
-                color = Pink,
+                color = MaterialTheme.colorScheme.primary,
                 fontWeight = FontWeight.Bold,
                 fontSize = 13.sp,
                 modifier = Modifier.clickable { navController.navigate(Routes.LOGIN) }
             )
+        }
+    }
+}
+
+@RoomiePreview
+@Composable
+private fun RegisterScreenPreview(){
+    Roomie_AndroidTheme (dynamicColor = false){
+        Surface {
+            val navController = rememberNavController()
+            RegisterScreen(navController)
         }
     }
 }
