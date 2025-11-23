@@ -17,7 +17,7 @@ import com.roomie.app.navigation.Routes
 @Composable
 fun BottomBar(selectedRoute: String?, onNavigate: (String) -> Unit) {
     NavigationBar (
-        containerColor = MaterialTheme.colorScheme.surfaceVariant,
+        containerColor = MaterialTheme.colorScheme.surface,
         tonalElevation = 0.dp
     ){
         bottomDestinations.forEach { dest ->
