@@ -2,20 +2,25 @@ package com.roomie.app.feature.welcome_screen.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
+import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import androidx.navigation.compose.rememberNavController
 import com.roomie.app.R
 import com.roomie.app.core.ui.components.GradientButton
+import com.roomie.app.core.ui.preview.RoomiePreview
+import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 import com.roomie.app.navigation.Routes
 
 @Composable
@@ -23,7 +28,7 @@ fun WelcomeScreen(navController: NavController) {
     Box(
         modifier = Modifier
             .fillMaxSize()
-            .background(Color.White)
+            .background(MaterialTheme.colorScheme.background)
             .padding(horizontal = 20.dp)
     ) {
         Column(
@@ -33,7 +38,7 @@ fun WelcomeScreen(navController: NavController) {
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(id = R.drawable.roomie_logo_cortada),
+                painter = painterResource(R.drawable.logo),
                 contentDescription = "Logo Roomie",
                 modifier = Modifier
                     .size(200.dp)
@@ -45,7 +50,7 @@ fun WelcomeScreen(navController: NavController) {
                 text = "Bem-vindo!",
                 fontSize = 28.sp,
                 fontWeight = FontWeight.Bold,
-                color = Color.Black,
+                color = MaterialTheme.colorScheme.onBackground,
                 textAlign = TextAlign.Center
             )
 
@@ -54,7 +59,7 @@ fun WelcomeScreen(navController: NavController) {
             Text(
                 text = "Encontre seu lar perfeito\ne pessoas incríveis para dividir",
                 fontSize = 18.sp,
-                color = Color.DarkGray,
+                color = MaterialTheme.colorScheme.onSurfaceVariant,
                 textAlign = TextAlign.Center
             )
         }
@@ -68,5 +73,16 @@ fun WelcomeScreen(navController: NavController) {
             buttonTextSize = 20,
             onClick = {navController.navigate(Routes.LOGIN)}
         )
+    }
+}
+
+@RoomiePreview
+@Composable
+private fun WelcomeScreenPreview(){
+    Roomie_AndroidTheme(dynamicColor = false) {
+        Surface {
+            val navController = rememberNavController()
+            WelcomeScreen(navController)
+        }
     }
 }
