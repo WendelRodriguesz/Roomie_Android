@@ -59,35 +59,31 @@ fun MatchCard(
 
             val isPreview = LocalInspectionMode.current
             val resName = listing.photos.firstOrNull()
+            val ctx = LocalContext.current
 
-            when {
-                // Preview: placeholder seguro
-                isPreview -> {
-                    Image(
-                        painter = painterResource(R.drawable.match1),
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                }
-                // Runtime: nome -> id (mock local por enquanto)
+
+            val painter = when {
+                isPreview -> painterResource(R.drawable.match1)
+                listing.localPhoto != null -> painterResource(listing.localPhoto!!)
                 !resName.isNullOrBlank() -> {
-                    val id = getDrawableId(resName)
-                    if (id != 0) {
-                        Image(
-                            painter = painterResource(id),
-                            contentDescription = null,
-                            modifier = Modifier.fillMaxSize().blur(8.dp),
-                            contentScale = ContentScale.Crop
-                        )
-                    } else {
-                        Box(Modifier.fillMaxSize().background(Color(0xFFE0E0E0)))
-                    }
+                    val id = ctx.resources.getIdentifier(resName, "drawable", ctx.packageName)
+                    if (id != 0) painterResource(id) else null
                 }
-                else -> Box(Modifier.fillMaxSize().background(Color(0xFFE0E0E0)))
+                else -> null
             }
 
-            // gradiente inferior p/ leitura
+            if (painter != null) {
+                Image(
+                    painter = painter,
+                    contentDescription = null,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            } else {
+                Box(Modifier.fillMaxSize().background(Color(0xFFE0E0E0)))
+            }
+
+
             Box(
                 Modifier
                     .fillMaxWidth()
@@ -100,7 +96,6 @@ fun MatchCard(
                     )
             )
 
-            // conteúdo textual
             Column(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
@@ -163,7 +158,6 @@ fun MatchCard(
                 }
             }
 
-            // zonas clicáveis laterais (prev/next)
             Row(Modifier.fillMaxSize()) {
                 Box(
                     Modifier
@@ -211,7 +205,7 @@ private fun MatchCardPreview() {
                 status = ListingStatus.ACTIVE,
                 createdInMillis = 0L,
                 tags = listOf("2 quartos", "Piscina", "Academia"),
-                photos = listOf("match1") // tem que existir em res/drawable
+                photos = listOf("match1")
             )
             MatchCard(mock, {}, {}, {})
         }

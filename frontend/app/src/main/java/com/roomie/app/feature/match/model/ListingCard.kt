@@ -18,5 +18,6 @@ data class ListingCard(
     val status: ListingStatus,
     val createdInMillis: Long,
     val tags: List<String> = emptyList(),
+    @androidx.annotation.DrawableRes val localPhoto: Int? = null,
     val photos: List<String> = emptyList()
 )
