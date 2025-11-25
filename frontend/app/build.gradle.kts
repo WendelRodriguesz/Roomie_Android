@@ -55,6 +55,9 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
 
+    implementation("io.coil-kt:coil-compose:2.6.0")
+
+
     // Ícones estendidos (entra no BOM)
     implementation("androidx.compose.material:material-icons-extended")
 
