@@ -26,6 +26,7 @@ import com.roomie.app.feature.match.presentation.MatchState
 import com.roomie.app.feature.match.ui.MatchRoute
 import com.roomie.app.feature.match.ui.MatchScreen
 import com.roomie.app.feature.notifications.ui.NotificationsScreen
+import com.roomie.app.feature.profile.model.UserMock
 import com.roomie.app.feature.register.ui.RegisterScreen
 import com.roomie.app.feature.welcome_screen.ui.WelcomeScreen
 
@@ -65,7 +66,7 @@ fun AppNavHost(startDestination: String) {
             composable(Routes.CHAT)   { ChatScreen() }
             composable(Routes.MATCH) { MatchRoute() }
             composable(Routes.NOTIFICATIONS)   { NotificationsScreen() }
-            composable(Routes.PROFILE)   { ProfileScreen() }
+            composable(Routes.PROFILE)   { ProfileScreen(UserMock.profileYou) }
             composable(Routes.WELCOME_SCREEN) { WelcomeScreen(navController) }
             composable(Routes.LOGIN) { LoginScreen(navController) }
             composable(Routes.REGISTER) { RegisterScreen(navController) }

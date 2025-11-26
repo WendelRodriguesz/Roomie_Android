@@ -22,7 +22,7 @@ private val DarkColorScheme = darkColorScheme(
     secondary = Color(0xFFDD8CA5),
     tertiary  = Color(0xFF009AFA),
     background = Color(0xFF373737),
-    surface    = Color(0xFF5A5A5A),
+    surface    = Color(0xFF474747),
     scrim      = Color(0xFFC6C6C6)
 )
 
@@ -30,8 +30,8 @@ private val LightColorScheme = lightColorScheme(
     primary   = Color(0xFF009AFA),
     secondary = Color(0xFF61AAE1),
     tertiary  = Color(0xFFFF5383),
-    background = Color(0xFFFFFFFF),
-    surface    = Color(0xFFDFDFDF),
+    background = Color(0xFFE3E6E8),
+    surface    = Color(0xFFFFFFFF),
     scrim      = Color(0xFF6A6A6A),
 )
 val darkLogo = R.drawable.logo
@@ -44,7 +44,7 @@ val RoomieGradient = Brush.horizontalGradient(
 data class RoomieAssets(@DrawableRes val logoRes: Int)
 
 private val LocalRoomieAssets = staticCompositionLocalOf {
-    RoomieAssets(logoRes = R.drawable.logo) // fallback
+    RoomieAssets(logoRes = R.drawable.logo)
 }
 
 object RoomieTheme {

@@ -31,14 +31,16 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
-    kotlinOptions { jvmTarget = "17" }
+    kotlinOptions { jvmTarget = "17"
+        freeCompilerArgs = listOf("-XXLanguage:+PropertyParamAnnotationDefaultTargetMode")
+    }
 
     buildFeatures { compose = true }
 }
 
 dependencies {
     // BOM do Compose (trava versões coerentes)
-    implementation("androidx.core:core-splashscreen:1.2.0")
+    implementation(libs.androidx.core.splashscreen)
     implementation("com.google.android.material:material:1.13.0")
     implementation(platform(libs.androidx.compose.bom))
 
@@ -59,7 +61,7 @@ dependencies {
     // Ícones estendidos (entra no BOM)
     implementation("androidx.compose.material:material-icons-extended")
 
-    // Preview (obrigatório para o painel de Preview do Studio)
+    implementation("io.coil-kt.coil3:coil-compose:3.3.0")
     implementation("androidx.compose.ui:ui-tooling-preview")
     debugImplementation("androidx.compose.ui:ui-tooling")
 
