@@ -63,6 +63,7 @@ dependencies {
 
     implementation("io.coil-kt.coil3:coil-compose:3.3.0")
     implementation("androidx.compose.ui:ui-tooling-preview")
+    implementation(libs.androidx.foundation)
     debugImplementation("androidx.compose.ui:ui-tooling")
 
     // Testes
