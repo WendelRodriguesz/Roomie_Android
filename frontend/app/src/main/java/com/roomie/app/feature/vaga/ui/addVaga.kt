@@ -48,6 +48,8 @@ import com.roomie.app.core.ui.components.RoomieTextField
 import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 
+enum class OcupacaoMorador { TRABALHA, ESTUDA, TRABALHA_E_ESTUDA, SEM_PREFERENCIA }
+enum class PerfilSocial{ RESERVADO, SOCIAL, SEM_PREFERENCIA }
 
 @Composable
 fun CadastrarVagasScreen(navController: NavController){
@@ -58,6 +60,7 @@ fun CadastrarVagasScreen(navController: NavController){
     var moradoresMax by remember { mutableStateOf(1f) }
     var idadeMorador by remember {mutableStateOf(15f)}
     var ocupacao by remember { mutableStateOf(OcupacaoMorador.SEM_PREFERENCIA) }
+    var perfilSocial by remember {mutableStateOf(PerfilSocial.SEM_PREFERENCIA) }
     var fuma by remember { mutableStateOf(false) }
     var festas by remember { mutableStateOf(false) }
     var aceitaPets by remember { mutableStateOf(false) }
@@ -95,6 +98,7 @@ fun CadastrarVagasScreen(navController: NavController){
                 Spacer(Modifier.height(20.dp))
 
             }
+
         item {
             Text("Fotos do imóvel", fontWeight = FontWeight.SemiBold)
 
@@ -104,35 +108,36 @@ fun CadastrarVagasScreen(navController: NavController){
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
+                // PRIMEIRA FOTO — IMAGE PICKER
                 ImagePickerBox(
-                    imageUri = selectedImages.firstOrNull(),
+                    imageUri = selectedImages.getOrNull(0),
                     onClick = {
                         imagePickerLauncher.launch(
                             PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
                         )
                     },
-                    modifier = Modifier.size(140.dp)
+                    modifier = Modifier.size(110.dp)
                 )
 
-                Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-                    repeat(3) { index ->
-                        val previewUri = selectedImages.getOrNull(index + 1)
-                        Box(
-                            modifier = Modifier
-                                .size(60.dp)
-                                .background(Color(0xFFEAEAEA), RoundedCornerShape(12.dp)),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            if (previewUri != null) {
-                                AsyncImage(
-                                    model = previewUri,
-                                    contentDescription = null,
-                                    modifier = Modifier.fillMaxSize(),
-                                    contentScale = ContentScale.Crop
-                                )
-                            } else {
-                                Icon(Icons.Default.Photo, contentDescription = "Foto")
-                            }
+                // MAIS DUAS FOTOS DO LADO
+                repeat(2) { index ->
+                    val uri = selectedImages.getOrNull(index + 1)
+
+                    Box(
+                        modifier = Modifier
+                            .size(110.dp)
+                            .background(Color(0xFFEAEAEA), RoundedCornerShape(12.dp)),
+                        contentAlignment = Alignment.Center
+                    ) {
+                        if (uri != null) {
+                            AsyncImage(
+                                model = uri,
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        } else {
+                            Icon(Icons.Default.Photo, contentDescription = "Foto")
                         }
                     }
                 }
@@ -140,6 +145,7 @@ fun CadastrarVagasScreen(navController: NavController){
 
             Spacer(Modifier.height(25.dp))
         }
+
 
         // ---------- ENDEREÇO ----------
         item {
@@ -218,7 +224,7 @@ fun CadastrarVagasScreen(navController: NavController){
 
             Spacer(Modifier.height(20.dp))
         }
-
+        //preferencias de moradia
         item{
             Text("Perfil do morador ideal", fontWeight = FontWeight.SemiBold)
             Spacer(Modifier.height(10.dp))
@@ -232,9 +238,67 @@ fun CadastrarVagasScreen(navController: NavController){
 
             Spacer(Modifier.height(10.dp))
 
+            Text("Ocupação desejada", fontWeight = FontWeight.Medium)
 
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                androidx.compose.material3.RadioButton(
+                    selected = ocupacao == OcupacaoMorador.TRABALHA,
+                    onClick = { ocupacao = OcupacaoMorador.TRABALHA }
+                )
+                Text("Trabalha")
+            }
 
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                androidx.compose.material3.RadioButton(
+                    selected = ocupacao == OcupacaoMorador.ESTUDA,
+                    onClick = { ocupacao = OcupacaoMorador.ESTUDA }
+                )
+                Text("Estuda")
+            }
 
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                androidx.compose.material3.RadioButton(
+                    selected = ocupacao == OcupacaoMorador.TRABALHA_E_ESTUDA,
+                    onClick = { ocupacao = OcupacaoMorador.TRABALHA_E_ESTUDA }
+                )
+                Text("Trabalha e estuda")
+            }
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                androidx.compose.material3.RadioButton(
+                    selected = ocupacao == OcupacaoMorador.SEM_PREFERENCIA,
+                    onClick = { ocupacao = OcupacaoMorador.SEM_PREFERENCIA }
+                )
+                Text("Sem preferência")
+            }
+
+            Spacer(Modifier.height(10.dp))
+
+            Text("Perfil social ", fontWeight = FontWeight.Medium)
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                androidx.compose.material3.RadioButton(
+                    selected = perfilSocial == PerfilSocial.RESERVADO,
+                    onClick = { perfilSocial = PerfilSocial.RESERVADO }
+                )
+                Text("Reservado")
+            }
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                androidx.compose.material3.RadioButton(
+                    selected = perfilSocial == PerfilSocial.SOCIAL,
+                    onClick = { perfilSocial = PerfilSocial.SOCIAL }
+                )
+                Text("Sociável")
+            }
+
+            Row(verticalAlignment = Alignment.CenterVertically) {
+                androidx.compose.material3.RadioButton(
+                    selected = perfilSocial == PerfilSocial.SEM_PREFERENCIA,
+                    onClick = { perfilSocial = PerfilSocial.SEM_PREFERENCIA }
+                )
+                Text("Sem preferência")
+            }
         }
 
         // ---------- PETS ----------
@@ -299,11 +363,12 @@ fun CadastrarVagasScreen(navController: NavController){
 
 @RoomiePreview
 @Composable
-private fun CadastrarVagasScreenPreview() {
+private fun CadastrarVagasPreview() {
     Roomie_AndroidTheme(dynamicColor = false) {
         Surface {
             val navController = rememberNavController()
             CadastrarVagasScreen(navController = navController)
+
         }
     }
 }
