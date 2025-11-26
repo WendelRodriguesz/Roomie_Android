@@ -200,10 +200,14 @@ private fun MatchCardPreview() {
                 mediaAccounts = 200.0,
                 numResidents = 2,
                 vacanciesDisp = 1,
+                bedrooms = 2,
+                bathrooms = 2,
+                areaInSquareMeters = 80,
                 acceptPets = true,
                 rules = "Sem festas após 22h",
                 status = ListingStatus.ACTIVE,
                 createdInMillis = 0L,
+                rating = 4.8,
                 tags = listOf("2 quartos", "Piscina", "Academia"),
                 photos = listOf("match1")
             )
