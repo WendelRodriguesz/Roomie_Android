@@ -21,6 +21,7 @@ import com.roomie.app.feature.home.ui.HomeScreen
 import com.roomie.app.feature.login.ui.LoginScreen
 import com.roomie.app.feature.profile.ui.ProfileScreen
 import com.roomie.app.feature.chat.ui.ChatScreen
+import com.roomie.app.feature.edit_profile.ui.EditProfileScreen
 import com.roomie.app.feature.match.model.MatchMock
 import com.roomie.app.feature.match.presentation.MatchState
 import com.roomie.app.feature.match.ui.MatchRoute
@@ -66,10 +67,11 @@ fun AppNavHost(startDestination: String) {
             composable(Routes.CHAT)   { ChatScreen() }
             composable(Routes.MATCH) { MatchRoute() }
             composable(Routes.NOTIFICATIONS)   { NotificationsScreen() }
-            composable(Routes.PROFILE)   { ProfileScreen(UserMock.profileYou) }
+            composable(Routes.PROFILE)   { ProfileScreen(UserMock.profileYou, onEditClick = {navController.navigate("edit_profile")}) }
             composable(Routes.WELCOME_SCREEN) { WelcomeScreen(navController) }
             composable(Routes.LOGIN) { LoginScreen(navController) }
             composable(Routes.REGISTER) { RegisterScreen(navController) }
+            composable(Routes.EDIT_PROFILE) { EditProfileScreen(UserMock.profileYou, onCancelClick = {navController.navigate("profile")}) }
         }
     }
 }

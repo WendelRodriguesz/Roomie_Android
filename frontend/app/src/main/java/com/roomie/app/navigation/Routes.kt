@@ -9,7 +9,8 @@ object Routes {
     const val WELCOME_SCREEN = "welcome"
     const val LOGIN = "login"
     const val REGISTER = "register"
+    const val EDIT_PROFILE = "edit_profile"
 
-    val BOTTOM_BAR_ROUTES = listOf(HOME, CHAT, MATCH, NOTIFICATIONS, PROFILE)
+    val BOTTOM_BAR_ROUTES = listOf(HOME, CHAT, MATCH, NOTIFICATIONS, PROFILE, EDIT_PROFILE)
 }
 
