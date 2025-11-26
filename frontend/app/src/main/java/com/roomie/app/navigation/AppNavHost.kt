@@ -17,7 +17,7 @@ import androidx.navigation.compose.rememberNavController
 import com.roomie.app.core.ui.components.BottomBar
 import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
-import com.roomie.app.feature.home.ui.HomeScreen
+import com.roomie.app.feature.home.ui.HomeRoute
 import com.roomie.app.feature.login.ui.LoginScreen
 import com.roomie.app.feature.profile.ui.ProfileScreen
 import com.roomie.app.feature.chat.ui.ChatScreen
@@ -64,7 +64,7 @@ fun AppNavHost(startDestination: String) {
             startDestination = startDestination,
             modifier = Modifier.padding(inner)
         ) {
-            composable(Routes.HOME)   { HomeScreen() }
+            composable(Routes.HOME)   { HomeRoute() }
             composable(Routes.CHAT)   { ChatScreen() }
             composable(Routes.MATCH) { MatchRoute() }
             composable(Routes.NOTIFICATIONS)   { NotificationsScreen() }
