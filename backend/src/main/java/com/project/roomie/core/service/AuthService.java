@@ -43,7 +43,10 @@ public class AuthService implements AuthPortIn {
         Usuario usuarioLogado = (Usuario) auth.getPrincipal();
         var token = tokenService.generatedToken(usuarioLogado);
         var refreshToken = refreshTokenService.generateRefreshToken(usuarioLogado);
-        return ResponseEntity.ok(new AuthResponseDTO(token, refreshToken, usuarioLogado.getRole()));
+        return ResponseEntity.ok(new AuthResponseDTO(usuarioLogado.getId(),
+                                                    token,
+                                                    refreshToken,
+                                                    usuarioLogado.getRole()));
     }
 
     @Override
@@ -68,6 +71,9 @@ public class AuthService implements AuthPortIn {
         var novoAccessToken = tokenService.generatedToken(usuario);
         var novoRefreshToken = refreshTokenService.generateRefreshToken(usuario);
 
-        return ResponseEntity.ok(new AuthResponseDTO(novoAccessToken, novoRefreshToken, usuario.getRole()));
+        return ResponseEntity.ok(new AuthResponseDTO(usuario.getId(),
+                                                     novoAccessToken,
+                                                     novoRefreshToken,
+                                                     usuario.getRole()));
     }
 }
