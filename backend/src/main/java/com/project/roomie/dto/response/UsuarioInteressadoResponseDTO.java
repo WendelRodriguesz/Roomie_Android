@@ -15,6 +15,7 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class UsuarioInteressadoResponseDTO {
 
+    private Integer id;
     private String nome;
     private String email;
     private String data_de_nascimento;
