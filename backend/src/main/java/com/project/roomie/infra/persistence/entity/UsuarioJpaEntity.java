@@ -1,6 +1,7 @@
 package com.project.roomie.infra.persistence.entity;
 
 import com.project.roomie.core.model.enums.Role;
+import com.project.roomie.infra.persistence.entity.enums.GeneroJpaEntity;
 import com.project.roomie.infra.persistence.entity.enums.RoleJpaEntity;
 import org.springframework.security.core.userdetails.UserDetails;
 import jakarta.persistence.*;
@@ -38,6 +39,21 @@ public class UsuarioJpaEntity {
 
     @Column(nullable = false)
     private LocalDate data_de_nascimento;
+
+    @Column(nullable = false)
+    private Integer idade;
+
+    @Column(nullable = false, length = 50)
+    private String cidade;
+
+    @Column(nullable = false, length = 100)
+    private String ocupacao;
+
+    @Column(nullable = false, length = 255)
+    private String bio;
+
+    @Column(nullable = false, length = 50)
+    private GeneroJpaEntity genero;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 50, insertable = false, updatable = false)

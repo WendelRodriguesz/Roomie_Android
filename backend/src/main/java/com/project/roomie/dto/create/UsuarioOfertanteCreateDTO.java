@@ -1,5 +1,6 @@
 package com.project.roomie.dto.create;
 
+import com.project.roomie.core.model.enums.Genero;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -15,4 +16,8 @@ public class UsuarioOfertanteCreateDTO {
     private String email;
     private String senha;
     private String data_de_nascimento;
+    private String cidade;
+    private String ocupacao;
+    private String bio;
+    private Genero genero;
 }

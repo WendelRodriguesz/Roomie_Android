@@ -6,6 +6,7 @@ import com.project.roomie.mapper.UsuarioInteressadoMapper;
 import com.project.roomie.ports.in.UsuarioInteressadoPortIn;
 import com.project.roomie.ports.out.BucketPortOut;
 import com.project.roomie.ports.out.UsuarioInteressadoPortOut;
+import com.project.roomie.util.AgeCalculator;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -20,22 +21,26 @@ public class UsuarioInteressadoService implements UsuarioInteressadoPortIn {
     private final UsuarioInteressadoMapper usuarioInteressadoMapper;
     private final PasswordEncoder passwordEncoder;
     private final BucketPortOut bucketPortOut;
+    private final AgeCalculator ageCalculator;
 
     @Autowired
     public UsuarioInteressadoService(UsuarioInteressadoPortOut usuarioInteressadoPortOut,
                                      UsuarioInteressadoMapper usuarioInteressadoMapper,
                                      PasswordEncoder passwordEncoder,
-                                     BucketPortOut bucketPortOut){
+                                     BucketPortOut bucketPortOut,
+                                     AgeCalculator ageCalculator){
         this.usuarioInteressadoPortOut = usuarioInteressadoPortOut;
         this.usuarioInteressadoMapper = usuarioInteressadoMapper;
         this.passwordEncoder = passwordEncoder;
         this.bucketPortOut = bucketPortOut;
+        this.ageCalculator = ageCalculator;
     }
 
     @Override
     public UsuarioInteressado cadastrar(UsuarioInteressado usuarioInteressado){
 
         usuarioInteressado.setSenha(passwordEncoder.encode(usuarioInteressado.getSenha()));
+        usuarioInteressado.setIdade(ageCalculator.calcularIdade(usuarioInteressado.getData_de_nascimento()));
         return usuarioInteressadoPortOut.save(usuarioInteressadoMapper.ModeltoJpaEntity(usuarioInteressado));
     }
 
