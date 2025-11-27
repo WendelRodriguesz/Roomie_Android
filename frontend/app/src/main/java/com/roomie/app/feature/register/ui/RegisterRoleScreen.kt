@@ -27,6 +27,7 @@ import androidx.navigation.compose.rememberNavController
 import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 import com.roomie.app.navigation.Routes
+import com.roomie.app.feature.register.components.ObjectiveButton
 
 @Composable
 fun RegisterRoleScreen(navController: NavController) {
@@ -58,41 +59,19 @@ fun RegisterRoleScreen(navController: NavController) {
         Spacer(modifier = Modifier.height(48.dp))
 
         ObjectiveButton(
-            text = "Tenho um lugar e busco colega de quarto",
             background = Color(0xFF0078FF),
+            text = "Tenho um lugar e busco colega de quarto",
+            buttonTextSize = 15,
             onClick = { navController.navigate(Routes.ADD_VAGA) }
         )
 
         Spacer(modifier = Modifier.height(16.dp))
 
         ObjectiveButton(
-            text = "Estou procurando um lugar pra morar",
             background = Color(0xFFFF4E88),
+            text = "Estou procurando um lugar pra morar",
+            buttonTextSize = 15,
             onClick = { /* TODO: conectar ao fluxo correspondente */ }
-        )
-    }
-}
-
-@Composable
-private fun ObjectiveButton(
-    text: String,
-    background: Color,
-    onClick: () -> Unit
-) {
-    Button(
-        modifier = Modifier
-            .fillMaxWidth()
-            .height(56.dp),
-        shape = RoundedCornerShape(16.dp),
-        colors = ButtonDefaults.buttonColors(containerColor = background),
-        onClick = onClick
-    ) {
-        Text(
-            text = text,
-            fontSize = 15.sp,
-            fontWeight = FontWeight.Medium,
-            color = Color.White,
-            textAlign = TextAlign.Center
         )
     }
 }
@@ -107,4 +86,3 @@ private fun RegisterRoleScreenPreview() {
         }
     }
 }
-
