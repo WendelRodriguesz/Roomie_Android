@@ -5,10 +5,11 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public enum RoleJpaEntity {
+public enum GeneroJpaEntity {
 
-    INTERESSADO("INTERESSADO"),
-    OFERTANTE("OFERTANTE");
+    MASCULINO("MASCULINO"),
+    FEMININO("FEMININO"),
+    OUTROS("OUTROS");
 
-    private final String role;
+    private final String genero;
 }

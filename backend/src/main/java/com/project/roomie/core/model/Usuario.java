@@ -1,6 +1,10 @@
 package com.project.roomie.core.model;
 
+import com.project.roomie.core.model.enums.Genero;
 import com.project.roomie.core.model.enums.Role;
+import com.project.roomie.infra.persistence.entity.enums.GeneroJpaEntity;
+import com.project.roomie.infra.persistence.entity.enums.RoleJpaEntity;
+import jakarta.persistence.Column;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,18 +20,39 @@ public class Usuario implements UserDetails {
     private String email;
     private String senha;
     private LocalDate data_de_nascimento;
+    private Integer idade;
+    private String cidade;
+    private String ocupacao;
+    private String bio;
+    private Genero genero;
     private Role role;
     private String foto_de_perfil;
 
     public Usuario() {
     }
 
-    public Usuario(Integer id, String nome, String email, String senha, LocalDate data_de_nascimento, Role role, String foto_de_perfil) {
+    public Usuario(Integer id,
+                   String nome,
+                   String email,
+                   String senha,
+                   LocalDate data_de_nascimento,
+                   Integer idade,
+                   String cidade,
+                   String ocupacao,
+                   String bio,
+                   Genero genero,
+                   Role role,
+                   String foto_de_perfil) {
         this.id = id;
         this.nome = nome;
         this.email = email;
         this.senha = senha;
         this.data_de_nascimento = data_de_nascimento;
+        this.idade = idade;
+        this.cidade = cidade;
+        this.ocupacao = ocupacao;
+        this.bio = bio;
+        this.genero = genero;
         this.role = role;
         this.foto_de_perfil = foto_de_perfil;
     }
@@ -105,6 +130,46 @@ public class Usuario implements UserDetails {
 
     public void setData_de_nascimento(LocalDate data_de_nascimento) {
         this.data_de_nascimento = data_de_nascimento;
+    }
+
+    public Integer getIdade() {
+        return idade;
+    }
+
+    public void setIdade(Integer idade) {
+        this.idade = idade;
+    }
+
+    public String getCidade() {
+        return cidade;
+    }
+
+    public void setCidade(String cidade) {
+        this.cidade = cidade;
+    }
+
+    public String getOcupacao() {
+        return ocupacao;
+    }
+
+    public void setOcupacao(String ocupacao) {
+        this.ocupacao = ocupacao;
+    }
+
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
+    public Genero getGenero() {
+        return genero;
+    }
+
+    public void setGenero(Genero genero) {
+        this.genero = genero;
     }
 
     public Role getRole() {
