@@ -31,6 +31,7 @@ import com.roomie.app.feature.profile.model.UserMock
 import com.roomie.app.feature.register.ui.RegisterScreen
 import com.roomie.app.feature.welcome_screen.ui.WelcomeScreen
 import com.roomie.app.feature.vaga.ui.CadastrarVagasScreen
+import com.roomie.app.feature.register.ui.RegisterRoleScreen
 
 @Composable
 fun AppNavHost(startDestination: String) {
@@ -72,6 +73,7 @@ fun AppNavHost(startDestination: String) {
             composable(Routes.WELCOME_SCREEN) { WelcomeScreen(navController) }
             composable(Routes.LOGIN) { LoginScreen(navController) }
             composable(Routes.REGISTER) { RegisterScreen(navController) }
+            composable(Routes.REGISTER_ROLE) { RegisterRoleScreen(navController) }
             composable(Routes.EDIT_PROFILE) { EditProfileScreen(UserMock.profileYou, onCancelClick = {navController.navigate("profile")}) }
             composable(Routes.ADD_VAGA) { CadastrarVagasScreen(navController)}
         }

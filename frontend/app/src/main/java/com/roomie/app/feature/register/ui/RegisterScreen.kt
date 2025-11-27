@@ -120,7 +120,7 @@ fun RegisterScreen(navController: NavController) {
             modifier = Modifier
                 .fillMaxWidth()
                 .height(50.dp),
-            onClick = {}
+            onClick = { navController.navigate(Routes.REGISTER_ROLE) }
         )
 
         Spacer(Modifier.height(10.dp))

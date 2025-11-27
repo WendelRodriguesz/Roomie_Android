@@ -9,6 +9,7 @@ object Routes {
     const val WELCOME_SCREEN = "welcome"
     const val LOGIN = "login"
     const val REGISTER = "register"
+    const val REGISTER_ROLE = "register_role"
     const val EDIT_PROFILE = "edit_profile"
     const val ADD_VAGA = "addvaga"
 
