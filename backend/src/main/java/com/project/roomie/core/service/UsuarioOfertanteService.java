@@ -6,6 +6,7 @@ import com.project.roomie.mapper.UsuarioOfertanteMapper;
 import com.project.roomie.ports.in.UsuarioOfertantePortIn;
 import com.project.roomie.ports.out.BucketPortOut;
 import com.project.roomie.ports.out.UsuarioOfertantePortOut;
+import com.project.roomie.util.AgeCalculator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -19,22 +20,26 @@ public class UsuarioOfertanteService implements UsuarioOfertantePortIn {
     private final UsuarioOfertanteMapper usuarioOfertanteMapper;
     private final PasswordEncoder passwordEncoder;
     private final BucketPortOut bucketPortOut;
+    private final AgeCalculator ageCalculator;
 
     @Autowired
     public UsuarioOfertanteService(UsuarioOfertantePortOut usuarioOfertantePortOut,
                                    UsuarioOfertanteMapper usuarioOfertanteMapper,
                                    PasswordEncoder passwordEncoder,
-                                   BucketPortOut bucketPortOut){
+                                   BucketPortOut bucketPortOut,
+                                   AgeCalculator ageCalculator){
         this.usuarioOfertantePortOut = usuarioOfertantePortOut;
         this.usuarioOfertanteMapper = usuarioOfertanteMapper;
         this.passwordEncoder = passwordEncoder;
         this.bucketPortOut = bucketPortOut;
+        this.ageCalculator = ageCalculator;
     }
 
     @Override
     public UsuarioOfertante cadastrar(UsuarioOfertante usuarioOfertante){
 
         usuarioOfertante.setSenha(passwordEncoder.encode(usuarioOfertante.getSenha()));
+        usuarioOfertante.setIdade(ageCalculator.calcularIdade(usuarioOfertante.getData_de_nascimento()));
         return usuarioOfertantePortOut.save(usuarioOfertanteMapper.ModeltoJpaEntity(usuarioOfertante));
     }
 
