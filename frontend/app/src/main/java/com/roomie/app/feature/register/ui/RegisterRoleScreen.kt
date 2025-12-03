@@ -71,7 +71,7 @@ fun RegisterRoleScreen(navController: NavController) {
             background = Color(0xFFFF4E88),
             text = "Estou procurando um lugar pra morar",
             buttonTextSize = 15,
-            onClick = { /* TODO: conectar ao fluxo correspondente */ }
+            onClick = { navController.navigate(Routes.PREFERENCES_REGISTRATION) }
         )
     }
 }
