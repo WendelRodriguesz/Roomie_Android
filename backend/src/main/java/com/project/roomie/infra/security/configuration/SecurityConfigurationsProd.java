@@ -44,6 +44,9 @@ public class SecurityConfigurationsProd {
                         // Usuário Ofertante
                         .requestMatchers(HttpMethod.POST, "/api/usuarioOfertante/cadastrar").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/usuarioOfertante/uploadFotoDePerfil/{idUsuario}").hasAnyRole("OFERTANTE")
+
+                        //interesses interessado
+                        .requestMatchers(HttpMethod.POST, "/api/interesses/cadastrar").hasAnyRole("INTERESSADO")
                 )
 
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
