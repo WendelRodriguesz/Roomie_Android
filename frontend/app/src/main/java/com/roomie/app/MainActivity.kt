@@ -20,7 +20,7 @@ class MainActivity : ComponentActivity() {
         actionBar?.hide()
         installSplashScreen()
         setContent {
-            Roomie_AndroidTheme (dynamicColor = false,darkTheme = true){
+            Roomie_AndroidTheme (dynamicColor = false, darkTheme = false){
                 Surface (Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background){
                     var loggedIn : Boolean = false // simulando
 
