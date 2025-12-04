@@ -5,6 +5,13 @@ import androidx.annotation.DrawableRes
 enum class ProfileRole { OFFEROR, SEEKER }
 enum class PartyFrequency { NEVER, SOMETIMES, FREQUENT }
 enum class SleepRoutine { MORNING, NIGHT, FLEXIBLE }
+enum class CleaningHabit { DAILY, WEEKLY, BIWEEKLY, OCCASIONAL }
+enum class GenderOption(val label: String) {
+    MASCULINO("Masculino"),
+    FEMININO("Feminino"),
+    NAO_BINARIO("Não-binário"),
+    PREFIRO_NAO_DIZER("Prefiro não dizer")
+}
 
 data class Budget(
     val minBudget: Int?,

@@ -21,7 +21,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
@@ -31,8 +30,9 @@ import androidx.navigation.compose.rememberNavController
 import com.roomie.app.core.ui.components.GradientButton
 import com.roomie.app.core.ui.components.RoomieTextField
 import com.roomie.app.core.ui.preview.RoomiePreview
-import com.roomie.app.core.ui.theme.Pink
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
+import com.roomie.app.feature.profile.model.GenderOption
+import com.roomie.app.feature.register.components.GenderSelect
 import com.roomie.app.navigation.Routes
 
 @Composable
@@ -42,6 +42,8 @@ fun RegisterScreen(navController: NavController) {
     var email by remember { mutableStateOf("")}
     var dataDeNascimento by remember { mutableStateOf("")}
     var senha by remember { mutableStateOf("")}
+    var cidade by remember { mutableStateOf("")}
+    var genero by remember { mutableStateOf<GenderOption?>(null) }
     var termosDeUso by remember { mutableStateOf(false)}
 
     Column(modifier = Modifier
@@ -98,6 +100,23 @@ fun RegisterScreen(navController: NavController) {
             value = senha,
             onValueChange = {senha = it},
             placeholder = "senha",
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(Modifier.height(12.dp))
+
+        RoomieTextField(
+            value = cidade,
+            onValueChange = {cidade = it},
+            placeholder = "cidade",
+            modifier = Modifier.fillMaxWidth()
+        )
+
+        Spacer(Modifier.height(12.dp))
+
+        GenderSelect(
+            value = genero,
+            onValueChange = { genero = it },
             modifier = Modifier.fillMaxWidth()
         )
 

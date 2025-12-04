@@ -7,11 +7,11 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.roomie.app.core.ui.components.BudgetCard
 import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 import com.roomie.app.feature.profile.model.*
 import com.roomie.app.feature.edit_profile.ui.components.BasicInfoCard
-import com.roomie.app.feature.edit_profile.ui.components.BudgetCard
 import com.roomie.app.feature.edit_profile.ui.components.LifestylePreferencesCard
 
 @OptIn(ExperimentalMaterial3Api::class)

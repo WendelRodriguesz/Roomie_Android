@@ -16,8 +16,9 @@ fun PartyFrequencySelector(
     onSelect: (PartyFrequency) -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Row(
+    FlowRow(
         horizontalArrangement = Arrangement.spacedBy(8.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier.fillMaxWidth()
     ) {
         PartyFrequency.entries.forEach { freq ->
@@ -26,15 +27,15 @@ fun PartyFrequencySelector(
                 onClick = { onSelect(freq) },
                 label = { 
                     Text(
-                        when (freq) {
+                        text = when (freq) {
                             PartyFrequency.NEVER -> "Nunca"
                             PartyFrequency.SOMETIMES -> "Às vezes"
                             PartyFrequency.FREQUENT -> "Frequentemente"
-                        }
-                    ) 
+                        },
+                        maxLines = 1
+                    )
                 },
-                selected = isSelected,
-                modifier = Modifier.weight(1f)
+                selected = isSelected
             )
         }
     }

@@ -1,4 +1,4 @@
-package com.roomie.app.feature.edit_profile.ui.components
+package com.roomie.app.feature.preference_registration.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.FilterChip
@@ -8,12 +8,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
-import com.roomie.app.feature.profile.model.SleepRoutine
+import com.roomie.app.feature.profile.model.CleaningHabit
 
 @Composable
-fun SleepRoutineSelector(
-    selected: SleepRoutine,
-    onSelect: (SleepRoutine) -> Unit,
+fun CleaningHabitSelector(
+    selected: CleaningHabit?,
+    onSelect: (CleaningHabit) -> Unit,
     modifier: Modifier = Modifier
 ) {
     FlowRow(
@@ -21,16 +21,17 @@ fun SleepRoutineSelector(
         verticalArrangement = Arrangement.spacedBy(8.dp),
         modifier = modifier.fillMaxWidth()
     ) {
-        SleepRoutine.entries.forEach { routine ->
-            val isSelected = routine == selected
+        CleaningHabit.entries.forEach { habit ->
+            val isSelected = habit == selected
             FilterChip(
-                onClick = { onSelect(routine) },
+                onClick = { onSelect(habit) },
                 label = {
                     Text(
-                        text = when (routine) {
-                            SleepRoutine.MORNING -> "Matutino"
-                            SleepRoutine.NIGHT -> "Noturno"
-                            SleepRoutine.FLEXIBLE -> "Flexível"
+                        text = when (habit) {
+                            CleaningHabit.DAILY -> "Diário"
+                            CleaningHabit.WEEKLY -> "Semanal"
+                            CleaningHabit.BIWEEKLY -> "Quinzenal"
+                            CleaningHabit.OCCASIONAL -> "Ocasional"
                         },
                         maxLines = 1
                     )
@@ -43,11 +44,12 @@ fun SleepRoutineSelector(
 
 @RoomiePreview
 @Composable
-private fun SleepRoutineSelectorPreview() {
+private fun CleaningHabitSelectorPreview() {
     Roomie_AndroidTheme(dynamicColor = false) {
-        SleepRoutineSelector(
-            selected = SleepRoutine.FLEXIBLE,
+        CleaningHabitSelector(
+            selected = CleaningHabit.WEEKLY,
             onSelect = {}
         )
     }
 }
+

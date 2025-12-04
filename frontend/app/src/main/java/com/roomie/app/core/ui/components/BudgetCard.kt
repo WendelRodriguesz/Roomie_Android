@@ -1,4 +1,4 @@
-package com.roomie.app.feature.edit_profile.ui.components
+package com.roomie.app.core.ui.components
 
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
