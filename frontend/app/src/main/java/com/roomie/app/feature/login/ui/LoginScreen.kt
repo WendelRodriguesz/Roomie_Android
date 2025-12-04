@@ -5,6 +5,7 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
@@ -42,7 +43,6 @@ fun LoginScreen(navController: NavController) {
 
     var email by remember { mutableStateOf("") }
     var senha by remember { mutableStateOf("") }
-    var rememberMe by remember { mutableStateOf(false) }
 
     LaunchedEffect(uiState.isLoginSuccessful) {
         if (uiState.isLoginSuccessful) {
@@ -111,21 +111,11 @@ fun LoginScreen(navController: NavController) {
         Spacer(Modifier.height(6.dp))
 
         Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween,
+            modifier = Modifier
+                .fillMaxWidth()
+                .wrapContentWidth(Alignment.End),
             verticalAlignment = Alignment.CenterVertically
         ) {
-
-            Row(verticalAlignment = Alignment.CenterVertically) {
-                Checkbox(
-                    checked = rememberMe,
-                    onCheckedChange = { rememberMe = it }
-                )
-                Text(
-                    text = "Lembre-se de mim",
-                    fontSize = 12.sp
-                )
-            }
 
             Text(
                 text = "Esqueceu sua senha?",
