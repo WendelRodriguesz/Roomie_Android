@@ -36,6 +36,7 @@ public class SecurityConfigurationsProd {
 
                         // Authorization
                         .requestMatchers(HttpMethod.POST, "/api/auth/logar").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/refresh").permitAll()
 
                         // Usuário interessado
                         .requestMatchers(HttpMethod.POST, "/api/usuarioInteressado/cadastrar").permitAll()
