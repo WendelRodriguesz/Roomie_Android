@@ -22,15 +22,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             Roomie_AndroidTheme (dynamicColor = false, darkTheme = false){
                 Surface (Modifier.fillMaxSize(), color = MaterialTheme.colorScheme.background){
-                    var loggedIn : Boolean = false // simulando
-
-                    val startDestination = if (loggedIn) {
-                        Routes.HOME
-                    } else {
-                        Routes.WELCOME_SCREEN
-                    }
-
-                    AppNavHost(startDestination)
+                    AppNavHost(Routes.WELCOME_SCREEN)
                 }
             }
         }
