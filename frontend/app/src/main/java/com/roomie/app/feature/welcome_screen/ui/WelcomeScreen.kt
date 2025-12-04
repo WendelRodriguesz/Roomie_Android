@@ -2,7 +2,6 @@ package com.roomie.app.feature.welcome_screen.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -20,6 +19,7 @@ import androidx.navigation.compose.rememberNavController
 import com.roomie.app.R
 import com.roomie.app.core.ui.components.GradientButton
 import com.roomie.app.core.ui.preview.RoomiePreview
+import com.roomie.app.core.ui.theme.RoomieTheme
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 import com.roomie.app.navigation.Routes
 
@@ -38,7 +38,7 @@ fun WelcomeScreen(navController: NavController) {
             verticalArrangement = Arrangement.Center
         ) {
             Image(
-                painter = painterResource(R.drawable.logo),
+                painter = painterResource(RoomieTheme.assets.logoRes),
                 contentDescription = "Logo Roomie",
                 modifier = Modifier
                     .size(200.dp)
