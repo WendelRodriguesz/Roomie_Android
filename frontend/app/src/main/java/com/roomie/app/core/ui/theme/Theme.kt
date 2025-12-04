@@ -34,8 +34,8 @@ private val LightColorScheme = lightColorScheme(
     surface    = Color(0xFFFFFFFF),
     scrim      = Color(0xFF6A6A6A),
 )
-val darkLogo = R.drawable.logo
-val lightLogo = R.drawable.logo
+val nightLogo = R.drawable.logo_night
+val lightLogo = R.drawable.logo_light
 val RoomieGradient = Brush.horizontalGradient(
     listOf(Color(0xFF0083FA), Color(0xFFFF5383))
 )
@@ -44,7 +44,7 @@ val RoomieGradient = Brush.horizontalGradient(
 data class RoomieAssets(@DrawableRes val logoRes: Int)
 
 private val LocalRoomieAssets = staticCompositionLocalOf {
-    RoomieAssets(logoRes = R.drawable.logo)
+    RoomieAssets(logoRes = R.drawable.logo_light)
 }
 
 object RoomieTheme {
@@ -66,9 +66,9 @@ fun Roomie_AndroidTheme(
             if (darkTheme) DarkColorScheme else LightColorScheme
         }
     val assets = if (darkTheme) {
-        RoomieAssets(logoRes = R.drawable.logo)
+        RoomieAssets(logoRes = nightLogo)
     } else {
-        RoomieAssets(logoRes = R.drawable.logo)
+        RoomieAssets(logoRes = lightLogo)
     }
 
     CompositionLocalProvider(LocalRoomieAssets provides assets) {

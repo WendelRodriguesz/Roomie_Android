@@ -1,9 +1,9 @@
 package com.roomie.app.feature.login.ui
 
+import android.R.style.Theme
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.foundation.layout.*
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CircularProgressIndicator
@@ -22,11 +22,11 @@ import androidx.compose.ui.unit.sp
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import kotlinx.coroutines.delay
 import com.roomie.app.R
 import com.roomie.app.core.ui.components.GradientButton
 import com.roomie.app.core.ui.components.RoomieTextField
 import com.roomie.app.core.ui.preview.RoomiePreview
+import com.roomie.app.core.ui.theme.RoomieTheme
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 import com.roomie.app.feature.login.presentation.LoginViewModel
 import com.roomie.app.feature.login.presentation.LoginViewModelFactory
@@ -68,7 +68,7 @@ fun LoginScreen(navController: NavController) {
         verticalArrangement = Arrangement.Center
     ) {
         Image(
-            painter = painterResource(R.drawable.logo),
+            painter = painterResource(RoomieTheme.assets.logoRes),
             contentDescription = "Roomie Logo",
             modifier = Modifier.size(160.dp)
         )
