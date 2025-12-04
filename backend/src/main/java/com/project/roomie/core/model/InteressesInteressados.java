@@ -3,9 +3,8 @@ package com.project.roomie.core.model;
 import com.project.roomie.core.model.enums.Frequencia_festas;
 import com.project.roomie.core.model.enums.Habitos_limpeza;
 import com.project.roomie.core.model.enums.Horario_sono;
-import com.project.roomie.infra.persistence.entity.UsuarioJpaEntity;
 
-public class Interesses {
+public class InteressesInteressados {
 
     private Integer id;
     private Integer user_id;
@@ -18,18 +17,18 @@ public class Interesses {
     private boolean aceita_dividir_quarto;
 
 
-    public Interesses() {
+    public InteressesInteressados() {
     }
 
-    public Interesses(Integer id,
-                      Integer user_id,
-                      Frequencia_festas frequencia_festas,
-                      Habitos_limpeza habitos_limpeza,
-                      boolean aceita_pets,
-                      Horario_sono horario_sono,
-                      float orcamento_min,
-                      float orcamento_max,
-                      boolean aceita_dividir_quarto) {
+    public InteressesInteressados(Integer id,
+                                  Integer user_id,
+                                  Frequencia_festas frequencia_festas,
+                                  Habitos_limpeza habitos_limpeza,
+                                  boolean aceita_pets,
+                                  Horario_sono horario_sono,
+                                  float orcamento_min,
+                                  float orcamento_max,
+                                  boolean aceita_dividir_quarto) {
         this.id = id;
         this.user_id = user_id;
         this.frequencia_festas = frequencia_festas;

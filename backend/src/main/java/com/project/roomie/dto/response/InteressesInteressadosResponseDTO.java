@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class InteressesResponseDTO {
+public class InteressesInteressadosResponseDTO {
     private Integer id;
     private Integer user_id;
     private Frequencia_festas frequencia_festas;

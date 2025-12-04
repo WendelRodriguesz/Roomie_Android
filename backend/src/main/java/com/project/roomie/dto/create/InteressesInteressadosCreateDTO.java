@@ -1,6 +1,5 @@
 package com.project.roomie.dto.create;
 
-import com.project.roomie.core.model.Usuario;
 import com.project.roomie.core.model.enums.Frequencia_festas;
 import com.project.roomie.core.model.enums.Habitos_limpeza;
 import com.project.roomie.core.model.enums.Horario_sono;
@@ -13,7 +12,7 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class InteressesCreateDTO {
+public class InteressesInteressadosCreateDTO {
     private Integer user_id;
     private Frequencia_festas frequencia_festas;
     private Habitos_limpeza habitos_limpeza;
