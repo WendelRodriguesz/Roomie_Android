@@ -21,5 +21,6 @@ public interface UsuarioInteressadoMapper {
     UsuarioInteressado JpaEntitytoModel(UsuarioInteressadoJpaEntity usuarioInteressadoJpaEntity);
 
     @Mapping(source = "data_de_nascimento", target = "data_de_nascimento", qualifiedByName = "toStringDate")
+    @Mapping(source = "interesses", target = "interesses", qualifiedByName = "ModeltoResponseDTO")
     UsuarioInteressadoResponseDTO ModeltoResponseDTO(UsuarioInteressado usuarioInteressado);
 }

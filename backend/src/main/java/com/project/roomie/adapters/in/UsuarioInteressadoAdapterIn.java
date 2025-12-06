@@ -29,8 +29,15 @@ public class UsuarioInteressadoAdapterIn {
                                 usuarioInteressadoCreateDTO)));
     }
 
-    @PostMapping("/uploadFotoDePerfil/{idUsuario}")
-    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, @PathVariable Integer idUsuario) {
-        return usuarioInteressadoService.uploadFotoDePerfil(file, idUsuario);
+    @PostMapping("/uploadFotoDePerfil/{id_usuario}")
+    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, @PathVariable Integer id_usuario) {
+        return usuarioInteressadoService.uploadFotoDePerfil(file, id_usuario);
+    }
+
+    @GetMapping("/uploadFotoDePerfil/{id_usuario}")
+    public UsuarioInteressadoResponseDTO visualizar(@PathVariable Integer id_usuario){
+        return usuarioInteressadoMapper.ModeltoResponseDTO(
+                usuarioInteressadoService.visualizar(id_usuario)
+        );
     }
 }
