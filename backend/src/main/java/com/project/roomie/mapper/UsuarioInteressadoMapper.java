@@ -8,14 +8,16 @@ import com.project.roomie.util.DateFormatter;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
-@Mapper(componentModel = "spring", uses = { DateFormatter.class })
+@Mapper(componentModel = "spring", uses = { DateFormatter.class, InteressesInteressadosMapper.class })
 public interface UsuarioInteressadoMapper {
 
     @Mapping(source = "data_de_nascimento", target = "data_de_nascimento", qualifiedByName = "toLocalDate")
     UsuarioInteressado CreateDTOtoModel(UsuarioInteressadoCreateDTO usuarioInteressadoCreateDTO);
 
+    @Mapping(source = "interesses", target = "interesses", qualifiedByName = "ModeltoJpaEntity")
     UsuarioInteressadoJpaEntity ModeltoJpaEntity(UsuarioInteressado usuarioInteressado);
 
+    @Mapping(source = "interesses", target = "interesses", qualifiedByName = "JpaEntitytoModel")
     UsuarioInteressado JpaEntitytoModel(UsuarioInteressadoJpaEntity usuarioInteressadoJpaEntity);
 
     @Mapping(source = "data_de_nascimento", target = "data_de_nascimento", qualifiedByName = "toStringDate")
