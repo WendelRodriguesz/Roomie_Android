@@ -7,7 +7,6 @@ import com.project.roomie.core.model.enums.Horario_sono;
 public class InteressesInteressados {
 
     private Integer id;
-    private Integer user_id;
     private Frequencia_festas frequencia_festas;
     private Habitos_limpeza habitos_limpeza;
     private boolean aceita_pets;
@@ -21,7 +20,6 @@ public class InteressesInteressados {
     }
 
     public InteressesInteressados(Integer id,
-                                  Integer user_id,
                                   Frequencia_festas frequencia_festas,
                                   Habitos_limpeza habitos_limpeza,
                                   boolean aceita_pets,
@@ -30,7 +28,6 @@ public class InteressesInteressados {
                                   float orcamento_max,
                                   boolean aceita_dividir_quarto) {
         this.id = id;
-        this.user_id = user_id;
         this.frequencia_festas = frequencia_festas;
         this.habitos_limpeza = habitos_limpeza;
         this.aceita_pets = aceita_pets;
@@ -46,14 +43,6 @@ public class InteressesInteressados {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public Integer getUser_id() {
-        return user_id;
-    }
-
-    public void setUser_id(Integer user_id) {
-        this.user_id = user_id;
     }
 
     public Frequencia_festas getFrequencia_festas() {
@@ -108,7 +97,7 @@ public class InteressesInteressados {
         return aceita_dividir_quarto;
     }
 
-    public void setAceita_divigir_quarto(boolean aceita_dividir_quarto) {
+    public void setAceita_dividir_quarto(boolean aceita_dividir_quarto) {
         this.aceita_dividir_quarto = aceita_dividir_quarto;
     }
 }

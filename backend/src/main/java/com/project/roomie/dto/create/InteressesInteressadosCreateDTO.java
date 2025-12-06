@@ -13,7 +13,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InteressesInteressadosCreateDTO {
-    private Integer user_id;
     private Frequencia_festas frequencia_festas;
     private Habitos_limpeza habitos_limpeza;
     private boolean aceita_pets;
@@ -21,5 +20,4 @@ public class InteressesInteressadosCreateDTO {
     private float orcamento_min;
     private float orcamento_max;
     private boolean aceita_dividir_quarto;
-
 }

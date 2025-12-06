@@ -10,5 +10,7 @@ CREATE TABLE usuarios(
     ocupacao VARCHAR(100) NOT NULL,
     bio VARCHAR(255) NOT NULL,
     genero VARCHAR(50) NOT NULL,
-    foto_de_perfil VARCHAR(500)
+    foto_de_perfil VARCHAR(500),
+    id_interesses_interessados INTEGER,
+    FOREIGN KEY (id_interesses_interessados) REFERENCES interesses_interessados(id)
 );

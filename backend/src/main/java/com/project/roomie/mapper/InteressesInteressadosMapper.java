@@ -4,33 +4,21 @@ import com.project.roomie.core.model.InteressesInteressados;
 import com.project.roomie.dto.create.InteressesInteressadosCreateDTO;
 import com.project.roomie.dto.response.InteressesInteressadosResponseDTO;
 import com.project.roomie.infra.persistence.entity.InteressesInteressadosJpaEntity;
-import com.project.roomie.infra.persistence.entity.UsuarioJpaEntity;
 import org.mapstruct.Mapper;
+import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring")
 public interface InteressesInteressadosMapper {
 
-    InteressesInteressados createDTOtoModel(InteressesInteressadosCreateDTO interessesInteressadosCreateDTO);
+    @Named("JpaEntitytoModel")
+    InteressesInteressados JpaEntitytoModel(InteressesInteressadosJpaEntity interessesInteressadosJpaEntity);
 
-    InteressesInteressados jpaEntitytoModel(InteressesInteressadosJpaEntity interessesInteressadosJpaEntity);
+    @Named("ModeltoResponseDTO")
+    InteressesInteressadosResponseDTO ModeltoResponseDTO(InteressesInteressados interessesInteressados);
 
-    InteressesInteressadosResponseDTO modeltoResponseDTO(InteressesInteressados interessesInteressados);
-
+    @Named("ModeltoResponseDTO")
     InteressesInteressados CreateDTOtoModel(InteressesInteressadosCreateDTO interessesInteressadosCreateDTO);
 
-    InteressesInteressadosJpaEntity modeltoJpaEntity(InteressesInteressados interessesInteressados);
-
-    // Conversão UsuarioJpaEntity → Integer
-    default Integer map(UsuarioJpaEntity usuario) {
-        return usuario != null ? usuario.getId() : null;
-    }
-
-    // Conversão Integer → UsuarioJpaEntity
-    default UsuarioJpaEntity map(Integer id) {
-        if (id == null) return null;
-        UsuarioJpaEntity usuario = new UsuarioJpaEntity();
-        usuario.setId(id);
-        return usuario;
-    }
-
+    @Named("ModeltoJpaEntity")
+    InteressesInteressadosJpaEntity ModeltoJpaEntity(InteressesInteressados interessesInteressados);
 }

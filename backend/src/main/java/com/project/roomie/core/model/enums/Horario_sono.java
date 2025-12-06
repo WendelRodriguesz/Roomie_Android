@@ -6,12 +6,13 @@ public enum Horario_sono {
     NOTURNO("NOTURNO"),
     FLEXIVEL("FLEXIVEL");
 
-    private final String horarrio_sono;
+    private final String horario_sono;
 
-    Horario_sono(String horarrio_sono) {
-        this.horarrio_sono = horarrio_sono;
+    Horario_sono(String horario_sono) {
+        this.horario_sono = horario_sono;
     }
-    public String getHorarrio_sono() {
-        return horarrio_sono;
+
+    public String getHorario_sono() {
+        return horario_sono;
     }
 }

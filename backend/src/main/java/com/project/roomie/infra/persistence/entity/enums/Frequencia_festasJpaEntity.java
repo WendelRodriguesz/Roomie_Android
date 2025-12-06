@@ -5,11 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Frequencia_festasJPAEntity {
+public enum Frequencia_festasJpaEntity {
     NUNCA("NUNCA"),
     AS_VEZES("AS_VEZES"),
     FREQUENTE("FREQUENTE");
 
     private final String frequencia_festas;
 }
-

@@ -5,11 +5,11 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Horario_sonoJPAEntity {
+public enum Horario_sonoJpaEntity {
     MATUTINO("MATUTINO"),
     VESPERTINO("VESPERTINO"),
     NOTURNO("NOTURNO"),
     FLEXIVEL("FLEXIVEL");
 
-    private final String horarrio_sono;
+    private final String horario_sono;
 }

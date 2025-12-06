@@ -21,6 +21,6 @@ public class InteressesInteressadosInteressadosAdapterOut implements InteressesI
 
     @Override
     public InteressesInteressados save(InteressesInteressadosJpaEntity interessesInteressadosJpaEntity){
-        return interessesInteressadosMapper.jpaEntitytoModel(interessesInteressadosRepository.save(interessesInteressadosJpaEntity));
+        return interessesInteressadosMapper.JpaEntitytoModel(interessesInteressadosRepository.save(interessesInteressadosJpaEntity));
     }
 }

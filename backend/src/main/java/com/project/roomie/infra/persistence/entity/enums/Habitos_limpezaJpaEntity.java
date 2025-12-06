@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Habitos_limpezaJPAEntity {
+public enum Habitos_limpezaJpaEntity {
     DIARIO("DIARIO"),
     SEMANAL("SEMANAL"),
     QUINZENAL("QUINZENAL"),
