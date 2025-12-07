@@ -40,14 +40,15 @@ public class SecurityConfigurationsProd {
 
                         // Usuário interessado
                         .requestMatchers(HttpMethod.POST, "/api/usuarioInteressado/cadastrar").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/usuarioInteressado/uploadFotoDePerfil/{idUsuario}").hasAnyRole("INTERESSADO")
+                        .requestMatchers(HttpMethod.POST, "/api/usuarioInteressado/uploadFotoDePerfil/{id_usuario}").hasAnyRole("INTERESSADO")
+                        .requestMatchers(HttpMethod.GET, "/api/usuarioInteressado/visualizar/{id_usuario}").hasAnyRole("INTERESSADO")
 
                         // Usuário Ofertante
                         .requestMatchers(HttpMethod.POST, "/api/usuarioOfertante/cadastrar").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/usuarioOfertante/uploadFotoDePerfil/{idUsuario}").hasAnyRole("OFERTANTE")
 
                         //interesses interessado
-                        .requestMatchers(HttpMethod.POST, "/api/interesses/cadastrar").hasAnyRole("INTERESSADO")
+                        .requestMatchers(HttpMethod.POST, "/api/interessesInteressados/cadastrar/{id_usuario}").hasAnyRole("INTERESSADO")
                 )
 
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

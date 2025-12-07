@@ -34,7 +34,7 @@ public class UsuarioInteressadoAdapterIn {
         return usuarioInteressadoService.uploadFotoDePerfil(file, id_usuario);
     }
 
-    @GetMapping("/uploadFotoDePerfil/{id_usuario}")
+    @GetMapping("/visualizar/{id_usuario}")
     public UsuarioInteressadoResponseDTO visualizar(@PathVariable Integer id_usuario){
         return usuarioInteressadoMapper.ModeltoResponseDTO(
                 usuarioInteressadoService.visualizar(id_usuario)
