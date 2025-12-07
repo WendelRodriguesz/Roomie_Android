@@ -45,7 +45,7 @@ public class UsuarioInteressadoService implements UsuarioInteressadoPortIn {
     }
 
     @Override
-    public ResponseEntity<String> uploadFotoDePerfil(MultipartFile file, Integer idUsuario){
+    public ResponseEntity<String> uploadFotoDePerfil(MultipartFile file, Integer id_usuario){
 
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("Arquivo vazio");
@@ -53,7 +53,7 @@ public class UsuarioInteressadoService implements UsuarioInteressadoPortIn {
 
         try {
             String url = bucketPortOut.upload(file);
-            UsuarioInteressado usuario = usuarioInteressadoPortOut.findById(idUsuario);
+            UsuarioInteressado usuario = usuarioInteressadoPortOut.findById(id_usuario);
             usuario.setFoto_de_perfil(url);
             usuarioInteressadoPortOut.save(usuarioInteressadoMapper.ModeltoJpaEntity(usuario));
             return ResponseEntity.ok(url);
@@ -61,5 +61,10 @@ public class UsuarioInteressadoService implements UsuarioInteressadoPortIn {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
         }
+    }
+
+    @Override
+    public UsuarioInteressado visualizar(Integer id_usuario){
+        return usuarioInteressadoPortOut.findById(id_usuario);
     }
 }
