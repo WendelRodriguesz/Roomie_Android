@@ -14,7 +14,6 @@ import lombok.Setter;
 @NoArgsConstructor
 public class InteressesInteressadosResponseDTO {
     private Integer id;
-    private Integer user_id;
     private FrequenciaFestas frequencia_festas;
     private HabitosLimpeza habitos_limpeza;
     private boolean aceita_pets;
