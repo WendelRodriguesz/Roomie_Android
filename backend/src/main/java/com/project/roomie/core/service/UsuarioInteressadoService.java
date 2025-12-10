@@ -51,9 +51,11 @@ public class UsuarioInteressadoService implements UsuarioInteressadoPortIn {
 
         try {
             String url = bucketPortOut.upload(file);
+
             UsuarioInteressado usuario = usuarioInteressadoPortOut.findById(id_usuario);
             usuario.setFoto_de_perfil(url);
             usuarioInteressadoPortOut.save(usuarioInteressadoMapper.ModeltoJpaEntity(usuario));
+
             return ResponseEntity.ok(url);
 
         } catch (Exception e) {
