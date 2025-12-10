@@ -25,4 +25,12 @@ public class AnuncioAdapterOut implements AnuncioPortOut {
     public Anuncio save(AnuncioJpaEntity anuncioJpaEntity){
         return anuncioMapper.JpaEntitytoModel(anuncioRepository.save(anuncioJpaEntity));
     }
+
+    @Override
+    public Anuncio findById(Integer id){
+        AnuncioJpaEntity AnuncioJpaEntity = anuncioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        return anuncioMapper.JpaEntitytoModel(AnuncioJpaEntity);
+    }
 }
