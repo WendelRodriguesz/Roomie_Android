@@ -7,5 +7,5 @@ import org.springframework.web.multipart.MultipartFile;
 public interface UsuarioOfertantePortIn {
 
     UsuarioOfertante cadastrar(UsuarioOfertante usuarioOfertante);
-    ResponseEntity<String> uploadFotoDePerfil(MultipartFile file, Integer idUsuario);
+    ResponseEntity<String> uploadFotoDePerfil(MultipartFile file, Integer id_usuario);
 }

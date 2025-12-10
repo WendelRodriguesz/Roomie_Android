@@ -45,7 +45,7 @@ public class SecurityConfigurationsProd {
 
                         // Usuário Ofertante
                         .requestMatchers(HttpMethod.POST, "/api/usuarioOfertante/cadastrar").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/usuarioOfertante/uploadFotoDePerfil/{idUsuario}").hasAnyRole("OFERTANTE")
+                        .requestMatchers(HttpMethod.POST, "/api/usuarioOfertante/uploadFotoDePerfil/{id_usuario}").hasAnyRole("OFERTANTE")
 
                         // Interesses interessado
                         .requestMatchers(HttpMethod.POST, "/api/interessesInteressados/cadastrar/{id_usuario}").hasAnyRole("INTERESSADO")

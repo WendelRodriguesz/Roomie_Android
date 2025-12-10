@@ -29,8 +29,8 @@ public class UsuarioOfertanteAdapterIn {
                                 usuarioOfertanteCreateDTO)));
     }
 
-    @PostMapping("/uploadFotoDePerfil/{idUsuario}")
-    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, @PathVariable Integer idUsuario) {
-        return usuarioOfertantePortIn.uploadFotoDePerfil(file, idUsuario);
+    @PostMapping("/uploadFotoDePerfil/{id_usuario}")
+    public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, @PathVariable Integer id_usuario) {
+        return usuarioOfertantePortIn.uploadFotoDePerfil(file, id_usuario);
     }
 }

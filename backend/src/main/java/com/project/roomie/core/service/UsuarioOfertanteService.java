@@ -43,7 +43,7 @@ public class UsuarioOfertanteService implements UsuarioOfertantePortIn {
     }
 
     @Override
-    public ResponseEntity<String> uploadFotoDePerfil(MultipartFile file, Integer idUsuario){
+    public ResponseEntity<String> uploadFotoDePerfil(MultipartFile file, Integer id_usuario){
 
         if (file.isEmpty()) {
             return ResponseEntity.badRequest().body("Arquivo vazio");
@@ -51,7 +51,7 @@ public class UsuarioOfertanteService implements UsuarioOfertantePortIn {
 
         try {
             String url = bucketPortOut.upload(file);
-            UsuarioOfertante usuario = usuarioOfertantePortOut.findById(idUsuario);
+            UsuarioOfertante usuario = usuarioOfertantePortOut.findById(id_usuario);
             usuario.setFoto_de_perfil(url);
             usuarioOfertantePortOut.save(usuarioOfertanteMapper.ModeltoJpaEntity(usuario));
             return ResponseEntity.ok(url);
