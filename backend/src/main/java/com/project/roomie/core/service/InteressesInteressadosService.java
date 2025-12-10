@@ -11,7 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class InteresseInteressadosService implements InteressesInteressadosPortIn {
+public class InteressesInteressadosService implements InteressesInteressadosPortIn {
 
     private final InteressesInteressadosPortOut interessesInteressadosPortOut;
     private final InteressesInteressadosMapper interessesInteressadosMapper;
@@ -19,10 +19,10 @@ public class InteresseInteressadosService implements InteressesInteressadosPortI
     private final UsuarioInteressadoMapper usuarioInteressadoMapper;
 
     @Autowired
-    public InteresseInteressadosService(InteressesInteressadosPortOut interessesInteressadosPortOut,
-                                        InteressesInteressadosMapper interessesInteressadosMapper,
-                                        UsuarioInteressadoPortOut usuarioInteressadoPortOut,
-                                        UsuarioInteressadoMapper usuarioInteressadoMapper) {
+    public InteressesInteressadosService(InteressesInteressadosPortOut interessesInteressadosPortOut,
+                                         InteressesInteressadosMapper interessesInteressadosMapper,
+                                         UsuarioInteressadoPortOut usuarioInteressadoPortOut,
+                                         UsuarioInteressadoMapper usuarioInteressadoMapper) {
         this.interessesInteressadosPortOut = interessesInteressadosPortOut;
         this.interessesInteressadosMapper = interessesInteressadosMapper;
         this.usuarioInteressadoPortOut = usuarioInteressadoPortOut;

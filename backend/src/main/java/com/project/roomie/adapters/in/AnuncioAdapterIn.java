@@ -23,7 +23,7 @@ public class AnuncioAdapterIn {
 
     @PostMapping("/cadastrar/{id_usuario}")
     public AnuncioResponseDTO cadastrar(@RequestBody AnuncioCreateDTO anuncioCreateDTO,
-                                        @PathVariable Integer id_usuario ){
+                                        @PathVariable Integer id_usuario){
         return anuncioMapper.ModeltoResponseDTO(
                 anuncioPortIn.cadastrar(
                         anuncioMapper.CreateDTOtoModel(anuncioCreateDTO),

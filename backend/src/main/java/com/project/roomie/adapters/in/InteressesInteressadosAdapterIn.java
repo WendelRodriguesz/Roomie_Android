@@ -1,6 +1,6 @@
 package com.project.roomie.adapters.in;
 
-import com.project.roomie.core.service.InteresseInteressadosService;
+import com.project.roomie.core.service.InteressesInteressadosService;
 import com.project.roomie.dto.create.InteressesInteressadosCreateDTO;
 import com.project.roomie.dto.response.InteressesInteressadosResponseDTO;
 import com.project.roomie.mapper.InteressesInteressadosMapper;
@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/interessesInteressados")
 public class InteressesInteressadosAdapterIn {
 
-    private final InteresseInteressadosService interessesService;
+    private final InteressesInteressadosService interessesInteressadosService;
     private final InteressesInteressadosMapper interessesInteressadosMapper;
 
     @Autowired
-    public InteressesInteressadosAdapterIn(InteresseInteressadosService interessesService,
+    public InteressesInteressadosAdapterIn(InteressesInteressadosService interessesInteressadosService,
                                            InteressesInteressadosMapper interessesInteressadosMapper) {
-        this.interessesService = interessesService;
+        this.interessesInteressadosService = interessesInteressadosService;
         this.interessesInteressadosMapper = interessesInteressadosMapper;
     }
 
@@ -25,7 +25,7 @@ public class InteressesInteressadosAdapterIn {
     public InteressesInteressadosResponseDTO cadastrar(@RequestBody InteressesInteressadosCreateDTO interessesInteressadosCreateDTO,
                                                        @PathVariable Integer id_usuario ){
         return interessesInteressadosMapper.ModeltoResponseDTO(
-                interessesService.cadastrarInteresses(
+                interessesInteressadosService.cadastrarInteresses(
                         interessesInteressadosMapper.CreateDTOtoModel(interessesInteressadosCreateDTO),
                         id_usuario));
     }
