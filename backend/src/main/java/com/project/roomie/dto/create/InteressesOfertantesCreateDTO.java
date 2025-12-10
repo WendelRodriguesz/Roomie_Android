@@ -1,4 +1,4 @@
-package com.project.roomie.dto.response;
+package com.project.roomie.dto.create;
 
 import com.project.roomie.core.model.enums.FrequenciaFestas;
 import com.project.roomie.core.model.enums.HabitosLimpeza;
@@ -12,13 +12,10 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class InteressesInteressadosResponseDTO {
-    private Integer id;
+public class InteressesOfertantesCreateDTO {
     private FrequenciaFestas frequencia_festas;
     private HabitosLimpeza habitos_limpeza;
     private boolean aceita_pets;
     private HorarioSono horario_sono;
-    private float orcamento_min;
-    private float orcamento_max;
     private boolean aceita_dividir_quarto;
 }

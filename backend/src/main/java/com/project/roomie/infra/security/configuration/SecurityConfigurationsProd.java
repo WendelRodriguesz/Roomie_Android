@@ -51,6 +51,7 @@ public class SecurityConfigurationsProd {
                         .requestMatchers(HttpMethod.POST, "/api/interessesInteressados/cadastrar/{id_usuario}").hasAnyRole("INTERESSADO")
 
                         // Interesses Ofertante
+                        .requestMatchers(HttpMethod.POST, "/api/interessesOfertantes/cadastrar/{id_usuario}").hasAnyRole("OFERTANTE")
 
                         // Anuncio
                         .requestMatchers(HttpMethod.POST, "/api/anuncio/cadastrar/{id_usuario}").hasAnyRole("OFERTANTE")

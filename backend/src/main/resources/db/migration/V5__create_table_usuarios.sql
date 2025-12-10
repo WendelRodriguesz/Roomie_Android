@@ -14,5 +14,7 @@ CREATE TABLE usuarios(
     id_interesses_interessados INTEGER,
     FOREIGN KEY (id_interesses_interessados) REFERENCES interesses_interessados(id),
     id_anuncio INTEGER,
-    FOREIGN KEY (id_anuncio) REFERENCES anuncios(id)
+    FOREIGN KEY (id_anuncio) REFERENCES anuncios(id),
+    id_interesses_ofertantes INTEGER,
+    FOREIGN KEY (id_interesses_ofertantes) REFERENCES interesses_ofertantes(id)
 );

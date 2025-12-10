@@ -1,5 +1,6 @@
 package com.project.roomie.dto.response;
 
+import com.project.roomie.core.model.InteressesOfertantes;
 import com.project.roomie.core.model.enums.Genero;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -22,4 +23,5 @@ public class UsuarioOfertanteResponseDTO {
     private String bio;
     private Genero genero;
     private String foto_de_perfil;
+    private InteressesOfertantes interesses;
 }

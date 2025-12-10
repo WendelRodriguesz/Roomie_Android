@@ -8,6 +8,7 @@ import java.time.LocalDate;
 public class UsuarioOfertante extends Usuario {
 
     private Anuncio anuncio;
+    private InteressesOfertantes interesses;
 
     public UsuarioOfertante(Integer id,
                             String nome,
@@ -21,8 +22,10 @@ public class UsuarioOfertante extends Usuario {
                             Genero genero,
                             Role role,
                             String foto_de_perfil,
-                            Anuncio anuncio){
+                            Anuncio anuncio,
+                            InteressesOfertantes interesses){
         this.anuncio = anuncio;
+        this.interesses = interesses;
         super(id, nome, email, senha, data_de_nascimento, idade, cidade, ocupacao, bio, genero, role, foto_de_perfil);
     }
 
@@ -32,5 +35,13 @@ public class UsuarioOfertante extends Usuario {
 
     public void setAnuncio(Anuncio anuncio) {
         this.anuncio = anuncio;
+    }
+
+    public InteressesOfertantes getInteresses() {
+        return interesses;
+    }
+
+    public void setInteresses(InteressesOfertantes interesses) {
+        this.interesses = interesses;
     }
 }

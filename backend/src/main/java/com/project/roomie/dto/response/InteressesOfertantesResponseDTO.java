@@ -12,13 +12,11 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class InteressesInteressadosResponseDTO {
+public class InteressesOfertantesResponseDTO {
     private Integer id;
     private FrequenciaFestas frequencia_festas;
     private HabitosLimpeza habitos_limpeza;
     private boolean aceita_pets;
     private HorarioSono horario_sono;
-    private float orcamento_min;
-    private float orcamento_max;
     private boolean aceita_dividir_quarto;
 }
