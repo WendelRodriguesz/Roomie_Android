@@ -30,7 +30,7 @@ public class InteressesInteressadosService implements InteressesInteressadosPort
     }
 
     @Override
-    public InteressesInteressados cadastrarInteresses(InteressesInteressados interessesInteressados,
+    public InteressesInteressados cadastrar(InteressesInteressados interessesInteressados,
                                                       Integer id_usuario) {
 
         InteressesInteressados interesses = interessesInteressadosPortOut.save(interessesInteressadosMapper.ModeltoJpaEntity(interessesInteressados));

@@ -25,7 +25,7 @@ public class InteressesInteressadosAdapterIn {
     public InteressesInteressadosResponseDTO cadastrar(@RequestBody InteressesInteressadosCreateDTO interessesInteressadosCreateDTO,
                                                        @PathVariable Integer id_usuario ){
         return interessesInteressadosMapper.ModeltoResponseDTO(
-                interessesInteressadosPortIn.cadastrarInteresses(
+                interessesInteressadosPortIn.cadastrar(
                         interessesInteressadosMapper.CreateDTOtoModel(interessesInteressadosCreateDTO),
                         id_usuario));
     }
