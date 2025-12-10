@@ -1,9 +1,9 @@
 package com.project.roomie.adapters.in;
 
-import com.project.roomie.core.service.InteressesInteressadosService;
 import com.project.roomie.dto.create.InteressesInteressadosCreateDTO;
 import com.project.roomie.dto.response.InteressesInteressadosResponseDTO;
 import com.project.roomie.mapper.InteressesInteressadosMapper;
+import com.project.roomie.ports.in.InteressesInteressadosPortIn;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -11,13 +11,13 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/interessesInteressados")
 public class InteressesInteressadosAdapterIn {
 
-    private final InteressesInteressadosService interessesInteressadosService;
+    private final InteressesInteressadosPortIn interessesInteressadosPortIn;
     private final InteressesInteressadosMapper interessesInteressadosMapper;
 
     @Autowired
-    public InteressesInteressadosAdapterIn(InteressesInteressadosService interessesInteressadosService,
+    public InteressesInteressadosAdapterIn(InteressesInteressadosPortIn interessesInteressadosPortIn,
                                            InteressesInteressadosMapper interessesInteressadosMapper) {
-        this.interessesInteressadosService = interessesInteressadosService;
+        this.interessesInteressadosPortIn = interessesInteressadosPortIn;
         this.interessesInteressadosMapper = interessesInteressadosMapper;
     }
 
@@ -25,7 +25,7 @@ public class InteressesInteressadosAdapterIn {
     public InteressesInteressadosResponseDTO cadastrar(@RequestBody InteressesInteressadosCreateDTO interessesInteressadosCreateDTO,
                                                        @PathVariable Integer id_usuario ){
         return interessesInteressadosMapper.ModeltoResponseDTO(
-                interessesInteressadosService.cadastrarInteresses(
+                interessesInteressadosPortIn.cadastrarInteresses(
                         interessesInteressadosMapper.CreateDTOtoModel(interessesInteressadosCreateDTO),
                         id_usuario));
     }
