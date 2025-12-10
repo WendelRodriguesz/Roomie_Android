@@ -1,14 +1,10 @@
 package com.project.roomie.dto.response;
 
-import com.project.roomie.core.model.InteressesInteressados;
 import com.project.roomie.core.model.enums.Genero;
-import com.project.roomie.core.model.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter
@@ -25,5 +21,6 @@ public class UsuarioInteressadoResponseDTO {
     private String ocupacao;
     private String bio;
     private Genero genero;
+    private String foto_de_perfil;
     private InteressesInteressadosResponseDTO interesses;
 }

@@ -9,7 +9,6 @@ import com.project.roomie.infra.security.service.TokenService;
 import com.project.roomie.ports.in.AuthPortIn;
 import com.project.roomie.ports.out.UsuarioPortOut;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.auditing.AuditingHandlerSupport;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;

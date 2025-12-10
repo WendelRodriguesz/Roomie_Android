@@ -2,7 +2,10 @@ package com.project.roomie.infra.persistence.entity;
 
 import com.project.roomie.infra.persistence.entity.enums.GeneroJpaEntity;
 import com.project.roomie.infra.persistence.entity.enums.RoleJpaEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -35,13 +38,5 @@ public class UsuarioInteressadoJpaEntity extends UsuarioJpaEntity{
                                        InteressesInteressadosJpaEntity interesses){
         this.interesses = interesses;
         super(id, nome, email, senha, data_de_nascimento, idade, cidade, ocupacao, bio, genero, role, foto_de_perfil);
-    }
-
-    public InteressesInteressadosJpaEntity getInteresses() {
-        return interesses;
-    }
-
-    public void setInteresses(InteressesInteressadosJpaEntity interesses) {
-        this.interesses = interesses;
     }
 }

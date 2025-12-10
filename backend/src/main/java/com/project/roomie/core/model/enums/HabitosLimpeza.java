@@ -1,6 +1,6 @@
 package com.project.roomie.core.model.enums;
 
-public enum Habitos_limpeza {
+public enum HabitosLimpeza {
     DIARIO("DIARIO"),
     SEMANAL("SEMANAL"),
     QUINZENAL("QUINZENAL"),
@@ -8,7 +8,7 @@ public enum Habitos_limpeza {
 
     private final String habitos_limpeza;
 
-    Habitos_limpeza(String habitos_limpeza) {
+    HabitosLimpeza(String habitos_limpeza) {
         this.habitos_limpeza = habitos_limpeza;
     }
 
