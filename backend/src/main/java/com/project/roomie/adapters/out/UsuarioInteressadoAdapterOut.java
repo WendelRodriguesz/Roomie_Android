@@ -1,6 +1,5 @@
 package com.project.roomie.adapters.out;
 
-import com.project.roomie.core.model.Usuario;
 import com.project.roomie.core.model.UsuarioInteressado;
 import com.project.roomie.infra.persistence.entity.UsuarioInteressadoJpaEntity;
 import com.project.roomie.infra.persistence.repository.UsuarioInteressadoRepository;
@@ -8,8 +7,6 @@ import com.project.roomie.mapper.UsuarioInteressadoMapper;
 import com.project.roomie.ports.out.UsuarioInteressadoPortOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-
-import java.util.Optional;
 
 @Repository
 public class UsuarioInteressadoAdapterOut implements UsuarioInteressadoPortOut {

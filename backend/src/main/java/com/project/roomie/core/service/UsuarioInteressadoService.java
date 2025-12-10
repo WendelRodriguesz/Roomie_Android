@@ -1,13 +1,11 @@
 package com.project.roomie.core.service;
 
-import com.project.roomie.core.model.Usuario;
 import com.project.roomie.core.model.UsuarioInteressado;
 import com.project.roomie.mapper.UsuarioInteressadoMapper;
 import com.project.roomie.ports.in.UsuarioInteressadoPortIn;
 import com.project.roomie.ports.out.BucketPortOut;
 import com.project.roomie.ports.out.UsuarioInteressadoPortOut;
 import com.project.roomie.util.AgeCalculator;
-import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.password.PasswordEncoder;

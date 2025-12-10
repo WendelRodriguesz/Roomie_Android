@@ -1,16 +1,12 @@
 package com.project.roomie.infra.persistence.entity;
 
-import com.project.roomie.core.model.enums.Role;
 import com.project.roomie.infra.persistence.entity.enums.GeneroJpaEntity;
 import com.project.roomie.infra.persistence.entity.enums.RoleJpaEntity;
-import org.springframework.security.core.userdetails.UserDetails;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.time.LocalDate;
 

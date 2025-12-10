@@ -1,11 +1,11 @@
 package com.project.roomie.adapters.in;
 
 import com.project.roomie.core.service.InteresseInteressadosService;
+import com.project.roomie.dto.create.InteressesInteressadosCreateDTO;
+import com.project.roomie.dto.response.InteressesInteressadosResponseDTO;
 import com.project.roomie.mapper.InteressesInteressadosMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import com.project.roomie.dto.response.InteressesInteressadosResponseDTO;
-import com.project.roomie.dto.create.InteressesInteressadosCreateDTO;
 
 @RestController
 @RequestMapping("/api/interessesInteressados")

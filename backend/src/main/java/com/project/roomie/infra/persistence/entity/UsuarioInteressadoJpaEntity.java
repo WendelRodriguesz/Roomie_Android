@@ -2,7 +2,10 @@ package com.project.roomie.infra.persistence.entity;
 
 import com.project.roomie.infra.persistence.entity.enums.GeneroJpaEntity;
 import com.project.roomie.infra.persistence.entity.enums.RoleJpaEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.DiscriminatorValue;
+import jakarta.persistence.Entity;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.OneToOne;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

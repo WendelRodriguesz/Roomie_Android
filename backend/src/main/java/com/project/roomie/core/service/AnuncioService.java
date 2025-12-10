@@ -1,8 +1,6 @@
 package com.project.roomie.core.service;
 
 import com.project.roomie.core.model.Anuncio;
-import com.project.roomie.core.model.InteressesInteressados;
-import com.project.roomie.core.model.UsuarioOfertante;
 import com.project.roomie.core.model.UsuarioOfertante;
 import com.project.roomie.mapper.AnuncioMapper;
 import com.project.roomie.mapper.UsuarioOfertanteMapper;

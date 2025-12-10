@@ -1,13 +1,10 @@
 package com.project.roomie.dto.create;
 
 import com.project.roomie.core.model.enums.Genero;
-import com.project.roomie.core.model.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
-import java.time.LocalDate;
 
 @Getter
 @Setter

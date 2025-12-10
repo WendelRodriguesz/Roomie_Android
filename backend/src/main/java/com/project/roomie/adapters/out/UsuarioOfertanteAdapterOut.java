@@ -2,7 +2,6 @@ package com.project.roomie.adapters.out;
 
 import com.project.roomie.core.model.UsuarioOfertante;
 import com.project.roomie.infra.persistence.entity.UsuarioOfertanteJpaEntity;
-import com.project.roomie.infra.persistence.entity.UsuarioOfertanteJpaEntity;
 import com.project.roomie.infra.persistence.repository.UsuarioOfertanteRepository;
 import com.project.roomie.mapper.UsuarioOfertanteMapper;
 import com.project.roomie.ports.out.UsuarioOfertantePortOut;

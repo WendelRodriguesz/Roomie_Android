@@ -1,7 +1,6 @@
 package com.project.roomie.core.service;
 
 import com.project.roomie.core.model.UsuarioOfertante;
-import com.project.roomie.core.model.UsuarioOfertante;
 import com.project.roomie.mapper.UsuarioOfertanteMapper;
 import com.project.roomie.ports.in.UsuarioOfertantePortIn;
 import com.project.roomie.ports.out.BucketPortOut;
