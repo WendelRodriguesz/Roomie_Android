@@ -36,12 +36,4 @@ public class UsuarioInteressadoJpaEntity extends UsuarioJpaEntity{
         this.interesses = interesses;
         super(id, nome, email, senha, data_de_nascimento, idade, cidade, ocupacao, bio, genero, role, foto_de_perfil);
     }
-
-    public InteressesInteressadosJpaEntity getInteresses() {
-        return interesses;
-    }
-
-    public void setInteresses(InteressesInteressadosJpaEntity interesses) {
-        this.interesses = interesses;
-    }
 }
