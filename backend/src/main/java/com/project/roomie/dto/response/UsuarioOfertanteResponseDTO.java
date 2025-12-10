@@ -21,4 +21,5 @@ public class UsuarioOfertanteResponseDTO {
     private String ocupacao;
     private String bio;
     private Genero genero;
+    private String foto_de_perfil;
 }

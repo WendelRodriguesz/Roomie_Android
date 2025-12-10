@@ -21,5 +21,6 @@ public class UsuarioInteressadoResponseDTO {
     private String ocupacao;
     private String bio;
     private Genero genero;
+    private String foto_de_perfil;
     private InteressesInteressadosResponseDTO interesses;
 }
