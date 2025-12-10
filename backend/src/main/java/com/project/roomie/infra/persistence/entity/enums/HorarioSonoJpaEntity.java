@@ -5,7 +5,7 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum Horario_sonoJpaEntity {
+public enum HorarioSonoJpaEntity {
     MATUTINO("MATUTINO"),
     VESPERTINO("VESPERTINO"),
     NOTURNO("NOTURNO"),

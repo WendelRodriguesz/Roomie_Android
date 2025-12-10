@@ -1,8 +1,8 @@
 package com.project.roomie.infra.persistence.entity;
 
-import com.project.roomie.infra.persistence.entity.enums.Frequencia_festasJpaEntity;
-import com.project.roomie.infra.persistence.entity.enums.Habitos_limpezaJpaEntity;
-import com.project.roomie.infra.persistence.entity.enums.Horario_sonoJpaEntity;
+import com.project.roomie.infra.persistence.entity.enums.FrequenciaFestasJpaEntity;
+import com.project.roomie.infra.persistence.entity.enums.HabitosLimpezaJpaEntity;
+import com.project.roomie.infra.persistence.entity.enums.HorarioSonoJpaEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -21,18 +21,18 @@ public class InteressesInteressadosJpaEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Frequencia_festasJpaEntity frequencia_festas;
+    private FrequenciaFestasJpaEntity frequencia_festas;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Habitos_limpezaJpaEntity habitos_limpeza;
+    private HabitosLimpezaJpaEntity habitos_limpeza;
 
     @Column(nullable = false)
     private boolean aceita_pets;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private Horario_sonoJpaEntity horario_sono;
+    private HorarioSonoJpaEntity horario_sono;
 
     @Column(nullable = false)
     private float orcamento_min;

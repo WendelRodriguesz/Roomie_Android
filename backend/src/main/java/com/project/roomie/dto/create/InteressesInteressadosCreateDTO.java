@@ -1,8 +1,8 @@
 package com.project.roomie.dto.create;
 
-import com.project.roomie.core.model.enums.Frequencia_festas;
-import com.project.roomie.core.model.enums.Habitos_limpeza;
-import com.project.roomie.core.model.enums.Horario_sono;
+import com.project.roomie.core.model.enums.FrequenciaFestas;
+import com.project.roomie.core.model.enums.HabitosLimpeza;
+import com.project.roomie.core.model.enums.HorarioSono;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -13,10 +13,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class InteressesInteressadosCreateDTO {
-    private Frequencia_festas frequencia_festas;
-    private Habitos_limpeza habitos_limpeza;
+    private FrequenciaFestas frequencia_festas;
+    private HabitosLimpeza habitos_limpeza;
     private boolean aceita_pets;
-    private Horario_sono horario_sono;
+    private HorarioSono horario_sono;
     private float orcamento_min;
     private float orcamento_max;
     private boolean aceita_dividir_quarto;

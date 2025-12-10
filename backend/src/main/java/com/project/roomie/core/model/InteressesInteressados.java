@@ -1,16 +1,16 @@
 package com.project.roomie.core.model;
 
-import com.project.roomie.core.model.enums.Frequencia_festas;
-import com.project.roomie.core.model.enums.Habitos_limpeza;
-import com.project.roomie.core.model.enums.Horario_sono;
+import com.project.roomie.core.model.enums.FrequenciaFestas;
+import com.project.roomie.core.model.enums.HabitosLimpeza;
+import com.project.roomie.core.model.enums.HorarioSono;
 
 public class InteressesInteressados {
 
     private Integer id;
-    private Frequencia_festas frequencia_festas;
-    private Habitos_limpeza habitos_limpeza;
+    private FrequenciaFestas frequencia_festas;
+    private HabitosLimpeza habitos_limpeza;
     private boolean aceita_pets;
-    private Horario_sono horario_sono;
+    private HorarioSono horario_sono;
     private float orcamento_min;
     private float orcamento_max;
     private boolean aceita_dividir_quarto;
@@ -20,10 +20,10 @@ public class InteressesInteressados {
     }
 
     public InteressesInteressados(Integer id,
-                                  Frequencia_festas frequencia_festas,
-                                  Habitos_limpeza habitos_limpeza,
+                                  FrequenciaFestas frequencia_festas,
+                                  HabitosLimpeza habitos_limpeza,
                                   boolean aceita_pets,
-                                  Horario_sono horario_sono,
+                                  HorarioSono horario_sono,
                                   float orcamento_min,
                                   float orcamento_max,
                                   boolean aceita_dividir_quarto) {
@@ -45,19 +45,19 @@ public class InteressesInteressados {
         this.id = id;
     }
 
-    public Frequencia_festas getFrequencia_festas() {
+    public FrequenciaFestas getFrequencia_festas() {
         return frequencia_festas;
     }
 
-    public void setFrequencia_festas(Frequencia_festas frequencia_festas) {
+    public void setFrequencia_festas(FrequenciaFestas frequencia_festas) {
         this.frequencia_festas = frequencia_festas;
     }
 
-    public Habitos_limpeza getHabitos_limpeza() {
+    public HabitosLimpeza getHabitos_limpeza() {
         return habitos_limpeza;
     }
 
-    public void setHabitos_limpeza(Habitos_limpeza habitos_limpeza) {
+    public void setHabitos_limpeza(HabitosLimpeza habitos_limpeza) {
         this.habitos_limpeza = habitos_limpeza;
     }
 
@@ -69,11 +69,11 @@ public class InteressesInteressados {
         this.aceita_pets = aceita_pets;
     }
 
-    public Horario_sono getHorario_sono() {
+    public HorarioSono getHorario_sono() {
         return horario_sono;
     }
 
-    public void setHorario_sono(Horario_sono horario_sono) {
+    public void setHorario_sono(HorarioSono horario_sono) {
         this.horario_sono = horario_sono;
     }
 

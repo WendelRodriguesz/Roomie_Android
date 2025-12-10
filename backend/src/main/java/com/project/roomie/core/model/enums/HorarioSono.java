@@ -1,6 +1,6 @@
 package com.project.roomie.core.model.enums;
 
-public enum Horario_sono {
+public enum HorarioSono {
     MATUTINO("MATUTINO"),
     VESPERTINO("VESPERTINO"),
     NOTURNO("NOTURNO"),
@@ -8,7 +8,7 @@ public enum Horario_sono {
 
     private final String horario_sono;
 
-    Horario_sono(String horario_sono) {
+    HorarioSono(String horario_sono) {
         this.horario_sono = horario_sono;
     }
 
