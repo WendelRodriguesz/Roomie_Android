@@ -60,4 +60,9 @@ public class UsuarioOfertanteService implements UsuarioOfertantePortIn {
             return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
         }
     }
+
+    @Override
+    public UsuarioOfertante visualizar(Integer id_usuario){
+        return usuarioOfertantePortOut.findById(id_usuario);
+    }
 }
