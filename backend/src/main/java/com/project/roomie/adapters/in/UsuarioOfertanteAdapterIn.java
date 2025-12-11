@@ -1,6 +1,7 @@
 package com.project.roomie.adapters.in;
 
 import com.project.roomie.dto.create.UsuarioOfertanteCreateDTO;
+import com.project.roomie.dto.response.UsuarioInteressadoResponseDTO;
 import com.project.roomie.dto.response.UsuarioOfertanteResponseDTO;
 import com.project.roomie.mapper.UsuarioOfertanteMapper;
 import com.project.roomie.ports.in.UsuarioOfertantePortIn;
@@ -32,5 +33,12 @@ public class UsuarioOfertanteAdapterIn {
     @PostMapping("/uploadFotoDePerfil/{id_usuario}")
     public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, @PathVariable Integer id_usuario) {
         return usuarioOfertantePortIn.uploadFotoDePerfil(file, id_usuario);
+    }
+
+    @GetMapping("/visualizar/{id_usuario}")
+    public UsuarioOfertanteResponseDTO visualizar(@PathVariable Integer id_usuario){
+        return usuarioOfertanteMapper.ModeltoResponseDTO(
+                usuarioOfertantePortIn.visualizar(id_usuario)
+        );
     }
 }
