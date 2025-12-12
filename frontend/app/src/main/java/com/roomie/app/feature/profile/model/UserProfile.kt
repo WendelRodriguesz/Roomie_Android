@@ -3,9 +3,13 @@ package com.roomie.app.feature.profile.model
 import androidx.annotation.DrawableRes
 
 enum class ProfileRole { OFFEROR, SEEKER }
+
 enum class PartyFrequency { NEVER, SOMETIMES, FREQUENT }
+
 enum class SleepRoutine { MORNING, NIGHT, FLEXIBLE }
+
 enum class CleaningHabit { DAILY, WEEKLY, BIWEEKLY, OCCASIONAL }
+
 enum class GenderOption(val label: String) {
     MASCULINO("Masculino"),
     FEMININO("Feminino"),
@@ -26,7 +30,9 @@ data class LifestylePreferences(
     val sleepRoutine: SleepRoutine,
     val cleanlinessLevel: Int,
     val socialLevel: Int,
-    val studySchedule: String,
+    val studySchedule: String?,
+    val cleaningHabit: CleaningHabit,
+    val acceptsSharedRoom: Boolean,
     val tags: List<String>,
 )
 
@@ -38,14 +44,17 @@ data class AccountSettings(
 )
 
 data class UserProfile(
-    val id: String,
+    val id: Long,
     val name: String,
-    val age: Int,
+    val email: String?,
+    val age: Int?,
     val role: ProfileRole,
 
     val city: String,
     val professionOrCourse: String?,
     val bio: String,
+
+    val gender: GenderOption?,
 
     val budget: Budget,
     val lifestyle: LifestylePreferences,
