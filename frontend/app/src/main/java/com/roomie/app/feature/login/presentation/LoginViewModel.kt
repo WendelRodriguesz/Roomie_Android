@@ -8,6 +8,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import com.roomie.app.core.data.session.AuthSession
 
 data class LoginUiState(
     val isLoading: Boolean = false,
@@ -38,6 +39,10 @@ class LoginViewModel(
 
             authRepository.login(email, senha)
                 .onSuccess { loginResponse ->
+                    AuthSession.userId = loginResponse.id
+                    AuthSession.token = loginResponse.token
+                    AuthSession.refreshToken = loginResponse.refreshToken
+                    AuthSession.role = loginResponse.role
                     _uiState.value = _uiState.value.copy(
                         isLoading = false,
                         isLoginSuccessful = true,

@@ -33,6 +33,8 @@ import com.roomie.app.feature.register.ui.RegisterScreen
 import com.roomie.app.feature.welcome_screen.ui.WelcomeScreen
 import com.roomie.app.feature.vaga.ui.CadastrarVagasScreen
 import com.roomie.app.feature.register.ui.RegisterRoleScreen
+import com.roomie.app.feature.profile.ui.ProfileScreenRoute
+import com.roomie.app.core.data.session.AuthSession
 
 @Composable
 fun AppNavHost(startDestination: String) {
@@ -70,7 +72,36 @@ fun AppNavHost(startDestination: String) {
             composable(Routes.CHAT)   { ChatScreen() }
             composable(Routes.MATCH) { MatchRoute() }
             composable(Routes.NOTIFICATIONS)   { NotificationsScreen() }
-            composable(Routes.PROFILE)   { ProfileScreen(UserMock.profileYou, onEditClick = {navController.navigate("edit_profile")}) }
+            composable(Routes.PROFILE) { backStackEntry ->
+                val userId = AuthSession.userId
+                val token = AuthSession.token
+
+                if (userId == null || token.isNullOrBlank()) {
+                    navController.navigate(Routes.LOGIN) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                } else {
+                    ProfileScreenRoute(
+                        userId = userId,
+                        token = token,
+                        onEditClick = { navController.navigate(Routes.EDIT_PROFILE) },
+                        onLogoutClick = {
+                            AuthSession.clear()
+                            navController.navigate(Routes.LOGIN) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    inclusive = true
+                                }
+                                launchSingleTop = true
+                            }
+                        }
+                    )
+                }
+            }
+
+
             composable(Routes.WELCOME_SCREEN) { WelcomeScreen(navController) }
             composable(Routes.LOGIN) { LoginScreen(navController) }
             composable(Routes.REGISTER) { RegisterScreen(navController) }

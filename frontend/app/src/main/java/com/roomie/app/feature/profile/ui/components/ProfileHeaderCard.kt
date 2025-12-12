@@ -49,8 +49,13 @@ fun ProfileHeaderCard(profile: UserProfile) {
                     verticalArrangement = Arrangement.spacedBy(4.dp),
                     modifier = Modifier.weight(1f)
                 ) {
+                    val title = if (profile.age != null) {
+                        "${profile.name}, ${profile.age}"
+                    } else {
+                        profile.name
+                    }
                     Text(
-                        text = "${profile.name}, ${profile.age}",
+                        text = title,
                         style = MaterialTheme.typography.titleMedium.copy(
                             fontWeight = FontWeight.Bold
                         )
