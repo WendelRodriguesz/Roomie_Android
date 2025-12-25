@@ -37,7 +37,8 @@ public class InteressesInteressadosService implements InteressesInteressadosPort
 
         UsuarioInteressado usuarioInteressado = usuarioInteressadoPortOut.findById(id_usuario);
         usuarioInteressado.setInteresses(interesses);
-        usuarioInteressado = usuarioInteressadoPortOut.save(usuarioInteressadoMapper.ModeltoJpaEntity(usuarioInteressado));
+        usuarioInteressado = usuarioInteressadoPortOut.save(usuarioInteressado);
+
 
         return interesses;
     }

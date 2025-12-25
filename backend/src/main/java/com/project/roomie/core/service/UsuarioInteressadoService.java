@@ -1,6 +1,9 @@
 package com.project.roomie.core.service;
 
 import com.project.roomie.core.model.UsuarioInteressado;
+import com.project.roomie.dto.response.UsuarioInteressadoResponseDTO;
+import com.project.roomie.dto.update.UsuarioInteressadoUpdateDTO;
+import com.project.roomie.infra.persistence.entity.UsuarioInteressadoJpaEntity;
 import com.project.roomie.mapper.UsuarioInteressadoMapper;
 import com.project.roomie.ports.in.UsuarioInteressadoPortIn;
 import com.project.roomie.ports.out.BucketPortOut;
@@ -39,7 +42,7 @@ public class UsuarioInteressadoService implements UsuarioInteressadoPortIn {
 
         usuarioInteressado.setSenha(passwordEncoder.encode(usuarioInteressado.getSenha()));
         usuarioInteressado.setIdade(ageCalculator.calcularIdade(usuarioInteressado.getData_de_nascimento()));
-        return usuarioInteressadoPortOut.save(usuarioInteressadoMapper.ModeltoJpaEntity(usuarioInteressado));
+        return usuarioInteressadoPortOut.save(usuarioInteressado);
     }
 
     @Override
@@ -54,7 +57,7 @@ public class UsuarioInteressadoService implements UsuarioInteressadoPortIn {
 
             UsuarioInteressado usuario = usuarioInteressadoPortOut.findById(id_usuario);
             usuario.setFoto_de_perfil(url);
-            usuarioInteressadoPortOut.save(usuarioInteressadoMapper.ModeltoJpaEntity(usuario));
+            usuarioInteressadoPortOut.save(usuario);
 
             return ResponseEntity.ok(url);
 
@@ -67,4 +70,23 @@ public class UsuarioInteressadoService implements UsuarioInteressadoPortIn {
     public UsuarioInteressado visualizar(Integer id_usuario){
         return usuarioInteressadoPortOut.findById(id_usuario);
     }
+
+    @Override
+    public UsuarioInteressadoResponseDTO atualizar(Integer id, UsuarioInteressadoUpdateDTO usuarioInteressado) {
+
+        UsuarioInteressado usuario = usuarioInteressadoPortOut.findById(id);
+
+        if(usuario == null) {
+            throw new RuntimeException("Usuário não encontrado");
+        }
+
+        usuarioInteressadoMapper.updateUsuarioFromDto(usuarioInteressado, usuario);
+
+        UsuarioInteressado usuarioAtualizado = usuarioInteressadoPortOut.save(usuario);
+
+        return usuarioInteressadoMapper.ModeltoResponseDTO(usuarioAtualizado);
+    }
+
+
+
 }

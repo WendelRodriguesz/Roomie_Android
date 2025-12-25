@@ -22,8 +22,15 @@ public class UsuarioInteressadoAdapterOut implements UsuarioInteressadoPortOut {
     }
 
     @Override
-    public UsuarioInteressado save(UsuarioInteressadoJpaEntity usuarioInteressadoJpaEntity){
-        return usuarioInteressadoMapper.JpaEntitytoModel(usuarioInteressadoRepository.save(usuarioInteressadoJpaEntity));
+    public UsuarioInteressado save(UsuarioInteressado usuarioInteressado){
+        UsuarioInteressadoJpaEntity entity =
+                usuarioInteressadoMapper.ModeltoJpaEntity(usuarioInteressado);
+
+        UsuarioInteressadoJpaEntity salvo =
+                usuarioInteressadoRepository.save(entity);
+
+        return usuarioInteressadoMapper.JpaEntitytoModel(salvo);
+
     }
 
     @Override
