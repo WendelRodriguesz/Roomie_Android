@@ -3,6 +3,7 @@ package com.project.roomie.adapters.in;
 import com.project.roomie.dto.create.UsuarioOfertanteCreateDTO;
 import com.project.roomie.dto.response.UsuarioInteressadoResponseDTO;
 import com.project.roomie.dto.response.UsuarioOfertanteResponseDTO;
+import com.project.roomie.dto.update.UsuarioOfertanteUpdateDTO;
 import com.project.roomie.mapper.UsuarioOfertanteMapper;
 import com.project.roomie.ports.in.UsuarioOfertantePortIn;
 import org.springframework.http.ResponseEntity;
@@ -40,5 +41,12 @@ public class UsuarioOfertanteAdapterIn {
         return usuarioOfertanteMapper.ModeltoResponseDTO(
                 usuarioOfertantePortIn.visualizar(id_usuario)
         );
+    }
+
+    @PatchMapping("/atualizar/{id}")
+    public ResponseEntity<UsuarioOfertanteResponseDTO> atualizar(
+            @PathVariable Integer id,
+            @RequestBody UsuarioOfertanteUpdateDTO usuarioOfertanteUpdateDTO ) {
+        return ResponseEntity.ok(usuarioOfertantePortIn.atualizar(id, usuarioOfertanteUpdateDTO));
     }
 }

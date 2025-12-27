@@ -5,6 +5,6 @@ import com.project.roomie.infra.persistence.entity.UsuarioOfertanteJpaEntity;
 
 public interface UsuarioOfertantePortOut {
 
-    UsuarioOfertante save(UsuarioOfertanteJpaEntity usuarioOfertanteJpaEntity);
+    UsuarioOfertante save(UsuarioOfertante usuarioOfertante);
     UsuarioOfertante findById(Integer id);
 }

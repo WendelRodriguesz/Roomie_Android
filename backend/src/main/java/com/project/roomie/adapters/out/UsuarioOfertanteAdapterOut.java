@@ -22,8 +22,14 @@ public class UsuarioOfertanteAdapterOut implements UsuarioOfertantePortOut {
     }
 
     @Override
-    public UsuarioOfertante save(UsuarioOfertanteJpaEntity usuarioOfertanteJpaEntity){
-        return usuarioOfertanteMapper.JpaEntitytoModel(usuarioOfertanteRepository.save(usuarioOfertanteJpaEntity));
+    public UsuarioOfertante save(UsuarioOfertante usuarioOfertante){
+        UsuarioOfertanteJpaEntity entity =
+                usuarioOfertanteMapper.ModeltoJpaEntity(usuarioOfertante);
+
+        UsuarioOfertanteJpaEntity salvo =
+                usuarioOfertanteRepository.save(entity);
+
+        return usuarioOfertanteMapper.JpaEntitytoModel(salvo);
     }
 
     @Override

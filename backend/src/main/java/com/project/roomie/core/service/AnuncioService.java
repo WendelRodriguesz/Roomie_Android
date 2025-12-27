@@ -41,7 +41,7 @@ public class AnuncioService implements AnuncioPortIn {
 
         UsuarioOfertante usuarioOfertante = usuarioOfertantePortOut.findById(id_usuario);
         usuarioOfertante.setAnuncio(novo_anuncio);
-        usuarioOfertante = usuarioOfertantePortOut.save(usuarioOfertanteMapper.ModeltoJpaEntity(usuarioOfertante));
+        usuarioOfertante = usuarioOfertantePortOut.save(usuarioOfertante);
 
         return novo_anuncio;
     }
@@ -67,7 +67,7 @@ public class AnuncioService implements AnuncioPortIn {
 
             anuncioPortOut.save(anuncioMapper.ModeltoJpaEntity(anuncio));
             usuario.setAnuncio(anuncio);
-            usuarioOfertantePortOut.save(usuarioOfertanteMapper.ModeltoJpaEntity(usuario));
+            usuarioOfertantePortOut.save(usuario);
 
             return ResponseEntity.ok(url);
 

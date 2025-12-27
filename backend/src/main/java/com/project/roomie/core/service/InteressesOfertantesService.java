@@ -37,7 +37,7 @@ public class InteressesOfertantesService implements InteressesOfertantesPortIn {
 
         UsuarioOfertante usuarioOfertante = usuarioOfertantePortOut.findById(id_usuario);
         usuarioOfertante.setInteresses(interesses);
-        usuarioOfertante = usuarioOfertantePortOut.save(usuarioOfertanteMapper.ModeltoJpaEntity(usuarioOfertante));
+        usuarioOfertante = usuarioOfertantePortOut.save(usuarioOfertante);
 
         return interesses;
     }
