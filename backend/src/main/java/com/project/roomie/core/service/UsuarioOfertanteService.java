@@ -1,6 +1,8 @@
 package com.project.roomie.core.service;
 
 import com.project.roomie.core.model.UsuarioOfertante;
+import com.project.roomie.dto.response.UsuarioOfertanteResponseDTO;
+import com.project.roomie.dto.update.UsuarioOfertanteUpdateDTO;
 import com.project.roomie.mapper.UsuarioOfertanteMapper;
 import com.project.roomie.ports.in.UsuarioOfertantePortIn;
 import com.project.roomie.ports.out.BucketPortOut;
@@ -39,7 +41,7 @@ public class UsuarioOfertanteService implements UsuarioOfertantePortIn {
 
         usuarioOfertante.setSenha(passwordEncoder.encode(usuarioOfertante.getSenha()));
         usuarioOfertante.setIdade(ageCalculator.calcularIdade(usuarioOfertante.getData_de_nascimento()));
-        return usuarioOfertantePortOut.save(usuarioOfertanteMapper.ModeltoJpaEntity(usuarioOfertante));
+        return usuarioOfertantePortOut.save(usuarioOfertante);
     }
 
     @Override
@@ -53,7 +55,7 @@ public class UsuarioOfertanteService implements UsuarioOfertantePortIn {
             String url = bucketPortOut.upload(file);
             UsuarioOfertante usuario = usuarioOfertantePortOut.findById(id_usuario);
             usuario.setFoto_de_perfil(url);
-            usuarioOfertantePortOut.save(usuarioOfertanteMapper.ModeltoJpaEntity(usuario));
+            usuarioOfertantePortOut.save(usuario);
             return ResponseEntity.ok(url);
 
         } catch (Exception e) {
@@ -64,5 +66,21 @@ public class UsuarioOfertanteService implements UsuarioOfertantePortIn {
     @Override
     public UsuarioOfertante visualizar(Integer id_usuario){
         return usuarioOfertantePortOut.findById(id_usuario);
+    }
+
+    @Override
+    public UsuarioOfertanteResponseDTO atualizar(Integer id, UsuarioOfertanteUpdateDTO usuarioOfertante) {
+        UsuarioOfertante usuario = usuarioOfertantePortOut.findById(id);
+
+        if(usuario == null){
+            throw new RuntimeException("Usuário não encontrado");
+        }
+
+        usuarioOfertanteMapper.updateUsuarioFromDto(usuarioOfertante, usuario);
+
+        UsuarioOfertante usuarioAtualizado = usuarioOfertantePortOut.save(usuario);
+
+        return usuarioOfertanteMapper.ModeltoResponseDTO(usuarioAtualizado);
+
     }
 }

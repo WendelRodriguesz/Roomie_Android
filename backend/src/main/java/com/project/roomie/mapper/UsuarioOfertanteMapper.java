@@ -1,12 +1,13 @@
 package com.project.roomie.mapper;
 
+import com.project.roomie.core.model.UsuarioInteressado;
 import com.project.roomie.core.model.UsuarioOfertante;
 import com.project.roomie.dto.create.UsuarioOfertanteCreateDTO;
 import com.project.roomie.dto.response.UsuarioOfertanteResponseDTO;
+import com.project.roomie.dto.update.UsuarioOfertanteUpdateDTO;
 import com.project.roomie.infra.persistence.entity.UsuarioOfertanteJpaEntity;
 import com.project.roomie.util.DateFormatter;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring", uses = { DateFormatter.class })
 public interface UsuarioOfertanteMapper {
@@ -20,4 +21,10 @@ public interface UsuarioOfertanteMapper {
 
     @Mapping(source = "data_de_nascimento", target = "data_de_nascimento", qualifiedByName = "toStringDate")
     UsuarioOfertanteResponseDTO ModeltoResponseDTO(UsuarioOfertante usuarioOfertante);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateUsuarioFromDto(
+            UsuarioOfertanteUpdateDTO dto,
+            @MappingTarget UsuarioOfertante usuarioOfertante
+    );
 }
