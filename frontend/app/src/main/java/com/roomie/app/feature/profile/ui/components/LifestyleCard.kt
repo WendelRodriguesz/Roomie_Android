@@ -46,21 +46,6 @@ fun LifestyleCard(profile: UserProfile) {
                 )
             )
 
-//            PreferenceRow(
-//                label = "Nível de limpeza",
-//                value = lifestyle.cleanlinessLevel,
-//            )
-//
-//            PreferenceRow(
-//                label = "Nível social",
-//                value = lifestyle.socialLevel,
-//            )
-
-            InfoRow(
-                label = "Horário de estudo preferido",
-                value = lifestyle.studySchedule ?: "Não informado"
-            )
-
             InfoRow(
                 label = "Gosta de ir a festas",
                 value = when (lifestyle.partyFrequency) {

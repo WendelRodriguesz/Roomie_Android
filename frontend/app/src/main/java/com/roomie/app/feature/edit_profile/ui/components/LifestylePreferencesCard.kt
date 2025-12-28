@@ -18,6 +18,8 @@ fun LifestylePreferencesCard(
     onAcceptsPetsChange: (Boolean) -> Unit,
     isSmoker: Boolean,
     onIsSmokerChange: (Boolean) -> Unit,
+    acceptsSharedRoom: Boolean,
+    onAcceptsSharedRoomChange: (Boolean) -> Unit,
     sleepRoutine: SleepRoutine,
     onSleepRoutineChange: (SleepRoutine) -> Unit,
     partyFrequency: PartyFrequency,
@@ -57,6 +59,15 @@ fun LifestylePreferencesCard(
                 checked = isSmoker,
                 onCheckedChange = onIsSmokerChange
             )
+
+            PreferenceSwitch(
+                label = "Aceita dividir quarto",
+                checked = acceptsSharedRoom,
+                onCheckedChange = onAcceptsSharedRoomChange
+            )
+
+            HorizontalDivider()
+
 
             HorizontalDivider()
 
@@ -116,6 +127,8 @@ private fun LifestylePreferencesCardPreview() {
             onAcceptsPetsChange = {},
             isSmoker = false,
             onIsSmokerChange = {},
+            acceptsSharedRoom = false,
+            onAcceptsSharedRoomChange = {  },
             sleepRoutine = SleepRoutine.FLEXIBLE,
             onSleepRoutineChange = {},
             partyFrequency = PartyFrequency.SOMETIMES,

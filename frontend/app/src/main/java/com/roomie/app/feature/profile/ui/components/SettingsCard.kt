@@ -5,37 +5,36 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.DividerDefaults
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
-import androidx.compose.material3.TextButton
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import com.roomie.app.core.ui.theme.LocalAppSettings
+import com.roomie.app.feature.profile.model.UserProfile
 import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 import com.roomie.app.feature.profile.model.UserMock
-import com.roomie.app.feature.profile.model.UserProfile
 import com.roomie.app.feature.profile.ui.components.SettingSwitch
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Modifier
+import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.roomie.app.core.ui.theme.AppSettings
 
 @Composable
 fun SettingsCard(
     profile: UserProfile,
     onLogoutClick: () -> Unit,
 ) {
-    val settings = profile.settings
+    val appSettingsState = LocalAppSettings.current
+    val settings = appSettingsState.value
 
     Card(
         shape = RoundedCornerShape(24.dp),
         modifier = Modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -43,33 +42,39 @@ fun SettingsCard(
         ) {
             Text(
                 text = "Configurações",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.SemiBold
-                )
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
             )
 
             SettingSwitch(
                 label = "Notificações",
                 checked = settings.notificationsEnabled,
-                onCheckedChange = {}
+                onCheckedChange = { checked ->
+                    appSettingsState.value = settings.copy(notificationsEnabled = checked)
+                }
             )
 
             SettingSwitch(
                 label = "Aparecer como online",
                 checked = settings.showAsOnline,
-                onCheckedChange = {}
+                onCheckedChange = { checked ->
+                    appSettingsState.value = settings.copy(showAsOnline = checked)
+                }
             )
 
             SettingSwitch(
                 label = "Descoberta",
                 checked = settings.discoveryEnabled,
-                onCheckedChange = {}
+                onCheckedChange = { checked ->
+                    appSettingsState.value = settings.copy(discoveryEnabled = checked)
+                }
             )
 
             SettingSwitch(
                 label = "Modo escuro",
                 checked = settings.darkModeEnabled,
-                onCheckedChange = {}
+                onCheckedChange = { checked ->
+                    appSettingsState.value = settings.copy(darkModeEnabled = checked)
+                }
             )
 
             HorizontalDivider(Modifier, DividerDefaults.Thickness, DividerDefaults.color)
@@ -78,10 +83,7 @@ fun SettingsCard(
                 onClick = onLogoutClick,
                 modifier = Modifier.align(Alignment.Start)
             ) {
-                Text(
-                    text = "Sair da conta",
-                    color = MaterialTheme.colorScheme.error
-                )
+                Text("Sair da conta", color = MaterialTheme.colorScheme.error)
             }
         }
     }
@@ -90,8 +92,12 @@ fun SettingsCard(
 @RoomiePreview
 @Composable
 private fun SettingsCardPreview(){
-    Roomie_AndroidTheme (dynamicColor = false){
-        val onLogoutClick: () -> Unit = {}
-        SettingsCard(UserMock.profileRoomie1, onLogoutClick)
+    val appSettingsState = remember { mutableStateOf(AppSettings()) }
+
+    CompositionLocalProvider(LocalAppSettings provides appSettingsState) {
+        Roomie_AndroidTheme(dynamicColor = false) {
+            val onLogoutClick: () -> Unit = {}
+            SettingsCard(UserMock.profileRoomie1, onLogoutClick)
+        }
     }
 }
