@@ -13,29 +13,36 @@ import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 import com.roomie.app.feature.profile.model.UserMock
 import com.roomie.app.feature.profile.model.UserProfile
 import com.roomie.app.feature.profile.ui.components.ProfileAvatar
+import com.roomie.app.core.ui.components.LabeledOutlinedField
+import com.roomie.app.feature.profile.model.GenderOption
 
 @Composable
 fun BasicInfoCard(
     profile: UserProfile,
     name: String,
     onNameChange: (String) -> Unit,
-    age: String,
-    onAgeChange: (String) -> Unit,
+
     city: String,
     onCityChange: (String) -> Unit,
+
     course: String,
     onCourseChange: (String) -> Unit,
+
     bio: String,
     onBioChange: (String) -> Unit,
+
+    gender: GenderOption?,
+    onGenderChange: (GenderOption) -> Unit,
+
     onPhotoChangeClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val selectedGender = gender ?: GenderOption.PREFIRO_NAO_INFORMAR
+
     Card(
         shape = RoundedCornerShape(24.dp),
         modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -43,9 +50,7 @@ fun BasicInfoCard(
         ) {
             Text(
                 text = "Informações básicas",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.SemiBold
-                )
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
             )
 
             Column(
@@ -54,69 +59,60 @@ fun BasicInfoCard(
             ) {
                 ProfileAvatar(profile)
                 Spacer(modifier = Modifier.height(8.dp))
-                TextButton(onClick = onPhotoChangeClick) {
-                    Text("Alterar foto")
-                }
+                TextButton(onClick = onPhotoChangeClick) { Text("Alterar foto") }
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-                OutlinedTextField(
+                LabeledOutlinedField(
+                    title = "Nome",
                     value = name,
                     onValueChange = onNameChange,
                     modifier = Modifier.weight(1f),
-                    label = { Text("Nome") },
                     singleLine = true
                 )
-                OutlinedTextField(
-                    value = age,
-                    onValueChange = { newAge ->
-                        if (newAge.all { char -> char.isDigit() } && newAge.length <= 3) {
-                            onAgeChange(newAge)
-                        }
-                    },
-                    modifier = Modifier.width(100.dp),
-                    label = { Text("Idade") },
-                    singleLine = true
-                )
+
             }
 
-            OutlinedTextField(
+            LabeledOutlinedField(
+                title = "Curso / Profissão",
                 value = course,
                 onValueChange = onCourseChange,
-                label = { Text("Curso / Profissão") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
 
-            OutlinedTextField(
+            LabeledOutlinedField(
+                title = "Cidade",
                 value = city,
                 onValueChange = onCityChange,
-                label = { Text("Cidade") },
                 modifier = Modifier.fillMaxWidth(),
                 singleLine = true
             )
 
-            OutlinedTextField(
+            LabeledOutlinedField(
+                title = "Biografia",
                 value = bio,
-                onValueChange = { newBio ->
-                    if (newBio.length <= 230) {
-                        onBioChange(newBio)
-                    }
-                },
-                label = { Text("Biografia") },
+                onValueChange = { newBio -> if (newBio.length <= 230) onBioChange(newBio) },
                 modifier = Modifier.fillMaxWidth(),
+                singleLine = false,
                 minLines = 3,
                 maxLines = 6,
-                supportingText = {
-                    Text(
-                        text = "${bio.length}/230",
-                        style = MaterialTheme.typography.bodySmall
-                    )
-                }
+                supportingText = { Text("${bio.length}/230", style = MaterialTheme.typography.bodySmall) }
+            )
+
+            HorizontalDivider()
+
+            com.roomie.app.core.ui.components.ChipSelector(
+                title = "Gênero",
+                options = GenderOption.entries,
+                selected = selectedGender,
+                onSelect = onGenderChange,
+                labelOf = { it.label }
             )
         }
     }
 }
+
 
 @RoomiePreview
 @Composable
@@ -127,14 +123,14 @@ private fun BasicInfoCardPreview() {
             profile = profile,
             name = profile.name,
             onNameChange = {},
-            age = profile.age.toString(),
-            onAgeChange = {},
             city = profile.city,
             onCityChange = {},
             course = profile.professionOrCourse ?: "",
             onCourseChange = {},
             bio = profile.bio,
             onBioChange = {},
+            gender = profile.gender,
+            onGenderChange = {},
             onPhotoChangeClick = {}
         )
     }

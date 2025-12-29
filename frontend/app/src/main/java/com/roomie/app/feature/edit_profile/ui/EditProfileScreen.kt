@@ -18,14 +18,15 @@ import com.roomie.app.feature.edit_profile.ui.components.LifestylePreferencesCar
 @Composable
 fun EditProfileScreen(
     profile: UserProfile,
+    isSaving: Boolean = false,
     onCancelClick: () -> Unit = {},
     onSaveClick: (UserProfile) -> Unit = {},
 ) {
-    var name by remember { mutableStateOf(profile.name) }
-    var age by remember { mutableStateOf(profile.age.toString()) }
-    var city by remember { mutableStateOf(profile.city) }
-    var course by remember { mutableStateOf(profile.professionOrCourse ?: "") }
-    var bio by remember { mutableStateOf(profile.bio) }
+    var name by remember(profile.id) { mutableStateOf(profile.name) }
+    var gender by remember(profile.id) { mutableStateOf(profile.gender ?: GenderOption.PREFIRO_NAO_INFORMAR) }
+    var city by remember(profile.id) { mutableStateOf(profile.city) }
+    var course by remember(profile.id) { mutableStateOf(profile.professionOrCourse ?: "") }
+    var bio by remember(profile.id) { mutableStateOf(profile.bio) }
 
     var minBudget by remember { mutableIntStateOf(profile.budget.minBudget ?: 800) }
     var maxBudget by remember { mutableIntStateOf(profile.budget.maxBudget ?: 1200) }
@@ -37,7 +38,9 @@ fun EditProfileScreen(
     var acceptsPets by remember { mutableStateOf(profile.lifestyle.acceptsPets) }
     var sleepRoutine by remember { mutableStateOf(profile.lifestyle.sleepRoutine) }
     var partyFreq by remember { mutableStateOf(profile.lifestyle.partyFrequency) }
-    var studySchedule by remember { mutableStateOf(profile.lifestyle.studySchedule) }
+    var studySchedule by remember { mutableStateOf(profile.lifestyle.studySchedule ?: "") }
+    var acceptsSharedRoom by remember { mutableStateOf(profile.lifestyle.acceptsSharedRoom) }
+
 
     Scaffold(
         topBar = {
@@ -50,12 +53,13 @@ fun EditProfileScreen(
 
                     Button(
                         modifier = Modifier.padding(end = 8.dp),
+                        enabled = !isSaving,
                         onClick = {
                             val updated = profile.copy(
                                 name = name,
-                                age = age.toIntOrNull() ?: profile.age,
+                                gender = gender,
                                 city = city,
-                                professionOrCourse = course,
+                                professionOrCourse = course.ifBlank { null },
                                 bio = bio,
                                 budget = Budget(minBudget, maxBudget),
                                 lifestyle = profile.lifestyle.copy(
@@ -65,13 +69,14 @@ fun EditProfileScreen(
                                     acceptsPets = acceptsPets,
                                     partyFrequency = partyFreq,
                                     sleepRoutine = sleepRoutine,
-                                    studySchedule = studySchedule,
+                                    studySchedule = studySchedule.ifBlank { null },
+                                    acceptsSharedRoom = acceptsSharedRoom,
                                 )
                             )
                             onSaveClick(updated)
                         }
                     ) {
-                        Text("Salvar")
+                        Text(if (isSaving) "Salvando..." else "Salvar")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -93,8 +98,8 @@ fun EditProfileScreen(
                 profile = profile,
                 name = name,
                 onNameChange = { name = it },
-                age = age,
-                onAgeChange = { age = it },
+                gender = gender,
+                onGenderChange = { gender = it },
                 city = city,
                 onCityChange = { city = it },
                 course = course,
@@ -116,14 +121,12 @@ fun EditProfileScreen(
                 onAcceptsPetsChange = { acceptsPets = it },
                 isSmoker = isSmoker,
                 onIsSmokerChange = { isSmoker = it },
+                acceptsSharedRoom = acceptsSharedRoom,
+                onAcceptsSharedRoomChange = { acceptsSharedRoom = it },
                 sleepRoutine = sleepRoutine,
                 onSleepRoutineChange = { sleepRoutine = it },
                 partyFrequency = partyFreq,
                 onPartyFrequencyChange = { partyFreq = it },
-                cleanlinessLevel = cleanliness,
-                onCleanlinessLevelChange = { cleanliness = it },
-                socialLevel = socialLevel,
-                onSocialLevelChange = { socialLevel = it }
             )
         }
     }

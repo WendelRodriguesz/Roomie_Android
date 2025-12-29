@@ -5,28 +5,28 @@ import com.roomie.app.feature.profile.data.remote.dto.UsuarioInteressadoDto
 
 private fun String?.toPartyFrequency(): PartyFrequency {
     return when (this?.uppercase()) {
-        "NUNCA" -> PartyFrequency.NEVER
-        "AS_VEZES", "AS VEZES" -> PartyFrequency.SOMETIMES
-        "FREQUENTE", "FREQUENTEMENTE" -> PartyFrequency.FREQUENT
-        else -> PartyFrequency.SOMETIMES
+        "NUNCA" -> PartyFrequency.NUNCA
+        "AS_VEZES", "AS VEZES" -> PartyFrequency.AS_VEZES
+        "FREQUENTE", "FREQUENTEMENTE" -> PartyFrequency.FREQUENTE
+        else -> PartyFrequency.AS_VEZES
     }
 }
 
 private fun String?.toCleaningHabit(): CleaningHabit {
     return when (this?.uppercase()) {
-        "DIARIO", "DIÁRIO" -> CleaningHabit.DAILY
-        "SEMANAL" -> CleaningHabit.WEEKLY
-        "QUINZENAL" -> CleaningHabit.BIWEEKLY
-        else -> CleaningHabit.OCCASIONAL
+        "DIARIO", "DIÁRIO" -> CleaningHabit.DIARIO
+        "SEMANAL" -> CleaningHabit.SEMANAL
+        "QUINZENAL" -> CleaningHabit.QUINZENAL
+        else -> CleaningHabit.OCASIONAL
     }
 }
 
 private fun String?.toSleepRoutine(): SleepRoutine {
     return when (this?.uppercase()) {
-        "MANHA", "MANHÃ", "MATUTINO" -> SleepRoutine.MORNING
-        "NOITE", "NOTURNO" -> SleepRoutine.NIGHT
-        "FLEXIVEL", "FLEXÍVEL" -> SleepRoutine.FLEXIBLE
-        else -> SleepRoutine.FLEXIBLE
+        "MANHA", "MANHÃ", "MATUTINO" -> SleepRoutine.MATUTINO
+        "NOITE", "NOTURNO" -> SleepRoutine.NOTURNO
+        "VESPERTINO", "TARDE" -> SleepRoutine.VESPERTINO
+        else -> SleepRoutine.FLEXIVEL
     }
 }
 
@@ -35,7 +35,7 @@ private fun String?.toGenderOption(): GenderOption? {
         "MASCULINO" -> GenderOption.MASCULINO
         "FEMININO" -> GenderOption.FEMININO
         "NAO_BINARIO", "NÃO_BINÁRIO", "NÃO BINÁRIO" -> GenderOption.NAO_BINARIO
-        "PREFIRO_NAO_DIZER", "PREFIRO NÃO DIZER" -> GenderOption.PREFIRO_NAO_DIZER
+        "PREFIRO_NAO_DIZER", "PREFIRO NÃO DIZER" -> GenderOption.PREFIRO_NAO_INFORMAR
         else -> null
     }
 }
@@ -47,16 +47,16 @@ fun UsuarioInteressadoDto.toUserProfile(): UserProfile {
     val genderOption = genero.toGenderOption()
 
     val cleanlinessLevel = when (cleaningHabit) {
-        CleaningHabit.DAILY -> 5
-        CleaningHabit.WEEKLY -> 4
-        CleaningHabit.BIWEEKLY -> 3
-        CleaningHabit.OCCASIONAL -> 2
+        CleaningHabit.DIARIO -> 5
+        CleaningHabit.SEMANAL -> 4
+        CleaningHabit.QUINZENAL -> 3
+        CleaningHabit.OCASIONAL -> 2
     }
 
     val socialLevel = when (partyFrequency) {
-        PartyFrequency.NEVER -> 1
-        PartyFrequency.SOMETIMES -> 3
-        PartyFrequency.FREQUENT -> 5
+        PartyFrequency.NUNCA -> 1
+        PartyFrequency.AS_VEZES -> 3
+        PartyFrequency.FREQUENTE -> 5
     }
 
     val tags = buildList {
@@ -73,9 +73,9 @@ fun UsuarioInteressadoDto.toUserProfile(): UserProfile {
         }
 
         when (partyFrequency) {
-            PartyFrequency.NEVER -> add("Não gosta de festas")
-            PartyFrequency.SOMETIMES -> add("Festas às vezes")
-            PartyFrequency.FREQUENT -> add("Gosta de festas")
+            PartyFrequency.NUNCA -> add("Não gosta de festas")
+            PartyFrequency.AS_VEZES -> add("Festas às vezes")
+            PartyFrequency.FREQUENTE -> add("Gosta de festas")
         }
 
         ocupacao?.let { add(it) }
@@ -85,7 +85,7 @@ fun UsuarioInteressadoDto.toUserProfile(): UserProfile {
         acceptsPets = interesses.aceita_pets,
         isSmoker = false, // API ainda não envia isso
         partyFrequency = partyFrequency,
-        isQuiet = partyFrequency == PartyFrequency.NEVER,
+        isQuiet = partyFrequency == PartyFrequency.NUNCA,
         sleepRoutine = sleepRoutine,
         cleanlinessLevel = cleanlinessLevel,
         socialLevel = socialLevel,
@@ -129,17 +129,18 @@ fun UsuarioInteressadoDto.toUserProfile(): UserProfile {
 
 private fun PartyFrequency.toApiValue(): String {
     return when (this) {
-        PartyFrequency.NEVER -> "NUNCA"
-        PartyFrequency.SOMETIMES -> "AS_VEZES"
-        PartyFrequency.FREQUENT -> "FREQUENTE"
+        PartyFrequency.NUNCA -> "NUNCA"
+        PartyFrequency.AS_VEZES -> "AS_VEZES"
+        PartyFrequency.FREQUENTE -> "FREQUENTE"
     }
 }
 
 private fun SleepRoutine.toApiValue(): String {
     return when (this) {
-        SleepRoutine.MORNING -> "MANHA"
-        SleepRoutine.NIGHT -> "NOITE"
-        SleepRoutine.FLEXIBLE -> "FLEXIVEL"
+        SleepRoutine.MATUTINO -> "MANHA"
+        SleepRoutine.NOTURNO -> "NOITE"
+        SleepRoutine.VESPERTINO -> "TARDE"
+        SleepRoutine.FLEXIVEL -> "FLEXIVEL"
     }
 }
 
