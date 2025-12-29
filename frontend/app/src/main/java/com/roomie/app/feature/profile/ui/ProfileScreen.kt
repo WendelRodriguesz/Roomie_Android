@@ -33,13 +33,18 @@ import com.roomie.app.feature.profile.model.UserProfile
 import coil3.compose.AsyncImage
 import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.runtime.CompositionLocalProvider
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
+import com.roomie.app.core.ui.theme.AppSettings
+import com.roomie.app.core.ui.theme.LocalAppSettings
 import com.roomie.app.feature.profile.ui.components.LifestyleCard
 import com.roomie.app.feature.profile.ui.components.ProfileHeaderCard
 import com.roomie.app.feature.profile.ui.components.SettingsCard
-
+import com.roomie.app.feature.profile.ui.components.MatchCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -47,17 +52,20 @@ fun ProfileScreen(
     profile: UserProfile,
     onEditClick: () -> Unit = {},
     onLogoutClick: () -> Unit = {},
+    onMatchesClick: () -> Unit = {},
+    onMyListingsClick: () -> Unit = {},
+    onLikedListingsClick: () -> Unit = {},
 ) {
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Meu perfil") },
                 actions = {
-                    TextButton(onClick = onEditClick) {
-                        Text("Editar")
-                    }
+                    TextButton(onClick = onEditClick) { Text("Editar") }
                 },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background
+                )
             )
         },
     ) { innerPadding ->
@@ -72,15 +80,37 @@ fun ProfileScreen(
         ) {
             ProfileHeaderCard(profile)
             LifestyleCard(profile)
+
+            MatchCard(
+                profile = profile,
+                onMatchesClick = onMatchesClick,
+                onMyListingsClick = onMyListingsClick,
+                onLikedListingsClick = onLikedListingsClick
+            )
+
             SettingsCard(profile, onLogoutClick)
         }
     }
 }
 
+
 @RoomiePreview
 @Composable
 fun ProfileScreenPreview() {
-    Roomie_AndroidTheme(dynamicColor = false) {
-        ProfileScreen(profile = UserMock.profileRoomie1)
+    val appSettingsState = remember { mutableStateOf(AppSettings()) }
+
+    CompositionLocalProvider(LocalAppSettings provides appSettingsState) {
+        Roomie_AndroidTheme(
+            dynamicColor = false,
+            darkTheme = appSettingsState.value.darkModeEnabled
+        ) {
+            ProfileScreen(
+                profile = UserMock.profileRoomie1,
+                onLogoutClick = {},
+                onMatchesClick = {},
+                onMyListingsClick = {},
+                onLikedListingsClick = {}
+            )
+        }
     }
 }

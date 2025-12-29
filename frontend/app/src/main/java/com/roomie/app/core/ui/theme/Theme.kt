@@ -1,5 +1,7 @@
 package com.roomie.app.core.ui.theme
 
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateOf
 import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -74,4 +76,14 @@ fun Roomie_AndroidTheme(
     CompositionLocalProvider(LocalRoomieAssets provides assets) {
         MaterialTheme(colorScheme = colorScheme, typography = Typography, content = content)
     }
+}
+data class AppSettings(
+    val notificationsEnabled: Boolean = true,
+    val showAsOnline: Boolean = true,
+    val discoveryEnabled: Boolean = true,
+    val darkModeEnabled: Boolean = false
+)
+
+val LocalAppSettings = staticCompositionLocalOf<MutableState<AppSettings>> {
+    error("LocalAppSettings não foi provido")
 }

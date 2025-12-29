@@ -1,29 +1,48 @@
 package com.roomie.app.core.ui.components
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.*
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.RangeSlider
+import androidx.compose.material3.Text
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
+import kotlin.math.roundToInt
 
 @Composable
 fun BudgetCard(
     minBudget: Int,
-    onMinBudgetChange: (Int) -> Unit,
     maxBudget: Int,
+    onMinBudgetChange: (Int) -> Unit,
     onMaxBudgetChange: (Int) -> Unit,
     modifier: Modifier = Modifier
 ) {
+    val minValue = 500
+    val maxValue = 5000
+    val stepSize = 100
+    val steps = ((maxValue - minValue) / stepSize) - 1
+
+    fun snapToStep(v: Float): Int {
+        val snapped = (v / stepSize.toFloat()).roundToInt() * stepSize
+        if (snapped < minValue) return minValue
+        if (snapped > maxValue) return maxValue
+        return snapped
+    }
+
     Card(
         shape = RoundedCornerShape(24.dp),
         modifier = modifier.fillMaxWidth(),
-        colors = CardDefaults.cardColors(
-            containerColor = MaterialTheme.colorScheme.surface
-        )
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
     ) {
         Column(
             modifier = Modifier.padding(16.dp),
@@ -31,44 +50,38 @@ fun BudgetCard(
         ) {
             Text(
                 text = "Orçamento mensal",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.SemiBold
-                )
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
             )
 
             Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
                 Column {
                     Text(
-                        text = "Mínimo: R$ $minBudget",
+                        text = "Min: R$ $minBudget – Max: R$  $maxBudget",
                         style = MaterialTheme.typography.bodyMedium,
                         color = MaterialTheme.colorScheme.onSurfaceVariant
                     )
-                    Slider(
-                        value = minBudget.toFloat(),
-                        onValueChange = { onMinBudgetChange(it.toInt()) },
-                        valueRange = 500f..4000f,
-                        steps = 34
+
+                    RangeSlider(
+                        value = minBudget.toFloat()..maxBudget.toFloat(),
+                        onValueChange = { newRange ->
+                            val newMin = snapToStep(newRange.start)
+                            val newMax = snapToStep(newRange.endInclusive)
+
+                            val adjustedMin = minOf(newMin, newMax)
+                            val adjustedMax = maxOf(newMin, newMax)
+
+                            onMinBudgetChange(adjustedMin)
+                            onMaxBudgetChange(adjustedMax)
+                        },
+                        valueRange = minValue.toFloat()..maxValue.toFloat(),
+                        steps = steps,
+                        modifier = Modifier.fillMaxWidth()
                     )
                 }
-
-                Column {
-                    Text(
-                        text = "Máximo: R$ $maxBudget",
-                        style = MaterialTheme.typography.bodyMedium,
-                        color = MaterialTheme.colorScheme.onSurfaceVariant
-                    )
-                    Slider(
-                        value = maxBudget.toFloat(),
-                        onValueChange = { onMaxBudgetChange(it.toInt()) },
-                        valueRange = minBudget.toFloat()..5000f,
-                        steps = ((5000 - minBudget) / 100).coerceAtMost(44)
-                    )
-                }
-
                 Surface(
                     shape = RoundedCornerShape(16.dp),
                     modifier = Modifier.fillMaxWidth(),
-                    color = MaterialTheme.colorScheme.primaryContainer.copy(alpha = 0.3f)
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.07f)
                 ) {
                     Text(
                         text = "R$ $minBudget - R$ $maxBudget /mês",
@@ -96,4 +109,3 @@ private fun BudgetCardPreview() {
         )
     }
 }
-

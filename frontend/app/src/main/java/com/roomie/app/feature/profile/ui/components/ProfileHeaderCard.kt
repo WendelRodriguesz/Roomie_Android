@@ -103,25 +103,26 @@ fun ProfileHeaderCard(profile: UserProfile) {
                 }
             }
 
-            if (profile.lifestyle.tags.isNotEmpty()) {
-                FlowRow(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.spacedBy(8.dp),
-                    verticalArrangement = Arrangement.spacedBy(8.dp)
-                ) {
-                    profile.lifestyle.tags.forEach { tag ->
-                        AssistChip(
-                            onClick = {},
-                            label = { Text(tag) },
-                            colors = SuggestionChipDefaults.suggestionChipColors(
-                                containerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.70f)
-                            ),
-//                            border = null,
-                            shape = RoundedCornerShape(15.dp)
-                        )
-                    }
-                }
-            }
+            // Tags (um futuro próximo)
+//            if (profile.lifestyle.tags.isNotEmpty()) {
+//                FlowRow(
+//                    modifier = Modifier.fillMaxWidth(),
+//                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+//                    verticalArrangement = Arrangement.spacedBy(8.dp)
+//                ) {
+//                    profile.lifestyle.tags.forEach { tag ->
+//                        AssistChip(
+//                            onClick = {},
+//                            label = { Text(tag) },
+//                            colors = SuggestionChipDefaults.suggestionChipColors(
+//                                containerColor = MaterialTheme.colorScheme.background.copy(alpha = 0.70f)
+//                            ),
+////                            border = null,
+//                            shape = RoundedCornerShape(15.dp)
+//                        )
+//                    }
+//                }
+//            }
         }
     }
 }

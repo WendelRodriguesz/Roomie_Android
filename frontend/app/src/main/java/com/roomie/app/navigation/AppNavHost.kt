@@ -35,6 +35,7 @@ import com.roomie.app.feature.vaga.ui.CadastrarVagasScreen
 import com.roomie.app.feature.register.ui.RegisterRoleScreen
 import com.roomie.app.feature.profile.ui.ProfileScreenRoute
 import com.roomie.app.core.data.session.AuthSession
+import com.roomie.app.feature.edit_profile.ui.EditProfileRoute
 
 @Composable
 fun AppNavHost(startDestination: String) {
@@ -106,7 +107,31 @@ fun AppNavHost(startDestination: String) {
             composable(Routes.LOGIN) { LoginScreen(navController) }
             composable(Routes.REGISTER) { RegisterScreen(navController) }
             composable(Routes.REGISTER_ROLE) { RegisterRoleScreen(navController) }
-            composable(Routes.EDIT_PROFILE) { EditProfileScreen(UserMock.profileYou, onCancelClick = {navController.navigate("profile")}) }
+            composable(Routes.EDIT_PROFILE) {
+                val userId = AuthSession.userId
+                val token = AuthSession.token
+
+                if (userId == null || token.isNullOrBlank()) {
+                    navController.navigate(Routes.LOGIN) {
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            inclusive = true
+                        }
+                        launchSingleTop = true
+                    }
+                } else {
+                    EditProfileRoute(
+                        userId = userId,
+                        token = token,
+                        onCancel = { navController.popBackStack() },
+                        onSaved = {
+                            navController.navigate(Routes.PROFILE) {
+                                popUpTo(Routes.PROFILE) { inclusive = true }
+                                launchSingleTop = true
+                            }
+                        }
+                    )
+                }
+            }
             composable(Routes.ADD_VAGA) { CadastrarVagasScreen(navController)}
             composable(Routes.PREFERENCES_REGISTRATION) { PreferenceRegistration() }
         }
