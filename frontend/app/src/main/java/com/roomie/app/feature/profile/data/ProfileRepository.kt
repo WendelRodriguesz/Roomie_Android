@@ -51,11 +51,8 @@ class ProfileRepository(
 
             if (response.isSuccessful) {
                 val body = response.body()
-                if (body != null) {
-                    Result.success(body.toUserProfile())
-                } else {
-                    Result.failure(IllegalStateException("Resposta da API vazia na atualização"))
-                }
+                if (body != null) Result.success(body.toUserProfile())
+                else Result.failure(IllegalStateException("Resposta da API vazia na atualização"))
             } else {
                 Result.failure(
                     IllegalStateException("Erro da API na atualização: ${response.code()} ${response.message()}")
@@ -65,5 +62,4 @@ class ProfileRepository(
             Result.failure(t)
         }
     }
-
 }

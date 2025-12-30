@@ -46,46 +46,32 @@ fun LifestyleCard(profile: UserProfile) {
                 )
             )
 
-//            PreferenceRow(
-//                label = "Nível de limpeza",
-//                value = lifestyle.cleanlinessLevel,
-//            )
-//
-//            PreferenceRow(
-//                label = "Nível social",
-//                value = lifestyle.socialLevel,
-//            )
-
-            InfoRow(
-                label = "Horário de estudo preferido",
-                value = lifestyle.studySchedule ?: "Não informado"
-            )
-
             InfoRow(
                 label = "Gosta de ir a festas",
                 value = when (lifestyle.partyFrequency) {
-                    PartyFrequency.FREQUENT -> "Sempre"
-                    PartyFrequency.SOMETIMES -> "As vezes"
-                    PartyFrequency.NEVER -> "Nunca"
+                    PartyFrequency.FREQUENTE -> "Sempre"
+                    PartyFrequency.AS_VEZES -> "As vezes"
+                    PartyFrequency.NUNCA -> "Nunca"
                 } ?: "Não informado"
             )
 
             InfoRow(
                 label = "Frequência de limpeza",
                 value = when (lifestyle.cleaningHabit) {
-                    CleaningHabit.DAILY -> "Diaria"
-                    CleaningHabit.OCCASIONAL -> "Ocasionalmente"
-                    CleaningHabit.BIWEEKLY -> "Quinzenalmente"
-                    CleaningHabit.WEEKLY -> "Semanalmente"
+                    CleaningHabit.DIARIO -> "Diaria"
+                    CleaningHabit.OCASIONAL -> "Ocasionalmente"
+                    CleaningHabit.QUINZENAL -> "Quinzenalmente"
+                    CleaningHabit.SEMANAL -> "Semanalmente"
                 } ?: "Não informado"
             )
 
             InfoRow(
                 label = "Rotina de sono",
                 value = when (lifestyle.sleepRoutine) {
-                    SleepRoutine.MORNING -> "Matutino"
-                    SleepRoutine.NIGHT -> "Noturno"
-                    SleepRoutine.FLEXIBLE -> "Flexível"
+                    SleepRoutine.MATUTINO -> "Matutino"
+                    SleepRoutine.NOTURNO -> "Noturno"
+                    SleepRoutine.VESPERTINO -> "Vespertino"
+                    SleepRoutine.FLEXIVEL -> "Flexível"
                 }
             )
 

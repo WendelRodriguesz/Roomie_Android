@@ -59,3 +59,4 @@
 /.gradle
 /.mvn
 /.spring-boot-devtools.properties
+.env*
