@@ -14,6 +14,8 @@ public class InteressesInteressados {
     private float orcamento_min;
     private float orcamento_max;
     private boolean aceita_dividir_quarto;
+    private boolean fumante;
+    private boolean consome_bebidas_alcoolicas;
 
 
     public InteressesInteressados() {
@@ -26,7 +28,9 @@ public class InteressesInteressados {
                                   HorarioSono horario_sono,
                                   float orcamento_min,
                                   float orcamento_max,
-                                  boolean aceita_dividir_quarto) {
+                                  boolean aceita_dividir_quarto,
+                                  boolean fumante,
+                                  boolean consome_bebidas_alcoolicas) {
         this.id = id;
         this.frequencia_festas = frequencia_festas;
         this.habitos_limpeza = habitos_limpeza;
@@ -35,6 +39,8 @@ public class InteressesInteressados {
         this.orcamento_min = orcamento_min;
         this.orcamento_max = orcamento_max;
         this.aceita_dividir_quarto = aceita_dividir_quarto;
+        this.fumante = fumante;
+        this.consome_bebidas_alcoolicas = consome_bebidas_alcoolicas;
     }
 
     public Integer getId() {
@@ -99,5 +105,20 @@ public class InteressesInteressados {
 
     public void setAceita_dividir_quarto(boolean aceita_dividir_quarto) {
         this.aceita_dividir_quarto = aceita_dividir_quarto;
+    }
+    public boolean getFumante() {
+        return fumante;
+    }
+
+    public void setFumante(boolean fumante) {
+        this.fumante = fumante;
+    }
+
+    public boolean getConsome_bebidas_alcoolicas() {
+        return consome_bebidas_alcoolicas;
+    }
+
+    public void setConsome_bebidas_alcoolicas(boolean consome_bebidas_alcoolicas) {
+        this.consome_bebidas_alcoolicas = consome_bebidas_alcoolicas;
     }
 }
