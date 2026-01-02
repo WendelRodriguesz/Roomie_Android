@@ -29,7 +29,8 @@ import com.roomie.app.feature.match.ui.MatchScreen
 import com.roomie.app.feature.notifications.ui.NotificationsScreen
 import com.roomie.app.feature.preference_registration.ui.PreferenceRegistration
 import com.roomie.app.feature.profile.model.UserMock
-import com.roomie.app.feature.register.ui.RegisterScreen
+import com.roomie.app.feature.register.ui.RegisterRoute
+import com.roomie.app.feature.register.ui.RegisterRoleRoute
 import com.roomie.app.feature.welcome_screen.ui.WelcomeScreen
 import com.roomie.app.feature.vaga.ui.CadastrarVagasScreen
 import com.roomie.app.feature.register.ui.RegisterRoleScreen
@@ -54,7 +55,9 @@ fun AppNavHost(startDestination: String) {
                     onNavigate = { route ->
                         if (route != currentRoute) {
                             navController.navigate(route) {
-                                popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
                                 launchSingleTop = true
                                 restoreState = true
                             }
@@ -69,10 +72,10 @@ fun AppNavHost(startDestination: String) {
             startDestination = startDestination,
             modifier = Modifier.padding(inner)
         ) {
-            composable(Routes.HOME)   { HomeRoute() }
-            composable(Routes.CHAT)   { ChatScreen() }
+            composable(Routes.HOME) { HomeRoute() }
+            composable(Routes.CHAT) { ChatScreen() }
             composable(Routes.MATCH) { MatchRoute() }
-            composable(Routes.NOTIFICATIONS)   { NotificationsScreen() }
+            composable(Routes.NOTIFICATIONS) { NotificationsScreen() }
             composable(Routes.PROFILE) { backStackEntry ->
                 val userId = AuthSession.userId
                 val token = AuthSession.token
@@ -105,8 +108,8 @@ fun AppNavHost(startDestination: String) {
 
             composable(Routes.WELCOME_SCREEN) { WelcomeScreen(navController) }
             composable(Routes.LOGIN) { LoginScreen(navController) }
-            composable(Routes.REGISTER) { RegisterScreen(navController) }
-            composable(Routes.REGISTER_ROLE) { RegisterRoleScreen(navController) }
+            composable(Routes.REGISTER) { RegisterRoute(navController) }
+            composable(Routes.REGISTER_ROLE) { RegisterRoleRoute(navController) }
             composable(Routes.EDIT_PROFILE) {
                 val userId = AuthSession.userId
                 val token = AuthSession.token
@@ -132,7 +135,7 @@ fun AppNavHost(startDestination: String) {
                     )
                 }
             }
-            composable(Routes.ADD_VAGA) { CadastrarVagasScreen(navController)}
+            composable(Routes.ADD_VAGA) { CadastrarVagasScreen(navController) }
             composable(Routes.PREFERENCES_REGISTRATION) { PreferenceRegistration() }
         }
     }
@@ -140,9 +143,9 @@ fun AppNavHost(startDestination: String) {
 
 @RoomiePreview
 @Composable
-private fun AppNavHostPreview(){
+private fun AppNavHostPreview() {
     Roomie_AndroidTheme(dynamicColor = false) {
-        Surface (){
+        Surface() {
             AppNavHost(Routes.MATCH)
         }
     }

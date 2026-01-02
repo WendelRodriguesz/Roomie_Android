@@ -1,14 +1,13 @@
 package com.roomie.app.core.data.api
 
-import com.roomie.app.feature.profile.data.remote.dto.UsuarioInteressadoDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.Body
 import retrofit2.http.Path
-import retrofit2.http.PUT
 import com.roomie.app.feature.profile.data.remote.dto.AtualizarUsuarioInteressadoRequest
+import com.roomie.app.feature.profile.data.remote.dto.UsuarioInteressadoDto
 
 
 interface ProfileApiService {
