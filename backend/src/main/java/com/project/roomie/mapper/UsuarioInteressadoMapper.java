@@ -6,11 +6,7 @@ import com.project.roomie.dto.response.UsuarioInteressadoResponseDTO;
 import com.project.roomie.dto.update.UsuarioInteressadoUpdateDTO;
 import com.project.roomie.infra.persistence.entity.UsuarioInteressadoJpaEntity;
 import com.project.roomie.util.DateFormatter;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring", uses = { DateFormatter.class, InteressesInteressadosMapper.class })
 public interface UsuarioInteressadoMapper {
