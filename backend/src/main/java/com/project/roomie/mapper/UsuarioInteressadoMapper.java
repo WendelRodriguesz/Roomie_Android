@@ -11,15 +11,19 @@ import org.mapstruct.*;
 @Mapper(componentModel = "spring", uses = { DateFormatter.class, InteressesInteressadosMapper.class })
 public interface UsuarioInteressadoMapper {
 
+    @Named("CreateDTOtoModel")
     @Mapping(source = "data_de_nascimento", target = "data_de_nascimento", qualifiedByName = "toLocalDate")
     UsuarioInteressado CreateDTOtoModel(UsuarioInteressadoCreateDTO usuarioInteressadoCreateDTO);
 
+    @Named("ModeltoJpaEntity")
     @Mapping(source = "interesses", target = "interesses", qualifiedByName = "ModeltoJpaEntity")
     UsuarioInteressadoJpaEntity ModeltoJpaEntity(UsuarioInteressado usuarioInteressado);
 
+    @Named("JpaEntitytoModel")
     @Mapping(source = "interesses", target = "interesses", qualifiedByName = "JpaEntitytoModel")
     UsuarioInteressado JpaEntitytoModel(UsuarioInteressadoJpaEntity usuarioInteressadoJpaEntity);
 
+    @Named("ModeltoResponseDTO")
     @Mapping(source = "data_de_nascimento", target = "data_de_nascimento", qualifiedByName = "toStringDate")
     @Mapping(source = "interesses", target = "interesses", qualifiedByName = "ModeltoResponseDTO")
     UsuarioInteressadoResponseDTO ModeltoResponseDTO(UsuarioInteressado usuarioInteressado);
@@ -29,5 +33,4 @@ public interface UsuarioInteressadoMapper {
             UsuarioInteressadoUpdateDTO dto,
             @MappingTarget UsuarioInteressado usuarioInteressado
     );
-
 }
