@@ -25,4 +25,12 @@ public class MatchAdapterOut implements MatchPortOut {
     public Match save(MatchJpaEntity matchJpaEntity) {
         return matchMapper.JpaEntitytoModel(matchRepository.save(matchJpaEntity));
     }
+
+    @Override
+    public Match findById(Integer id_match){
+        MatchJpaEntity matchJpaEntity = matchRepository.findById(id_match)
+                .orElseThrow(() -> new RuntimeException("Match não encontrado"));
+
+        return matchMapper.JpaEntitytoModel(matchJpaEntity);
+    }
 }

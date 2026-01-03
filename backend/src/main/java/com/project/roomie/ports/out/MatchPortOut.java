@@ -6,4 +6,5 @@ import com.project.roomie.infra.persistence.entity.MatchJpaEntity;
 public interface MatchPortOut {
 
     Match save(MatchJpaEntity matchJpaEntity);
+    Match findById(Integer id_match);
 }

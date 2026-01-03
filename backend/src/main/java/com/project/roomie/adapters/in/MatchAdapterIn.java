@@ -11,9 +11,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -55,5 +53,10 @@ public class MatchAdapterIn {
             @RequestParam Integer id_usuario_ofertante
     ) {
         return matchMapper.ModeltoResponseDTO(matchPortIn.enviarLike(id_usuario_interessado, id_usuario_ofertante));
+    }
+
+    @PostMapping("/aceitar/{id_match}")
+    public MatchResponseDTO aceitarMatch(@PathVariable Integer id_match) {
+        return matchMapper.ModeltoResponseDTO(matchPortIn.aceitarMatch(id_match));
     }
 }

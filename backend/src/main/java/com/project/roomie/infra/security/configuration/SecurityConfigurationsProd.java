@@ -63,6 +63,8 @@ public class SecurityConfigurationsProd {
                         // Match
                         .requestMatchers(HttpMethod.GET, "/api/match/buscarCandidatos").hasAnyRole("INTERESSADO")
                         .requestMatchers(HttpMethod.POST, "/api/match/enviarLike").hasAnyRole("INTERESSADO")
+                        .requestMatchers(HttpMethod.POST, "/api/match/aceitar/{id_match}").hasAnyRole("OFERTANTE")
+                        .requestMatchers(HttpMethod.POST, "/api/match/recusar/{id_match}").hasAnyRole("OFERTANTE")
                 )
 
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)

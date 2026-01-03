@@ -19,11 +19,11 @@ public class MatchJpaEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_interessado", nullable = false)
     private UsuarioInteressadoJpaEntity interessado;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_ofertante", nullable = false)
     private UsuarioOfertanteJpaEntity ofertante;
 
