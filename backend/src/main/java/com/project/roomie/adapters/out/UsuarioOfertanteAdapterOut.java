@@ -43,7 +43,7 @@ public class UsuarioOfertanteAdapterOut implements UsuarioOfertantePortOut {
     }
 
     @Override
-    public List<UsuarioOfertante> buscarCandidatosMatch(){
-        return usuarioOfertanteMapper.JpaEntitytoModel(usuarioOfertanteRepository.findAll()); // ALTERAR DEPOIS
+    public List<UsuarioOfertante> buscarCandidatosMatch(Integer id_usuario_interessado){
+        return usuarioOfertanteMapper.JpaEntitytoModel(usuarioOfertanteRepository.buscarCandidatosMatch(id_usuario_interessado));
     }
 }

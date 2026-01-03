@@ -8,5 +8,5 @@ public interface UsuarioOfertantePortOut {
 
     UsuarioOfertante save(UsuarioOfertante usuarioOfertante);
     UsuarioOfertante findById(Integer id);
-    List<UsuarioOfertante> buscarCandidatosMatch();
+    List<UsuarioOfertante> buscarCandidatosMatch(Integer id_usuario_interessado);
 }

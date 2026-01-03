@@ -7,7 +7,6 @@ import com.project.roomie.ports.in.MatchPortIn;
 import com.project.roomie.ports.out.MatchPortOut;
 import com.project.roomie.ports.out.UsuarioInteressadoPortOut;
 import com.project.roomie.ports.out.UsuarioOfertantePortOut;
-import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -18,7 +17,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 
-@Slf4j
 @Service
 public class MatchService implements MatchPortIn {
 
@@ -41,13 +39,14 @@ public class MatchService implements MatchPortIn {
     @Override
     public Page<UsuarioOfertante> buscarMatches(Integer id_usuario_interessado, Pageable pageable){
 
-        // Busca dados base
         UsuarioInteressado interessado = usuarioInteressadoPortOut.findById(id_usuario_interessado);
-        List<UsuarioOfertante> ofertantes = usuarioOfertantePortOut.buscarCandidatosMatch();
 
-        log.error("OFERTANTES ENCONTRADOS: {}", ofertantes.size());
+        if(interessado.getInteresses() == null){
+            throw new RuntimeException("Usuário interessado sem interesses cadastrados");
+        }
 
-        // Aplica regra de match + score
+        List<UsuarioOfertante> ofertantes = usuarioOfertantePortOut.buscarCandidatosMatch(id_usuario_interessado);
+
         List<UsuarioOfertante> matchesOrdenados = ofertantes.stream()
                 .map(ofertante -> Map.entry(
                         ofertante,
@@ -124,12 +123,10 @@ public class MatchService implements MatchPortIn {
             Anuncio anuncio
     ) {
 
-        // Regra eliminatória: orçamento
         if (anuncio.getValor_aluguel() + anuncio.getValor_contas() > interessado.getOrcamento_max()) {
             return 0;
         }
 
-        // Regra eliminatória: dividir quarto
         if (!Objects.equals(
                 interessado.isAceita_dividir_quarto(),
                 ofertante.isAceita_dividir_quarto()
@@ -137,7 +134,7 @@ public class MatchService implements MatchPortIn {
             return 0;
         }
 
-        int score = 30; // regras eliminatórias já eliminadas
+        int score = 30;
 
         if (Objects.equals(
                 interessado.isAceita_pets(),
