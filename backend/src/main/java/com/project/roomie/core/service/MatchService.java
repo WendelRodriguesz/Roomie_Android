@@ -101,6 +101,23 @@ public class MatchService implements MatchPortIn {
         return matchPortOut.save(matchMapper.ModeltoJpaEntity(match));
     }
 
+    @Override
+    public Match recusarMatch(Integer id_match){
+
+        Match match = matchPortOut.findById(id_match);
+
+        if (match.getStatus().equals(MatchStatus.ACEITO)){
+            throw new RuntimeException("Match já foi aceito");
+        }
+
+        if (match.getStatus().equals(MatchStatus.RECUSADO)){
+            throw new RuntimeException("Match já foi recusado antes");
+        }
+
+        match.setStatus(MatchStatus.RECUSADO);
+        return matchPortOut.save(matchMapper.ModeltoJpaEntity(match));
+    }
+
     public int calcularScore(
             InteressesInteressados interessado,
             InteressesOfertantes ofertante,

@@ -59,4 +59,9 @@ public class MatchAdapterIn {
     public MatchResponseDTO aceitarMatch(@PathVariable Integer id_match) {
         return matchMapper.ModeltoResponseDTO(matchPortIn.aceitarMatch(id_match));
     }
+
+    @PostMapping("/recusar/{id_match}")
+    public MatchResponseDTO recusarMatch(@PathVariable Integer id_match) {
+        return matchMapper.ModeltoResponseDTO(matchPortIn.recusarMatch(id_match));
+    }
 }
