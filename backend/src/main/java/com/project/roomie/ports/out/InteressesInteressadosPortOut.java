@@ -4,6 +4,6 @@ import com.project.roomie.core.model.InteressesInteressados;
 import com.project.roomie.infra.persistence.entity.InteressesInteressadosJpaEntity;
 
 public interface InteressesInteressadosPortOut {
-    InteressesInteressados save(InteressesInteressadosJpaEntity interessesInteressadosJpaEntity);
-
+    InteressesInteressados save(InteressesInteressados interessesInteressados);
+    InteressesInteressados findById(Integer id);
 }

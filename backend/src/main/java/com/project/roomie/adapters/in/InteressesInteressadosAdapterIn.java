@@ -2,6 +2,7 @@ package com.project.roomie.adapters.in;
 
 import com.project.roomie.dto.create.InteressesInteressadosCreateDTO;
 import com.project.roomie.dto.response.InteressesInteressadosResponseDTO;
+import com.project.roomie.dto.update.InteressesInteressadosUpdateDTO;
 import com.project.roomie.mapper.InteressesInteressadosMapper;
 import com.project.roomie.ports.in.InteressesInteressadosPortIn;
 import org.springframework.beans.factory.annotation.Autowired;

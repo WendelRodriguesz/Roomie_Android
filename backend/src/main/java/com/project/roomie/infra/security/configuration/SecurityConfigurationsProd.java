@@ -52,6 +52,8 @@ public class SecurityConfigurationsProd {
 
                         // Interesses interessado
                         .requestMatchers(HttpMethod.POST, "/api/interessesInteressados/cadastrar/{id_usuario}").hasAnyRole("INTERESSADO")
+                        .requestMatchers(HttpMethod.PATCH, "/api/interessesInteressados/atualizar/{id_usuario}").hasAnyRole("INTERESSADO")
+
 
                         // Interesses Ofertante
                         .requestMatchers(HttpMethod.POST, "/api/interessesOfertantes/cadastrar/{id_usuario}").hasAnyRole("OFERTANTE")
