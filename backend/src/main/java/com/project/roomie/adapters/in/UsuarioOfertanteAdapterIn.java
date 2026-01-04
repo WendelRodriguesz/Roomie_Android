@@ -1,7 +1,6 @@
 package com.project.roomie.adapters.in;
 
 import com.project.roomie.dto.create.UsuarioOfertanteCreateDTO;
-import com.project.roomie.dto.response.UsuarioInteressadoResponseDTO;
 import com.project.roomie.dto.response.UsuarioOfertanteResponseDTO;
 import com.project.roomie.dto.update.UsuarioOfertanteUpdateDTO;
 import com.project.roomie.mapper.UsuarioOfertanteMapper;

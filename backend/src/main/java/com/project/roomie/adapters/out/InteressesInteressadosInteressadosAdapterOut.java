@@ -20,7 +20,21 @@ public class InteressesInteressadosInteressadosAdapterOut implements InteressesI
     }
 
     @Override
-    public InteressesInteressados save(InteressesInteressadosJpaEntity interessesInteressadosJpaEntity){
-        return interessesInteressadosMapper.JpaEntitytoModel(interessesInteressadosRepository.save(interessesInteressadosJpaEntity));
+    public InteressesInteressados save(InteressesInteressados interessesInteressados) {
+        InteressesInteressadosJpaEntity entity =
+                interessesInteressadosMapper.ModeltoJpaEntity(interessesInteressados);
+
+        InteressesInteressadosJpaEntity salvo =
+                interessesInteressadosRepository.save(entity);
+
+        return interessesInteressadosMapper.JpaEntitytoModel(salvo);
+
+    }
+
+    public InteressesInteressados findById(Integer id){
+        InteressesInteressadosJpaEntity interessesInteressadosJpaEntity = interessesInteressadosRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Interesse não encontrado"));
+
+        return interessesInteressadosMapper.JpaEntitytoModel(interessesInteressadosJpaEntity);
     }
 }
