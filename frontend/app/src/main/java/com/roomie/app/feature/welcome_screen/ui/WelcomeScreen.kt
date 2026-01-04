@@ -31,6 +31,10 @@ import com.roomie.app.core.ui.theme.RoomieTheme
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 import com.roomie.app.feature.login.data.AuthRepository
 import com.roomie.app.navigation.Routes
+import com.roomie.app.core.data.session.AuthSession
+import com.roomie.app.core.model.ProfileRole
+import com.roomie.app.core.model.profileRoleFromApi
+
 
 @Composable
 fun WelcomeScreen(navController: NavController) {
@@ -42,14 +46,44 @@ fun WelcomeScreen(navController: NavController) {
 
     LaunchedEffect(Unit) {
         val sessionResult = authRepository.refreshSession()
+
         if (sessionResult.isSuccess) {
-            navController.navigate(Routes.HOME) {
+            val session = sessionResult.getOrNull()
+
+            if (session == null) {
+                isCheckingSession = false
+                return@LaunchedEffect
+            }
+
+            val mappedRole = profileRoleFromApi(session.role)
+
+            if (mappedRole == null) {
+                authDataStore.clearUserSession()
+                AuthSession.clear()
+                isCheckingSession = false
+                return@LaunchedEffect
+            }
+
+            AuthSession.userId = session.id
+            AuthSession.token = session.token
+            AuthSession.refreshToken = session.refreshToken
+            AuthSession.role = mappedRole
+
+            val targetRoute = if (mappedRole == ProfileRole.OFFEROR) {
+                Routes.MY_LISTINGS
+            } else {
+                Routes.HOME
+            }
+
+            navController.navigate(targetRoute) {
                 popUpTo(Routes.WELCOME_SCREEN) { inclusive = true }
+                launchSingleTop = true
             }
         } else {
             isCheckingSession = false
         }
     }
+
 
     Box(
         modifier = Modifier

@@ -1,66 +1,90 @@
 package com.roomie.app.navigation
 
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.padding
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
+import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.roomie.app.core.data.session.AuthSession
 import com.roomie.app.core.ui.components.BottomBar
 import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
+import com.roomie.app.feature.chat.ui.ChatScreen
+import com.roomie.app.feature.edit_profile.ui.EditProfileRoute
 import com.roomie.app.feature.home.ui.HomeRoute
 import com.roomie.app.feature.login.ui.LoginScreen
-import com.roomie.app.feature.profile.ui.ProfileScreen
-import com.roomie.app.feature.chat.ui.ChatScreen
-import com.roomie.app.feature.edit_profile.ui.EditProfileScreen
-import com.roomie.app.feature.match.model.MatchMock
-import com.roomie.app.feature.match.presentation.MatchState
 import com.roomie.app.feature.match.ui.MatchRoute
-import com.roomie.app.feature.match.ui.MatchScreen
 import com.roomie.app.feature.notifications.ui.NotificationsScreen
 import com.roomie.app.feature.preference_registration.ui.PreferenceRegistration
-import com.roomie.app.feature.profile.model.UserMock
-import com.roomie.app.feature.register.ui.RegisterRoute
-import com.roomie.app.feature.register.ui.RegisterRoleRoute
-import com.roomie.app.feature.welcome_screen.ui.WelcomeScreen
-import com.roomie.app.feature.vaga.ui.CadastrarVagasScreen
-import com.roomie.app.feature.register.ui.RegisterRoleScreen
+import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.feature.profile.ui.ProfileScreenRoute
-import com.roomie.app.core.data.session.AuthSession
-import com.roomie.app.feature.edit_profile.ui.EditProfileRoute
+import com.roomie.app.feature.register.ui.RegisterRoleScreen
+import com.roomie.app.feature.register.ui.RegisterScreen
+import com.roomie.app.feature.vaga.ui.CadastrarVagasScreen
+import com.roomie.app.feature.vaga.ui.MyListingsScreen
+import com.roomie.app.feature.welcome_screen.ui.WelcomeScreen
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import com.roomie.app.core.data.local.AuthDataStore
+import kotlinx.coroutines.launch
 
 @Composable
 fun AppNavHost(startDestination: String) {
     val navController = rememberNavController()
+
+    val context = LocalContext.current
+    val authDataStore = remember { AuthDataStore(context) }
+    val scope = rememberCoroutineScope()
+
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
+    var profileRefreshSignal by remember { mutableStateOf(0L) }
+    val role = AuthSession.role
 
-    val selectedRoute = currentRoute ?: startDestination
-    val showBottomBar = selectedRoute in Routes.BOTTOM_BAR_ROUTES
+    val selectedRoute = run {
+        if (currentRoute != null) currentRoute else startDestination
+    }
+
+    val destinations = run {
+        if (role == null) emptyList() else bottomDestinationsFor(role)
+    }
+
+    val showBottomBar = run {
+        if (role == null) {
+            false
+        } else {
+            val allowedRoutes = destinations.map { it.route }
+            allowedRoutes.contains(selectedRoute)
+        }
+    }
 
     Scaffold(
         bottomBar = {
             if (showBottomBar) {
                 BottomBar(
                     selectedRoute = selectedRoute,
+                    destinations = destinations,
                     onNavigate = { route ->
-                        if (route != currentRoute) {
-                            navController.navigate(route) {
-                                popUpTo(navController.graph.findStartDestination().id) {
-                                    saveState = true
-                                }
-                                launchSingleTop = true
-                                restoreState = true
+                        if (route == currentRoute) {
+                            if (route == Routes.PROFILE) {
+                                profileRefreshSignal = System.currentTimeMillis()
                             }
+                            return@BottomBar
+                        }
+
+                        navController.navigate(route) {
+                            popUpTo(navController.graph.findStartDestination().id) { saveState = true }
+                            launchSingleTop = true
+                            restoreState = true
                         }
                     }
                 )
@@ -76,23 +100,29 @@ fun AppNavHost(startDestination: String) {
             composable(Routes.CHAT) { ChatScreen() }
             composable(Routes.MATCH) { MatchRoute() }
             composable(Routes.NOTIFICATIONS) { NotificationsScreen() }
-            composable(Routes.PROFILE) { backStackEntry ->
+
+            composable(Routes.PROFILE) {
                 val userId = AuthSession.userId
                 val token = AuthSession.token
+                val currentRole = AuthSession.role
 
-                if (userId == null || token.isNullOrBlank()) {
+                if (userId == null || token.isNullOrBlank() || currentRole == null) {
                     navController.navigate(Routes.LOGIN) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            inclusive = true
-                        }
+                        popUpTo(navController.graph.findStartDestination().id) { inclusive = true }
                         launchSingleTop = true
                     }
-                } else {
-                    ProfileScreenRoute(
-                        userId = userId,
-                        token = token,
-                        onEditClick = { navController.navigate(Routes.EDIT_PROFILE) },
-                        onLogoutClick = {
+                    return@composable
+                }
+
+                ProfileScreenRoute(
+                    userId = userId,
+                    token = token,
+                    role = currentRole,
+                    refreshSignal = profileRefreshSignal,
+                    onEditClick = { navController.navigate(Routes.EDIT_PROFILE) },
+                    onLogoutClick = {
+                        scope.launch {
+                            authDataStore.clearUserSession()
                             AuthSession.clear()
                             navController.navigate(Routes.LOGIN) {
                                 popUpTo(navController.graph.findStartDestination().id) {
@@ -101,41 +131,46 @@ fun AppNavHost(startDestination: String) {
                                 launchSingleTop = true
                             }
                         }
-                    )
-                }
-            }
-
-
+                    }
+                )
+         }
             composable(Routes.WELCOME_SCREEN) { WelcomeScreen(navController) }
             composable(Routes.LOGIN) { LoginScreen(navController) }
-            composable(Routes.REGISTER) { RegisterRoute(navController) }
-            composable(Routes.REGISTER_ROLE) { RegisterRoleRoute(navController) }
+            composable(Routes.REGISTER) { RegisterScreen(navController) }
+            composable(Routes.REGISTER_ROLE) { RegisterRoleScreen(navController) }
+
             composable(Routes.EDIT_PROFILE) {
                 val userId = AuthSession.userId
                 val token = AuthSession.token
+                val currentRole = AuthSession.role
 
-                if (userId == null || token.isNullOrBlank()) {
+                if (userId == null || token.isNullOrBlank() || currentRole == null) {
                     navController.navigate(Routes.LOGIN) {
-                        popUpTo(navController.graph.findStartDestination().id) {
-                            inclusive = true
-                        }
+                        popUpTo(navController.graph.findStartDestination().id) { inclusive = true }
                         launchSingleTop = true
                     }
                 } else {
                     EditProfileRoute(
                         userId = userId,
                         token = token,
+                        role = currentRole,
                         onCancel = { navController.popBackStack() },
                         onSaved = {
-                            navController.navigate(Routes.PROFILE) {
-                                popUpTo(Routes.PROFILE) { inclusive = true }
-                                launchSingleTop = true
-                            }
+                            profileRefreshSignal = System.currentTimeMillis()
+                            navController.popBackStack()
                         }
                     )
                 }
             }
+
             composable(Routes.ADD_VAGA) { CadastrarVagasScreen(navController) }
+
+            composable(Routes.MY_LISTINGS) {
+                MyListingsScreen(
+                    onCreateListingClick = { navController.navigate(Routes.ADD_VAGA) }
+                )
+            }
+
             composable(Routes.PREFERENCES_REGISTRATION) { PreferenceRegistration() }
         }
     }
@@ -144,8 +179,12 @@ fun AppNavHost(startDestination: String) {
 @RoomiePreview
 @Composable
 private fun AppNavHostPreview() {
+    AuthSession.userId = 1L
+    AuthSession.token = "preview-token"
+    AuthSession.role = ProfileRole.SEEKER
+
     Roomie_AndroidTheme(dynamicColor = false) {
-        Surface() {
+        Surface {
             AppNavHost(Routes.MATCH)
         }
     }

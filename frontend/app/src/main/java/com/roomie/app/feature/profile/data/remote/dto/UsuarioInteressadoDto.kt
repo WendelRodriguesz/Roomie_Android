@@ -22,5 +22,5 @@ data class UsuarioInteressadoDto(
     val bio: String?,
     val genero: String?,
     val foto_de_perfil: String?,
-    val interesses: InteressesDto,
+    val interesses: InteressesDto?,
 )

@@ -9,12 +9,14 @@ import androidx.lifecycle.viewModelScope
 import com.roomie.app.feature.profile.data.ProfileRepository
 import com.roomie.app.feature.profile.model.UserProfile
 import kotlinx.coroutines.launch
+import com.roomie.app.core.model.ProfileRole
 
 data class ProfileUiState(
     val isLoading: Boolean = false,
     val profile: UserProfile? = null,
     val errorMessage: String? = null,
 )
+
 
 class ProfileViewModel(
     private val repository: ProfileRepository,
@@ -23,24 +25,20 @@ class ProfileViewModel(
     var uiState by mutableStateOf(ProfileUiState())
         private set
 
-    fun loadProfile(userId: Long, token: String) {
-        if (uiState.isLoading || uiState.profile != null) {
-            return
+    fun loadProfile(role: ProfileRole, userId: Long, token: String, forceReload: Boolean = false) {
+        if (!forceReload) {
+            if (uiState.isLoading || uiState.profile != null) return
+        } else {
+            if (uiState.isLoading) return
         }
 
         viewModelScope.launch {
-            uiState = uiState.copy(
-                isLoading = true,
-                errorMessage = null,
-            )
+            uiState = uiState.copy(isLoading = true, errorMessage = null)
 
-            val result = repository.getUserProfile(userId, token)
+            val result = repository.getUserProfile(role, userId, token)
 
             result.onSuccess { profile ->
-                uiState = uiState.copy(
-                    isLoading = false,
-                    profile = profile,
-                )
+                uiState = uiState.copy(isLoading = false, profile = profile)
             }.onFailure { throwable ->
                 uiState = uiState.copy(
                     isLoading = false,
@@ -49,6 +47,7 @@ class ProfileViewModel(
             }
         }
     }
+
 }
 
 class ProfileViewModelFactory(

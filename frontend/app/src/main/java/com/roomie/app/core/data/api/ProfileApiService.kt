@@ -6,7 +6,8 @@ import retrofit2.http.Header
 import retrofit2.http.PATCH
 import retrofit2.http.Body
 import retrofit2.http.Path
-import com.roomie.app.feature.profile.data.remote.dto.AtualizarUsuarioInteressadoRequest
+import com.roomie.app.feature.profile.data.remote.dto.AtualizarUsuarioBasicoRequest
+import com.roomie.app.feature.profile.data.remote.dto.UsuarioOfertanteDto
 import com.roomie.app.feature.profile.data.remote.dto.UsuarioInteressadoDto
 
 
@@ -22,6 +23,19 @@ interface ProfileApiService {
     suspend fun updateUsuarioInteressado(
         @Path("id") id: Long,
         @Header("Authorization") authHeader: String,
-        @Body body: AtualizarUsuarioInteressadoRequest,
+        @Body body: AtualizarUsuarioBasicoRequest,
     ): Response<UsuarioInteressadoDto>
+
+    @GET("api/usuarioOfertante/visualizar/{id}")
+    suspend fun getUsuarioOfertante(
+        @Path("id") id: Long,
+        @Header("Authorization") authHeader: String,
+    ): Response<UsuarioOfertanteDto>
+
+    @PATCH("api/usuarioOfertante/atualizar/{id}")
+    suspend fun updateUsuarioOfertante(
+        @Path("id") id: Long,
+        @Header("Authorization") authHeader: String,
+        @Body body: AtualizarUsuarioBasicoRequest,
+    ): Response<UsuarioOfertanteDto>
 }

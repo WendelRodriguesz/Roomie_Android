@@ -1,6 +1,7 @@
 package com.roomie.app.feature.profile.model
 
 import com.roomie.app.R
+import com.roomie.app.core.model.ProfileRole
 
 object UserMock {
 
@@ -28,9 +29,6 @@ object UserMock {
             cleaningHabit = CleaningHabit.DIARIO,
             isQuiet = true,
             sleepRoutine = SleepRoutine.NOTURNO,
-            cleanlinessLevel = 5,
-            socialLevel = 3,
-            studySchedule = "Noturno",
             acceptsSharedRoom = false,
             tags = listOf("Organizada", "Estudante", "Não fumante", "Gosta de cozinhar"),
         ),
@@ -70,9 +68,6 @@ object UserMock {
             cleaningHabit = CleaningHabit.QUINZENAL,
             isQuiet = true,
             sleepRoutine = SleepRoutine.MATUTINO,
-            cleanlinessLevel = 4,
-            socialLevel = 2,
-            studySchedule = "Manhã",
             acceptsSharedRoom = false,
             tags = listOf("Trabalho remoto", "Tranquilo", "Organizado"),
         ),
@@ -112,9 +107,6 @@ object UserMock {
             cleaningHabit = CleaningHabit.SEMANAL,
             isQuiet = false,
             sleepRoutine = SleepRoutine.FLEXIVEL,
-            cleanlinessLevel = 3,
-            socialLevel = 5,
-            studySchedule = "Tarde",
             acceptsSharedRoom = true,
             tags = listOf("Extrovertida", "Ama pets", "Criativa"),
         ),
