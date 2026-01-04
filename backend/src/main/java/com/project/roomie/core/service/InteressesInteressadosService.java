@@ -2,6 +2,8 @@ package com.project.roomie.core.service;
 
 import com.project.roomie.core.model.InteressesInteressados;
 import com.project.roomie.core.model.UsuarioInteressado;
+import com.project.roomie.dto.response.InteressesInteressadosResponseDTO;
+import com.project.roomie.dto.update.InteressesInteressadosUpdateDTO;
 import com.project.roomie.mapper.InteressesInteressadosMapper;
 import com.project.roomie.mapper.UsuarioInteressadoMapper;
 import com.project.roomie.ports.in.InteressesInteressadosPortIn;
@@ -33,7 +35,7 @@ public class InteressesInteressadosService implements InteressesInteressadosPort
     public InteressesInteressados cadastrar(InteressesInteressados interessesInteressados,
                                                       Integer id_usuario) {
 
-        InteressesInteressados interesses = interessesInteressadosPortOut.save(interessesInteressadosMapper.ModeltoJpaEntity(interessesInteressados));
+        InteressesInteressados interesses = interessesInteressadosPortOut.save(interessesInteressados);
 
         UsuarioInteressado usuarioInteressado = usuarioInteressadoPortOut.findById(id_usuario);
         usuarioInteressado.setInteresses(interesses);
@@ -41,5 +43,20 @@ public class InteressesInteressadosService implements InteressesInteressadosPort
 
 
         return interesses;
+    }
+
+    @Override
+    public InteressesInteressadosResponseDTO atualizar(Integer id, InteressesInteressadosUpdateDTO interessesInteressadosUpdateDTO) {
+        InteressesInteressados interesses = interessesInteressadosPortOut.findById(id);
+
+        if(interesses == null) {
+            throw new RuntimeException("Interesse não encontrado");
+        }
+
+        interessesInteressadosMapper.updateInteresseFromDto(interessesInteressadosUpdateDTO, interesses);
+
+        InteressesInteressados interesseAtualizado = interessesInteressadosPortOut.save(interesses);
+
+        return interessesInteressadosMapper.ModeltoResponseDTO(interesseAtualizado);
     }
 }

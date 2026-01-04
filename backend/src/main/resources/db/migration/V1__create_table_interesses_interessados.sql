@@ -6,5 +6,7 @@ CREATE TABLE interesses_interessados (
     horario_sono VARCHAR(50),
     orcamento_min DECIMAL,
     orcamento_max DECIMAL,
-    aceita_dividir_quarto BOOLEAN
+    aceita_dividir_quarto BOOLEAN,
+    fumante BOOLEAN,
+    consome_bebidas_alcoolicas BOOLEAN
 );
