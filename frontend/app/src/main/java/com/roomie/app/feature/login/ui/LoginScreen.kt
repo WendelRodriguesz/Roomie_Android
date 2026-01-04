@@ -7,7 +7,7 @@ import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.Checkbox
-import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.CircularProgressIndicator 
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,6 +32,8 @@ import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 import com.roomie.app.feature.login.presentation.LoginViewModel
 import com.roomie.app.feature.login.presentation.LoginViewModelFactory
 import com.roomie.app.navigation.Routes
+import com.roomie.app.core.data.session.AuthSession
+import com.roomie.app.core.model.ProfileRole
 
 @Composable
 fun LoginScreen(navController: NavController) {
@@ -46,8 +48,17 @@ fun LoginScreen(navController: NavController) {
 
     LaunchedEffect(uiState.isLoginSuccessful) {
         if (uiState.isLoginSuccessful) {
-            navController.navigate(Routes.HOME) {
+            val role = AuthSession.role
+
+            val targetRoute = if (role == ProfileRole.OFFEROR) {
+                Routes.MY_LISTINGS
+            } else {
+                Routes.HOME
+            }
+
+            navController.navigate(targetRoute) {
                 popUpTo(Routes.LOGIN) { inclusive = true }
+                launchSingleTop = true
             }
         }
     }

@@ -6,6 +6,9 @@ object Routes {
     const val MATCH = "match"
     const val NOTIFICATIONS = "notifications"
     const val PROFILE = "profile"
+
+    const val MY_LISTINGS = "my_listings"
+
     const val WELCOME_SCREEN = "welcome"
     const val LOGIN = "login"
     const val REGISTER = "register"
@@ -14,6 +17,5 @@ object Routes {
     const val ADD_VAGA = "addvaga"
     const val PREFERENCES_REGISTRATION = "preference_registration"
 
-    val BOTTOM_BAR_ROUTES = listOf(HOME, CHAT, MATCH, NOTIFICATIONS, PROFILE, EDIT_PROFILE)
+    val BOTTOM_BAR_ROUTES = listOf(HOME, CHAT, MATCH, NOTIFICATIONS, PROFILE, MY_LISTINGS)
 }
-

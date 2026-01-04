@@ -15,24 +15,25 @@ import com.roomie.app.feature.edit_profile.presentation.EditProfileUiState
 import com.roomie.app.feature.edit_profile.presentation.EditProfileViewModel
 import com.roomie.app.feature.edit_profile.presentation.EditProfileViewModelFactory
 import com.roomie.app.feature.profile.data.ProfileRepository
+import com.roomie.app.core.model.ProfileRole
 
 @Composable
 fun EditProfileRoute(
     userId: Long,
     token: String,
+    role: ProfileRole,
     onCancel: () -> Unit,
     onSaved: () -> Unit,
 ) {
     val repository = ProfileRepository(RetrofitClient.profileApiService)
-    val viewModel: EditProfileViewModel = viewModel(
-        factory = EditProfileViewModelFactory(repository)
-    )
+    val viewModel: EditProfileViewModel = viewModel(factory = EditProfileViewModelFactory(repository))
 
-    val uiState: EditProfileUiState = viewModel.uiState
+    val uiState = viewModel.uiState
 
-    LaunchedEffect(Unit) {
-        viewModel.loadProfile(userId, token)
+    LaunchedEffect(userId, token, role) {
+        viewModel.loadProfile(role = role, userId = userId, token = token)
     }
+
 
     LaunchedEffect(uiState.saveSuccessful) {
         if (uiState.saveSuccessful) {
@@ -68,7 +69,7 @@ fun EditProfileRoute(
                 isSaving = uiState.isSaving,
                 onCancelClick = onCancel,
                 onSaveClick = { updated ->
-                    viewModel.saveProfile(userId, token, updated)
+                    viewModel.saveProfile(role, userId, token, updated)
                 }
             )
         }

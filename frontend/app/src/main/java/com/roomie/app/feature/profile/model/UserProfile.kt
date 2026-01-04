@@ -1,6 +1,7 @@
 package com.roomie.app.feature.profile.model
 import androidx.annotation.DrawableRes
-enum class ProfileRole { OFFEROR, SEEKER }
+import com.roomie.app.core.model.ProfileRole
+
 
 enum class PartyFrequency(val label: String) {
     NUNCA("Nunca"),
@@ -42,9 +43,6 @@ data class LifestylePreferences(
     val partyFrequency: PartyFrequency,
     val isQuiet: Boolean,
     val sleepRoutine: SleepRoutine,
-    val cleanlinessLevel: Int,
-    val socialLevel: Int,
-    val studySchedule: String?,
     val cleaningHabit: CleaningHabit,
     val acceptsSharedRoom: Boolean,
     val tags: List<String>,

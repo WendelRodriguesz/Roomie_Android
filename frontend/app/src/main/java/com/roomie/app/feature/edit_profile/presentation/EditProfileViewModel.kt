@@ -6,6 +6,7 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
+import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.feature.profile.data.ProfileRepository
 import com.roomie.app.feature.profile.model.UserProfile
 import kotlinx.coroutines.launch
@@ -25,19 +26,16 @@ class EditProfileViewModel(
     var uiState by mutableStateOf(EditProfileUiState())
         private set
 
-    fun loadProfile(userId: Long, token: String) {
+    fun loadProfile(role: ProfileRole, userId: Long, token: String) {
         if (uiState.isLoading || uiState.profile != null) return
 
         viewModelScope.launch {
             uiState = uiState.copy(isLoading = true, errorMessage = null)
 
-            val result = repository.getUserProfile(userId, token)
+            val result = repository.getUserProfile(role, userId, token)
 
             result.onSuccess { profile ->
-                uiState = uiState.copy(
-                    isLoading = false,
-                    profile = profile
-                )
+                uiState = uiState.copy(isLoading = false, profile = profile)
             }.onFailure { throwable ->
                 uiState = uiState.copy(
                     isLoading = false,
@@ -47,27 +45,18 @@ class EditProfileViewModel(
         }
     }
 
-    fun saveProfile(userId: Long, token: String, updatedProfile: UserProfile) {
+    fun saveProfile(role: ProfileRole, userId: Long, token: String, updatedProfile: UserProfile) {
         viewModelScope.launch {
-            uiState = uiState.copy(
-                isSaving = true,
-                errorMessage = null,
-                saveSuccessful = false,
-            )
+            uiState = uiState.copy(isSaving = true, errorMessage = null, saveSuccessful = false)
 
-            val result = repository.updateUserProfile(userId, token, updatedProfile)
+            val result = repository.updateUserProfile(role, userId, token, updatedProfile)
 
             result.onSuccess { profile ->
-                uiState = uiState.copy(
-                    isSaving = false,
-                    profile = profile,
-                    saveSuccessful = true,
-                )
+                uiState = uiState.copy(isSaving = false, profile = profile, saveSuccessful = true)
             }.onFailure { throwable ->
                 uiState = uiState.copy(
                     isSaving = false,
-                    errorMessage = throwable.message ?: "Erro ao salvar perfil",
-                    saveSuccessful = false,
+                    errorMessage = throwable.message ?: "Erro ao salvar perfil"
                 )
             }
         }
