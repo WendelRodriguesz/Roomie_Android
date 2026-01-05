@@ -17,8 +17,8 @@ public class InteressesInteressadosUpdateDTO {
     private HabitosLimpeza habitos_limpeza;
     private boolean aceita_pets;
     private HorarioSono horario_sono;
-    private float orcamento_min;
-    private float orcamento_max;
+    private Float orcamento_min;
+    private Float orcamento_max;
     private boolean aceita_dividir_quarto;
     private boolean fumante;
     private boolean consome_bebidas_alcoolicas;
