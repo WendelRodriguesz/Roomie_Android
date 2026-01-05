@@ -98,7 +98,7 @@ public class AnuncioService implements AnuncioPortIn {
     }
 
     @Override
-    public AnuncioResponseDTO pausarAnuncio(Integer id_anuncio, Integer id_usuario) {
+    public AnuncioResponseDTO pausarAnuncio(Integer id_anuncio) {
         Anuncio anuncio = anuncioPortOut.findById(id_anuncio);
 
         if(anuncio.getStatus_anuncio() == StatusAnuncio.PAUSADO) {
@@ -106,6 +106,20 @@ public class AnuncioService implements AnuncioPortIn {
         }
 
         anuncio.setStatus_anuncio(StatusAnuncio.PAUSADO);
+        anuncioPortOut.save(anuncio);
+
+        return anuncioMapper.ModeltoResponseDTO(anuncio);
+    }
+
+    @Override
+    public AnuncioResponseDTO reativarAnuncio(Integer id_anuncio) {
+        Anuncio anuncio = anuncioPortOut.findById(id_anuncio);
+
+        if(anuncio.getStatus_anuncio() == StatusAnuncio.ATIVO){
+            throw new RuntimeException("Anúncio já esta ativo");
+        }
+
+        anuncio.setStatus_anuncio(StatusAnuncio.ATIVO);
         anuncioPortOut.save(anuncio);
 
         return anuncioMapper.ModeltoResponseDTO(anuncio);

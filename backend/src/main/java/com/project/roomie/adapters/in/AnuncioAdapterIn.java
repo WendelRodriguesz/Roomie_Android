@@ -26,7 +26,7 @@ public class AnuncioAdapterIn {
 
     @PostMapping("/cadastrar/{id_usuario}")
     public AnuncioResponseDTO cadastrar(@RequestBody AnuncioCreateDTO anuncioCreateDTO,
-                                        @PathVariable Integer id_usuario){
+                                        @PathVariable Integer id_usuario) {
         return anuncioMapper.ModeltoResponseDTO(
                 anuncioPortIn.cadastrar(
                         anuncioMapper.CreateDTOtoModel(anuncioCreateDTO),
@@ -42,16 +42,22 @@ public class AnuncioAdapterIn {
     public ResponseEntity<AnuncioResponseDTO> atualizar(
             @PathVariable Integer id_anuncio,
             @RequestBody AnuncioUpdateDTO anuncioUpdateDTO
-    ){
+    ) {
         return ResponseEntity.ok(anuncioPortIn.atualizar(id_anuncio, anuncioUpdateDTO));
     }
 
     @PatchMapping("/pausar/{id_anuncio}")
     public ResponseEntity<AnuncioResponseDTO> pausarAnuncio(
-            @PathVariable Integer id_anuncio,
-            @RequestHeader("id_usuario") Integer id_usuario
-    ){
-        return ResponseEntity.ok(anuncioPortIn.pausarAnuncio(id_anuncio, id_usuario));
+            @PathVariable Integer id_anuncio
+            ) {
+        return ResponseEntity.ok(anuncioPortIn.pausarAnuncio(id_anuncio));
+    }
+
+    @PatchMapping("/reativar/{id_anuncio}")
+    public ResponseEntity<AnuncioResponseDTO> reativarAnuncio(
+            @PathVariable Integer id_anuncio
+    ) {
+        return ResponseEntity.ok(anuncioPortIn.reativarAnuncio(id_anuncio));
     }
 
 
