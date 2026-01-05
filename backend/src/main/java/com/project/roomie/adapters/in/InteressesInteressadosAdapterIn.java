@@ -32,11 +32,11 @@ public class InteressesInteressadosAdapterIn {
                         id_usuario));
     }
 
-    @PatchMapping("/atualizar/{id_usuario}")
+    @PatchMapping("/atualizar/{id_interesse}")
     public ResponseEntity<InteressesInteressadosResponseDTO> atualizar(
-            @PathVariable Integer id_usuario,
+            @PathVariable Integer id_interesse,
             @RequestBody InteressesInteressadosUpdateDTO interessesInteressadosUpdateDTO
     ){
-        return ResponseEntity.ok(interessesInteressadosPortIn.atualizar(id_usuario, interessesInteressadosUpdateDTO));
+        return ResponseEntity.ok(interessesInteressadosPortIn.atualizar(id_interesse, interessesInteressadosUpdateDTO));
     }
 }
