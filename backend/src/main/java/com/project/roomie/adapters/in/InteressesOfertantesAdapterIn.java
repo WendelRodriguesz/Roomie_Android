@@ -2,9 +2,11 @@ package com.project.roomie.adapters.in;
 
 import com.project.roomie.dto.create.InteressesOfertantesCreateDTO;
 import com.project.roomie.dto.response.InteressesOfertantesResponseDTO;
+import com.project.roomie.dto.update.InteressesOfertantesUpdateDTO;
 import com.project.roomie.mapper.InteressesOfertantesMapper;
 import com.project.roomie.ports.in.InteressesOfertantesPortIn;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -28,5 +30,13 @@ public class InteressesOfertantesAdapterIn {
                 interessesOfertantesPortIn.cadastrarInteresses(
                         interessesOfertantesMapper.CreateDTOtoModel(interessesOfertantesCreateDTO),
                         id_usuario));
+    }
+
+    @PatchMapping("/atualizar/{id_usuario}")
+    public ResponseEntity<InteressesOfertantesResponseDTO> atualizar(
+            @PathVariable Integer id_usuario,
+            @RequestBody InteressesOfertantesUpdateDTO interessesOfertantesUpdateDTO
+    ){
+        return ResponseEntity.ok(interessesOfertantesPortIn.atualizar(id_usuario, interessesOfertantesUpdateDTO ));
     }
 }

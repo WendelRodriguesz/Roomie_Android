@@ -1,17 +1,11 @@
 package com.project.roomie.mapper;
 
 import com.project.roomie.core.model.InteressesOfertantes;
-import com.project.roomie.core.model.enums.FrequenciaFestas;
-import com.project.roomie.core.model.enums.HabitosLimpeza;
-import com.project.roomie.core.model.enums.HorarioSono;
 import com.project.roomie.dto.create.InteressesOfertantesCreateDTO;
 import com.project.roomie.dto.response.InteressesOfertantesResponseDTO;
+import com.project.roomie.dto.update.InteressesOfertantesUpdateDTO;
 import com.project.roomie.infra.persistence.entity.InteressesOfertantesJpaEntity;
-import com.project.roomie.infra.persistence.entity.enums.FrequenciaFestasJpaEntity;
-import com.project.roomie.infra.persistence.entity.enums.HabitosLimpezaJpaEntity;
-import com.project.roomie.infra.persistence.entity.enums.HorarioSonoJpaEntity;
-import org.mapstruct.Mapper;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 
 @Mapper(componentModel = "spring")
 public interface InteressesOfertantesMapper {
@@ -27,4 +21,10 @@ public interface InteressesOfertantesMapper {
 
     @Named("ModeltoJpaEntity")
     InteressesOfertantesJpaEntity ModeltoJpaEntity(InteressesOfertantes interessesOfertantes);
+
+    @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    void updateInteressesFromDto(
+            InteressesOfertantesUpdateDTO interessesOfertantesUpdateDTO,
+            @MappingTarget InteressesOfertantes interessesOfertantes
+    );
 }

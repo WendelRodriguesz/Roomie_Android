@@ -4,5 +4,6 @@ import com.project.roomie.core.model.InteressesOfertantes;
 import com.project.roomie.infra.persistence.entity.InteressesOfertantesJpaEntity;
 
 public interface InteressesOfertantesPortOut {
-    InteressesOfertantes save(InteressesOfertantesJpaEntity interessesOfertantesJpaEntity);
+    InteressesOfertantes save(InteressesOfertantes interessesOfertantes);
+    InteressesOfertantes findById(Integer id);
 }
