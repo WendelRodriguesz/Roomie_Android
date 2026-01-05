@@ -10,7 +10,8 @@ CREATE TABLE anuncios (
     valor_aluguel DECIMAL NOT NULL,
     valor_contas DECIMAL NOT NULL,
     vagas_disponiveis INTEGER,
-    tipo_imovel VARCHAR(50) NOT NULL
+    tipo_imovel VARCHAR(50) NOT NULL,
+    status_anuncio VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE anuncio_comodos (
