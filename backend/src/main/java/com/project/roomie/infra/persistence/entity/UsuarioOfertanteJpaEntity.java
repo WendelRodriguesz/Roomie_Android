@@ -20,6 +20,10 @@ import java.time.LocalDate;
 public class UsuarioOfertanteJpaEntity extends UsuarioJpaEntity{
 
     @OneToOne()
+    @JoinColumn(name = "id_interesses_ofertantes")
+    private InteressesOfertantesJpaEntity interesses;
+
+    @OneToOne()
     @JoinColumn(name = "id_anuncio")
     private AnuncioJpaEntity anuncio;
 
@@ -35,7 +39,9 @@ public class UsuarioOfertanteJpaEntity extends UsuarioJpaEntity{
                                      GeneroJpaEntity genero,
                                      RoleJpaEntity role,
                                      String foto_de_perfil,
+                                     InteressesOfertantesJpaEntity interesses,
                                      AnuncioJpaEntity anuncio){
+        this.interesses = interesses;
         this.anuncio = anuncio;
         super(id, nome, email, senha, data_de_nascimento, idade, cidade, ocupacao, bio, genero, role, foto_de_perfil);
     }

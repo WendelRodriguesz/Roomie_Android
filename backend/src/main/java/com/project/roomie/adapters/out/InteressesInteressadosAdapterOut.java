@@ -9,12 +9,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public class InteressesInteressadosInteressadosAdapterOut implements InteressesInteressadosPortOut {
+public class InteressesInteressadosAdapterOut implements InteressesInteressadosPortOut {
     private final InteressesInteressadosRepository interessesInteressadosRepository;
     private final InteressesInteressadosMapper interessesInteressadosMapper;
 
     @Autowired
-    public InteressesInteressadosInteressadosAdapterOut(InteressesInteressadosRepository interessesInteressadosRepository, InteressesInteressadosMapper interessesInteressadosMapper) {
+    public InteressesInteressadosAdapterOut(InteressesInteressadosRepository interessesInteressadosRepository, InteressesInteressadosMapper interessesInteressadosMapper) {
         this.interessesInteressadosRepository = interessesInteressadosRepository;
         this.interessesInteressadosMapper = interessesInteressadosMapper;
     }
