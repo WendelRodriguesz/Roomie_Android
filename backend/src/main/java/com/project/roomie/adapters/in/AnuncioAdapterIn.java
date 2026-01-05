@@ -46,5 +46,13 @@ public class AnuncioAdapterIn {
         return ResponseEntity.ok(anuncioPortIn.atualizar(id_anuncio, anuncioUpdateDTO));
     }
 
+    @PatchMapping("/pausar/{id_anuncio}")
+    public ResponseEntity<AnuncioResponseDTO> pausarAnuncio(
+            @PathVariable Integer id_anuncio,
+            @RequestHeader("id_usuario") Integer id_usuario
+    ){
+        return ResponseEntity.ok(anuncioPortIn.pausarAnuncio(id_anuncio, id_usuario));
+    }
+
 
 }

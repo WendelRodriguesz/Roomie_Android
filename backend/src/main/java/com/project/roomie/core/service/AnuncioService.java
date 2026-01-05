@@ -2,6 +2,7 @@ package com.project.roomie.core.service;
 
 import com.project.roomie.core.model.Anuncio;
 import com.project.roomie.core.model.UsuarioOfertante;
+import com.project.roomie.core.model.enums.StatusAnuncio;
 import com.project.roomie.dto.response.AnuncioResponseDTO;
 import com.project.roomie.dto.update.AnuncioUpdateDTO;
 import com.project.roomie.mapper.AnuncioMapper;
@@ -39,6 +40,9 @@ public class AnuncioService implements AnuncioPortIn {
 
     @Override
     public Anuncio cadastrar(Anuncio anuncio, Integer id_usuario){
+
+        anuncio.setStatus_anuncio(StatusAnuncio.ATIVO);
+
         Anuncio novo_anuncio = anuncioPortOut.save(anuncio);
 
         UsuarioOfertante usuarioOfertante = usuarioOfertantePortOut.findById(id_usuario);
@@ -91,5 +95,19 @@ public class AnuncioService implements AnuncioPortIn {
         Anuncio anuncioAtualizado = anuncioPortOut.save(anuncio);
 
         return anuncioMapper.ModeltoResponseDTO(anuncioAtualizado);
+    }
+
+    @Override
+    public AnuncioResponseDTO pausarAnuncio(Integer id_anuncio, Integer id_usuario) {
+        Anuncio anuncio = anuncioPortOut.findById(id_anuncio);
+
+        if(anuncio.getStatus_anuncio() == StatusAnuncio.PAUSADO) {
+            throw new RuntimeException("Anúncio já está pausado");
+        }
+
+        anuncio.setStatus_anuncio(StatusAnuncio.PAUSADO);
+        anuncioPortOut.save(anuncio);
+
+        return anuncioMapper.ModeltoResponseDTO(anuncio);
     }
 }
