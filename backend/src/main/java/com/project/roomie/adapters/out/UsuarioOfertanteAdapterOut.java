@@ -8,8 +8,6 @@ import com.project.roomie.ports.out.UsuarioOfertantePortOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import java.util.List;
-
 @Repository
 public class UsuarioOfertanteAdapterOut implements UsuarioOfertantePortOut {
 
@@ -40,10 +38,5 @@ public class UsuarioOfertanteAdapterOut implements UsuarioOfertantePortOut {
                 .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
 
         return usuarioOfertanteMapper.JpaEntitytoModel(usuarioOfertanteJpaEntity);
-    }
-
-    @Override
-    public List<UsuarioOfertante> buscarCandidatosMatch(Integer id_usuario_interessado){
-        return usuarioOfertanteMapper.JpaEntitytoModel(usuarioOfertanteRepository.buscarCandidatosMatch(id_usuario_interessado));
     }
 }

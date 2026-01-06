@@ -1,5 +1,6 @@
 package com.project.roomie.core.service;
 
+import com.project.roomie.core.model.InteressesInteressados;
 import com.project.roomie.core.model.InteressesOfertantes;
 import com.project.roomie.core.model.UsuarioOfertante;
 import com.project.roomie.dto.response.InteressesOfertantesResponseDTO;
@@ -41,5 +42,20 @@ public class InteressesOfertantesService implements InteressesOfertantesPortIn {
         usuarioOfertante = usuarioOfertantePortOut.save(usuarioOfertante);
 
         return interesses;
+    }
+
+    @Override
+    public InteressesOfertantesResponseDTO atualizar(Integer id, InteressesOfertantesUpdateDTO interessesOfertantesUpdateDTO) {
+        InteressesOfertantes interesses = interessesOfertantesPortOut.findById(id);
+
+        if(interesses == null){
+            throw new RuntimeException("Interesse não encontrado");
+        }
+
+        interessesOfertantesMapper.updateInteressesFromDto(interessesOfertantesUpdateDTO, interesses);
+
+        InteressesOfertantes interesseAtualizado = interessesOfertantesPortOut.save(interesses);
+
+        return interessesOfertantesMapper.ModeltoResponseDTO(interesseAtualizado);
     }
 }

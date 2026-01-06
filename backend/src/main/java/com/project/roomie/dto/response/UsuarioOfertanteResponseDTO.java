@@ -24,5 +24,5 @@ public class UsuarioOfertanteResponseDTO {
     private Genero genero;
     private String foto_de_perfil;
     private InteressesOfertantesResponseDTO interesses;
-    private AnuncioResponseDTO anuncio;
+    private Anuncio anuncio;
 }

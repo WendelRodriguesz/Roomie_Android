@@ -2,8 +2,8 @@ package com.project.roomie.core.model.enums;
 
 public enum Role {
 
-    INTERESSADO("INTERESSADO"),
-    OFERTANTE("OFERTANTE");
+    INTERESSADO("ADMIN"),
+    OFERTANTE("RECEPCIONISTA");
 
     private final String role;
 
