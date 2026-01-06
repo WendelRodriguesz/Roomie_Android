@@ -5,7 +5,8 @@ import com.project.roomie.dto.create.InteressesOfertantesCreateDTO;
 import com.project.roomie.dto.response.InteressesOfertantesResponseDTO;
 import com.project.roomie.dto.update.InteressesOfertantesUpdateDTO;
 import com.project.roomie.infra.persistence.entity.InteressesOfertantesJpaEntity;
-import org.mapstruct.*;
+import org.mapstruct.Mapper;
+import org.mapstruct.Named;
 
 @Mapper(componentModel = "spring")
 public interface InteressesOfertantesMapper {
