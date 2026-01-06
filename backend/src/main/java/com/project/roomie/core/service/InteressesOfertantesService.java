@@ -1,5 +1,6 @@
 package com.project.roomie.core.service;
 
+import com.project.roomie.core.model.InteressesInteressados;
 import com.project.roomie.core.model.InteressesOfertantes;
 import com.project.roomie.core.model.UsuarioOfertante;
 import com.project.roomie.dto.response.InteressesOfertantesResponseDTO;
