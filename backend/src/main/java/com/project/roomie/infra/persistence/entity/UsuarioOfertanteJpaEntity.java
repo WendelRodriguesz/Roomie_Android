@@ -27,10 +27,6 @@ public class UsuarioOfertanteJpaEntity extends UsuarioJpaEntity{
     @JoinColumn(name = "id_anuncio")
     private AnuncioJpaEntity anuncio;
 
-    @OneToOne()
-    @JoinColumn(name = "id_interesses_ofertantes")
-    private InteressesOfertantesJpaEntity interesses;
-
     public UsuarioOfertanteJpaEntity(Integer id,
                                      String nome,
                                      String email,

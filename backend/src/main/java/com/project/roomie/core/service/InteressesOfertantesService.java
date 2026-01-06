@@ -42,4 +42,19 @@ public class InteressesOfertantesService implements InteressesOfertantesPortIn {
 
         return interesses;
     }
+
+    @Override
+    public InteressesOfertantesResponseDTO atualizar(Integer id, InteressesOfertantesUpdateDTO interessesOfertantesUpdateDTO) {
+        InteressesOfertantes interesses = interessesOfertantesPortOut.findById(id);
+
+        if(interesses == null){
+            throw new RuntimeException("Interesse não encontrado");
+        }
+
+        interessesOfertantesMapper.updateInteressesFromDto(interessesOfertantesUpdateDTO, interesses);
+
+        InteressesOfertantes interesseAtualizado = interessesOfertantesPortOut.save(interesses);
+
+        return interessesOfertantesMapper.ModeltoResponseDTO(interesseAtualizado);
+    }
 }
