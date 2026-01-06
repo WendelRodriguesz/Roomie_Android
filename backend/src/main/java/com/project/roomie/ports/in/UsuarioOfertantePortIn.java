@@ -1,5 +1,6 @@
 package com.project.roomie.ports.in;
 
+import com.project.roomie.core.model.UsuarioInteressado;
 import com.project.roomie.core.model.UsuarioOfertante;
 import com.project.roomie.dto.response.UsuarioOfertanteResponseDTO;
 import com.project.roomie.dto.update.UsuarioOfertanteUpdateDTO;

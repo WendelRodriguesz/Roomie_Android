@@ -2,6 +2,7 @@ package com.project.roomie.core.model.enums;
 
 public enum Comodo {
 
+
     SALA_DE_ESTAR("SALA_DE_ESTAR"),
     SALA_DE_JANTAR("SALA_DE_JANTAR"),
     COZINHA("COZINHA"),
