@@ -3,7 +3,6 @@ package com.project.roomie.core.service;
 import com.project.roomie.core.model.UsuarioInteressado;
 import com.project.roomie.dto.response.UsuarioInteressadoResponseDTO;
 import com.project.roomie.dto.update.UsuarioInteressadoUpdateDTO;
-import com.project.roomie.infra.persistence.entity.UsuarioInteressadoJpaEntity;
 import com.project.roomie.mapper.UsuarioInteressadoMapper;
 import com.project.roomie.ports.in.UsuarioInteressadoPortIn;
 import com.project.roomie.ports.out.BucketPortOut;

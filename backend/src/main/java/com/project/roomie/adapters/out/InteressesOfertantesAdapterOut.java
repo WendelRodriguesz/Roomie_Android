@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public class InteressesOfertantesAdapterOut implements InteressesOfertantesPortOut {
+
     private final InteressesOfertantesRepository interessesOfertantesRepository;
     private final InteressesOfertantesMapper interessesOfertantesMapper;
 

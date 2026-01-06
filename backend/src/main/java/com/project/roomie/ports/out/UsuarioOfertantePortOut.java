@@ -1,10 +1,12 @@
 package com.project.roomie.ports.out;
 
 import com.project.roomie.core.model.UsuarioOfertante;
-import com.project.roomie.infra.persistence.entity.UsuarioOfertanteJpaEntity;
+
+import java.util.List;
 
 public interface UsuarioOfertantePortOut {
 
     UsuarioOfertante save(UsuarioOfertante usuarioOfertante);
     UsuarioOfertante findById(Integer id);
+    List<UsuarioOfertante> buscarCandidatosMatch(Integer id_usuario_interessado);
 }
