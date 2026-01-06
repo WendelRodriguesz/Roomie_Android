@@ -11,4 +11,5 @@ public interface MatchPortIn {
     Match enviarLike(Integer id_usuario_interessado, Integer id_usuario_ofertante);
     Match aceitarMatch(Integer id_match);
     Match recusarMatch(Integer id_match);
+    Page<Match> visualizarMeusLikes(Integer id_ofertante, Pageable pageable);
 }

@@ -2,6 +2,7 @@ package com.project.roomie.core.service;
 
 import com.project.roomie.core.model.*;
 import com.project.roomie.core.model.enums.MatchStatus;
+import com.project.roomie.infra.persistence.entity.MatchJpaEntity;
 import com.project.roomie.mapper.MatchMapper;
 import com.project.roomie.ports.in.MatchPortIn;
 import com.project.roomie.ports.out.MatchPortOut;
@@ -10,6 +11,7 @@ import com.project.roomie.ports.out.UsuarioOfertantePortOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -115,6 +117,11 @@ public class MatchService implements MatchPortIn {
 
         match.setStatus(MatchStatus.RECUSADO);
         return matchPortOut.save(matchMapper.ModeltoJpaEntity(match));
+    }
+
+    public Page<Match> visualizarMeusLikes(Integer id_ofertante, Pageable pageable) {
+
+        return matchPortOut.findByOfertante(id_ofertante, pageable);
     }
 
     public int calcularScore(

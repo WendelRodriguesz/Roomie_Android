@@ -1,5 +1,6 @@
 package com.project.roomie.adapters.in;
 
+import com.project.roomie.core.model.Match;
 import com.project.roomie.core.model.UsuarioOfertante;
 import com.project.roomie.dto.response.MatchResponseDTO;
 import com.project.roomie.dto.response.UsuarioOfertanteResponseDTO;
@@ -63,5 +64,20 @@ public class MatchAdapterIn {
     @PostMapping("/recusar/{id_match}")
     public MatchResponseDTO recusarMatch(@PathVariable Integer id_match) {
         return matchMapper.ModeltoResponseDTO(matchPortIn.recusarMatch(id_match));
+    }
+
+    @GetMapping("/visualizarMeusLikes")
+    public Page<MatchResponseDTO> visualizarMeusLikes(
+            @RequestParam(defaultValue = "0") int page,
+            @RequestParam(defaultValue = "10") int size,
+            @RequestParam Integer id_ofertante
+    ) {
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<Match> pagina =  matchPortIn.visualizarMeusLikes(id_ofertante, pageable);
+
+        List<MatchResponseDTO> matches = matchMapper.ModeltoResponseDTO(pagina.getContent());
+
+        return new PageImpl<>(matches, pageable, pagina.getTotalElements());
     }
 }

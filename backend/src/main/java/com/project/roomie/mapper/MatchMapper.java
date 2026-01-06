@@ -5,6 +5,9 @@ import com.project.roomie.dto.response.MatchResponseDTO;
 import com.project.roomie.infra.persistence.entity.MatchJpaEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.springframework.data.domain.Page;
+
+import java.util.List;
 
 @Mapper(componentModel = "spring", uses = { UsuarioOfertanteMapper.class, UsuarioInteressadoMapper.class })
 public interface MatchMapper {
@@ -20,4 +23,8 @@ public interface MatchMapper {
     @Mapping(source = "interessado", target = "interessado", qualifiedByName = "ModeltoResponseDTO")
     @Mapping(source = "ofertante", target = "ofertante", qualifiedByName = "ModeltoResponseDTO")
     MatchResponseDTO ModeltoResponseDTO(Match match);
+
+    @Mapping(source = "interessado", target = "interessado", qualifiedByName = "ModeltoResponseDTO")
+    @Mapping(source = "ofertante", target = "ofertante", qualifiedByName = "ModeltoResponseDTO")
+    List<MatchResponseDTO> ModeltoResponseDTO(List<Match> match);
 }
