@@ -10,7 +10,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.ComposeCompilerApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -22,7 +21,6 @@ import com.roomie.app.feature.profile.model.PartyFrequency
 import com.roomie.app.feature.profile.model.UserMock
 import com.roomie.app.feature.profile.model.UserProfile
 import com.roomie.app.feature.profile.ui.components.InfoRow
-import com.roomie.app.feature.profile.ui.components.PreferenceRow
 
 @Composable
 fun LifestyleCard(profile: UserProfile) {

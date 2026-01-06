@@ -1,5 +1,6 @@
 package com.project.roomie.dto.response;
 
+import com.project.roomie.core.model.Anuncio;
 import com.project.roomie.core.model.enums.Genero;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

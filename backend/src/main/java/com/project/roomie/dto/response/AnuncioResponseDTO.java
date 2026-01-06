@@ -1,6 +1,7 @@
 package com.project.roomie.dto.response;
 
 import com.project.roomie.core.model.enums.Comodo;
+import com.project.roomie.core.model.enums.StatusAnuncio;
 import com.project.roomie.core.model.enums.TipoImovel;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,4 +30,5 @@ public class AnuncioResponseDTO {
     private TipoImovel tipo_imovel;
     private List<String> fotos;
     private List<Comodo> comodos;
+    private StatusAnuncio status_anuncio;
 }

@@ -1,7 +1,8 @@
 package com.project.roomie.infra.persistence.entity;
 
-import com.project.roomie.core.model.enums.Comodo;
-import com.project.roomie.core.model.enums.TipoImovel;
+import com.project.roomie.infra.persistence.entity.enums.ComodoJpaEntity;
+import com.project.roomie.infra.persistence.entity.enums.StatusAnuncioJpaEntity;
+import com.project.roomie.infra.persistence.entity.enums.TipoImovelJpaEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -52,7 +53,7 @@ public class AnuncioJpaEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private TipoImovel tipo_imovel;
+    private TipoImovelJpaEntity tipo_imovel;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(
@@ -62,11 +63,15 @@ public class AnuncioJpaEntity {
     @Column(name = "url_foto")
     private List<String> fotos;
 
-    @ElementCollection(targetClass = Comodo.class, fetch = FetchType.EAGER)
+    @ElementCollection(targetClass = ComodoJpaEntity.class, fetch = FetchType.EAGER)
     @Enumerated(EnumType.STRING)
     @CollectionTable(
             name = "anuncio_comodos",
             joinColumns = @JoinColumn(name = "anuncio_id"))
     @Column(name = "comodo")
-    private List<Comodo> comodos;
+    private List<ComodoJpaEntity> comodos;
+
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private StatusAnuncioJpaEntity status_anuncio;
 }

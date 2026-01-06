@@ -20,6 +20,10 @@ import java.time.LocalDate;
 public class UsuarioOfertanteJpaEntity extends UsuarioJpaEntity{
 
     @OneToOne()
+    @JoinColumn(name = "id_interesses_ofertantes")
+    private InteressesOfertantesJpaEntity interesses;
+
+    @OneToOne()
     @JoinColumn(name = "id_anuncio")
     private AnuncioJpaEntity anuncio;
 

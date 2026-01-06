@@ -26,7 +26,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.roomie.app.feature.profile.model.ProfileRole
+import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 import com.roomie.app.feature.profile.model.SleepRoutine
 import com.roomie.app.feature.profile.model.UserProfile

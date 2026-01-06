@@ -4,6 +4,6 @@ import com.project.roomie.core.model.Anuncio;
 import com.project.roomie.infra.persistence.entity.AnuncioJpaEntity;
 
 public interface AnuncioPortOut {
-    Anuncio save(AnuncioJpaEntity anuncioJpaEntity);
+    Anuncio save(Anuncio anuncio);
     Anuncio findById(Integer id);
 }

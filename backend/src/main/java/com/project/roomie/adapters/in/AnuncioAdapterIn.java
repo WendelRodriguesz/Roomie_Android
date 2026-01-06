@@ -2,6 +2,7 @@ package com.project.roomie.adapters.in;
 
 import com.project.roomie.dto.create.AnuncioCreateDTO;
 import com.project.roomie.dto.response.AnuncioResponseDTO;
+import com.project.roomie.dto.update.AnuncioUpdateDTO;
 import com.project.roomie.mapper.AnuncioMapper;
 import com.project.roomie.ports.in.AnuncioPortIn;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,7 +26,7 @@ public class AnuncioAdapterIn {
 
     @PostMapping("/cadastrar/{id_usuario}")
     public AnuncioResponseDTO cadastrar(@RequestBody AnuncioCreateDTO anuncioCreateDTO,
-                                        @PathVariable Integer id_usuario){
+                                        @PathVariable Integer id_usuario) {
         return anuncioMapper.ModeltoResponseDTO(
                 anuncioPortIn.cadastrar(
                         anuncioMapper.CreateDTOtoModel(anuncioCreateDTO),
@@ -36,4 +37,28 @@ public class AnuncioAdapterIn {
     public ResponseEntity<String> upload(@RequestParam("file") MultipartFile file, @PathVariable Integer id_usuario) {
         return anuncioPortIn.uploadNovaFoto(file, id_usuario);
     }
+
+    @PatchMapping("/atualizar/{id_anuncio}")
+    public ResponseEntity<AnuncioResponseDTO> atualizar(
+            @PathVariable Integer id_anuncio,
+            @RequestBody AnuncioUpdateDTO anuncioUpdateDTO
+    ) {
+        return ResponseEntity.ok(anuncioPortIn.atualizar(id_anuncio, anuncioUpdateDTO));
+    }
+
+    @PatchMapping("/pausar/{id_anuncio}")
+    public ResponseEntity<AnuncioResponseDTO> pausarAnuncio(
+            @PathVariable Integer id_anuncio
+            ) {
+        return ResponseEntity.ok(anuncioPortIn.pausarAnuncio(id_anuncio));
+    }
+
+    @PatchMapping("/reativar/{id_anuncio}")
+    public ResponseEntity<AnuncioResponseDTO> reativarAnuncio(
+            @PathVariable Integer id_anuncio
+    ) {
+        return ResponseEntity.ok(anuncioPortIn.reativarAnuncio(id_anuncio));
+    }
+
+
 }

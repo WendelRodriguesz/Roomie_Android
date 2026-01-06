@@ -22,7 +22,21 @@ public class InteressesOfertantesAdapterOut implements InteressesOfertantesPortO
     }
 
     @Override
-    public InteressesOfertantes save(InteressesOfertantesJpaEntity interessesOfertantesJpaEntity) {
-        return interessesOfertantesMapper.JpaEntitytoModel(interessesOfertantesRepository.save(interessesOfertantesJpaEntity));
+    public InteressesOfertantes save(InteressesOfertantes interessesOfertantes) {
+        InteressesOfertantesJpaEntity entity =
+                interessesOfertantesMapper.ModeltoJpaEntity(interessesOfertantes);
+
+        InteressesOfertantesJpaEntity salvo =
+                interessesOfertantesRepository.save(entity);
+
+        return interessesOfertantesMapper.JpaEntitytoModel(salvo);
+    }
+
+    @Override
+    public InteressesOfertantes findById(Integer id) {
+        InteressesOfertantesJpaEntity interessesOfertantesJpaEntity = interessesOfertantesRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Interesse não encontrado"));
+
+        return interessesOfertantesMapper.JpaEntitytoModel(interessesOfertantesJpaEntity);
     }
 }

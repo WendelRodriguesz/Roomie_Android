@@ -2,6 +2,9 @@ package com.project.roomie.core.service;
 
 import com.project.roomie.core.model.Anuncio;
 import com.project.roomie.core.model.UsuarioOfertante;
+import com.project.roomie.core.model.enums.StatusAnuncio;
+import com.project.roomie.dto.response.AnuncioResponseDTO;
+import com.project.roomie.dto.update.AnuncioUpdateDTO;
 import com.project.roomie.mapper.AnuncioMapper;
 import com.project.roomie.mapper.UsuarioOfertanteMapper;
 import com.project.roomie.ports.in.AnuncioPortIn;
@@ -37,7 +40,10 @@ public class AnuncioService implements AnuncioPortIn {
 
     @Override
     public Anuncio cadastrar(Anuncio anuncio, Integer id_usuario){
-        Anuncio novo_anuncio = anuncioPortOut.save(anuncioMapper.ModeltoJpaEntity(anuncio));
+
+        anuncio.setStatus_anuncio(StatusAnuncio.ATIVO);
+
+        Anuncio novo_anuncio = anuncioPortOut.save(anuncio);
 
         UsuarioOfertante usuarioOfertante = usuarioOfertantePortOut.findById(id_usuario);
         usuarioOfertante.setAnuncio(novo_anuncio);
@@ -65,7 +71,7 @@ public class AnuncioService implements AnuncioPortIn {
             Anuncio anuncio = usuario.getAnuncio();
             anuncio.getFotos().add(url);
 
-            anuncioPortOut.save(anuncioMapper.ModeltoJpaEntity(anuncio));
+            anuncioPortOut.save(anuncio);
             usuario.setAnuncio(anuncio);
             usuarioOfertantePortOut.save(usuario);
 
@@ -74,5 +80,48 @@ public class AnuncioService implements AnuncioPortIn {
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
         }
+    }
+
+    @Override
+    public AnuncioResponseDTO atualizar(Integer id_anuncio, AnuncioUpdateDTO anuncioUpdateDTO) {
+        Anuncio anuncio = anuncioPortOut.findById(id_anuncio);
+
+        if(anuncio == null) {
+            throw new RuntimeException("Anuncio não encontrado");
+        }
+
+        anuncioMapper.updateAnuncioFromDto(anuncioUpdateDTO, anuncio);
+
+        Anuncio anuncioAtualizado = anuncioPortOut.save(anuncio);
+
+        return anuncioMapper.ModeltoResponseDTO(anuncioAtualizado);
+    }
+
+    @Override
+    public AnuncioResponseDTO pausarAnuncio(Integer id_anuncio) {
+        Anuncio anuncio = anuncioPortOut.findById(id_anuncio);
+
+        if(anuncio.getStatus_anuncio() == StatusAnuncio.PAUSADO) {
+            throw new RuntimeException("Anúncio já está pausado");
+        }
+
+        anuncio.setStatus_anuncio(StatusAnuncio.PAUSADO);
+        anuncioPortOut.save(anuncio);
+
+        return anuncioMapper.ModeltoResponseDTO(anuncio);
+    }
+
+    @Override
+    public AnuncioResponseDTO reativarAnuncio(Integer id_anuncio) {
+        Anuncio anuncio = anuncioPortOut.findById(id_anuncio);
+
+        if(anuncio.getStatus_anuncio() == StatusAnuncio.ATIVO){
+            throw new RuntimeException("Anúncio já esta ativo");
+        }
+
+        anuncio.setStatus_anuncio(StatusAnuncio.ATIVO);
+        anuncioPortOut.save(anuncio);
+
+        return anuncioMapper.ModeltoResponseDTO(anuncio);
     }
 }

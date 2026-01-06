@@ -42,4 +42,10 @@ public class InteressesInteressadosJpaEntity {
 
     @Column(nullable = false)
     private boolean aceita_dividir_quarto;
+
+    @Column(nullable = false)
+    private boolean fumante;
+
+    @Column(nullable = false)
+    private boolean consome_bebidas_alcoolicas;
 }

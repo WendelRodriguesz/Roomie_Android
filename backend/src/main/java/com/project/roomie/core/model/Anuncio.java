@@ -1,6 +1,7 @@
 package com.project.roomie.core.model;
 
 import com.project.roomie.core.model.enums.Comodo;
+import com.project.roomie.core.model.enums.StatusAnuncio;
 import com.project.roomie.core.model.enums.TipoImovel;
 
 import java.util.List;
@@ -21,6 +22,7 @@ public class Anuncio {
     private TipoImovel tipo_imovel;
     private List<String> fotos;
     private List<Comodo> comodos;
+    private StatusAnuncio status_anuncio;
 
     public Anuncio() {
     }
@@ -38,7 +40,8 @@ public class Anuncio {
                    int vagas_disponiveis,
                    TipoImovel tipo_imovel,
                    List<String> fotos,
-                   List<Comodo> comodos) {
+                   List<Comodo> comodos
+                   ) {
 
         this.id = id;
         this.titulo = titulo;
@@ -167,4 +170,8 @@ public class Anuncio {
     public void setComodos(List<Comodo> comodos) {
         this.comodos = comodos;
     }
+
+    public StatusAnuncio getStatus_anuncio() {return status_anuncio;}
+
+    public void setStatus_anuncio(StatusAnuncio status_anuncio) { this.status_anuncio = status_anuncio; }
 }

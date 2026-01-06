@@ -2,6 +2,8 @@ package com.project.roomie.core.service;
 
 import com.project.roomie.core.model.InteressesOfertantes;
 import com.project.roomie.core.model.UsuarioOfertante;
+import com.project.roomie.dto.response.InteressesOfertantesResponseDTO;
+import com.project.roomie.dto.update.InteressesOfertantesUpdateDTO;
 import com.project.roomie.mapper.InteressesOfertantesMapper;
 import com.project.roomie.mapper.UsuarioOfertanteMapper;
 import com.project.roomie.ports.in.InteressesOfertantesPortIn;
@@ -32,7 +34,7 @@ public class InteressesOfertantesService implements InteressesOfertantesPortIn {
     @Override
     public InteressesOfertantes cadastrarInteresses(InteressesOfertantes interessesOfertantes,
                                                     Integer id_usuario){
-        InteressesOfertantes interesses = interessesOfertantesPortOut.save(interessesOfertantesMapper.ModeltoJpaEntity(interessesOfertantes));
+        InteressesOfertantes interesses = interessesOfertantesPortOut.save(interessesOfertantes);
 
         UsuarioOfertante usuarioOfertante = usuarioOfertantePortOut.findById(id_usuario);
         usuarioOfertante.setInteresses(interesses);

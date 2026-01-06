@@ -1,7 +1,9 @@
 package com.roomie.app.feature.profile.model
-import com.roomie.app.feature.profile.data.remote.dto.AtualizarUsuarioInteressadoRequest
-import com.roomie.app.feature.profile.data.remote.dto.InteressesUpdateDto
+
+import com.roomie.app.core.model.ProfileRole
+import com.roomie.app.feature.profile.data.remote.dto.AtualizarUsuarioBasicoRequest
 import com.roomie.app.feature.profile.data.remote.dto.UsuarioInteressadoDto
+import com.roomie.app.feature.profile.data.remote.dto.UsuarioOfertanteDto
 
 private fun String?.toPartyFrequency(): PartyFrequency {
     return when (this?.uppercase()) {
@@ -35,42 +37,29 @@ private fun String?.toGenderOption(): GenderOption? {
         "MASCULINO" -> GenderOption.MASCULINO
         "FEMININO" -> GenderOption.FEMININO
         "NAO_BINARIO", "NÃO_BINÁRIO", "NÃO BINÁRIO" -> GenderOption.NAO_BINARIO
-        "PREFIRO_NAO_DIZER", "PREFIRO NÃO DIZER" -> GenderOption.PREFIRO_NAO_INFORMAR
+        "OUTROS" -> GenderOption.PREFIRO_NAO_INFORMAR
+        "PREFIRO_NAO_DIZER", "PREFIRO NÃO DIZER", "PREFIRO_NAO_INFORMAR", "PREFIRO NÃO INFORMAR" ->
+            GenderOption.PREFIRO_NAO_INFORMAR
         else -> null
     }
 }
 
+/**
+ * INTERESSADO
+ */
 fun UsuarioInteressadoDto.toUserProfile(): UserProfile {
-    val partyFrequency = interesses.frequencia_festas.toPartyFrequency()
-    val cleaningHabit = interesses.habitos_limpeza.toCleaningHabit()
-    val sleepRoutine = interesses.horario_sono.toSleepRoutine()
+    val partyFrequency = interesses?.frequencia_festas.toPartyFrequency()
+    val cleaningHabit = interesses?.habitos_limpeza.toCleaningHabit()
+    val sleepRoutine = interesses?.horario_sono.toSleepRoutine()
     val genderOption = genero.toGenderOption()
 
-    val cleanlinessLevel = when (cleaningHabit) {
-        CleaningHabit.DIARIO -> 5
-        CleaningHabit.SEMANAL -> 4
-        CleaningHabit.QUINZENAL -> 3
-        CleaningHabit.OCASIONAL -> 2
-    }
-
-    val socialLevel = when (partyFrequency) {
-        PartyFrequency.NUNCA -> 1
-        PartyFrequency.AS_VEZES -> 3
-        PartyFrequency.FREQUENTE -> 5
-    }
+    val acceptsPets = interesses?.aceita_pets == true
+    val acceptsSharedRoom = interesses?.aceita_dividir_quarto == true
 
     val tags = buildList {
         genderOption?.let { add(it.label) }
-
-        if (interesses.aceita_pets) {
-            add("Aceita pets")
-        }
-
-        if (!interesses.aceita_dividir_quarto) {
-            add("Prefere quarto individual")
-        } else {
-            add("Aceita dividir quarto")
-        }
+        if (acceptsPets) add("Aceita pets")
+        if (acceptsSharedRoom) add("Aceita dividir quarto") else add("Prefere quarto individual")
 
         when (partyFrequency) {
             PartyFrequency.NUNCA -> add("Não gosta de festas")
@@ -82,22 +71,19 @@ fun UsuarioInteressadoDto.toUserProfile(): UserProfile {
     }
 
     val lifestyle = LifestylePreferences(
-        acceptsPets = interesses.aceita_pets,
-        isSmoker = false, // API ainda não envia isso
+        acceptsPets = acceptsPets,
+        isSmoker = false,
         partyFrequency = partyFrequency,
         isQuiet = partyFrequency == PartyFrequency.NUNCA,
         sleepRoutine = sleepRoutine,
-        cleanlinessLevel = cleanlinessLevel,
-        socialLevel = socialLevel,
         cleaningHabit = cleaningHabit,
-        studySchedule = null, // API não manda
-        acceptsSharedRoom = interesses.aceita_dividir_quarto,
+        acceptsSharedRoom = acceptsSharedRoom,
         tags = tags,
     )
 
     val budget = Budget(
-        minBudget = interesses.orcamento_min?.toInt(),
-        maxBudget = interesses.orcamento_max?.toInt(),
+        minBudget = interesses?.orcamento_min?.toInt(),
+        maxBudget = interesses?.orcamento_max?.toInt(),
     )
 
     return UserProfile(
@@ -106,70 +92,95 @@ fun UsuarioInteressadoDto.toUserProfile(): UserProfile {
         email = email,
         age = idade,
         role = ProfileRole.SEEKER,
-
         city = cidade,
         professionOrCourse = ocupacao,
         bio = bio.orEmpty(),
-
         gender = genderOption,
         budget = budget,
         lifestyle = lifestyle,
-
         settings = AccountSettings(
-            notificationsEnabled = true,   // ainda local
+            notificationsEnabled = true,
             showAsOnline = true,
             discoveryEnabled = true,
             darkModeEnabled = true,
         ),
-
         localPhoto = null,
         photoUrl = foto_de_perfil,
     )
 }
 
-private fun PartyFrequency.toApiValue(): String {
-    return when (this) {
-        PartyFrequency.NUNCA -> "NUNCA"
-        PartyFrequency.AS_VEZES -> "AS_VEZES"
-        PartyFrequency.FREQUENTE -> "FREQUENTE"
-    }
-}
+/**
+ * OFERTANTE (placeholder: orçamento não existe no back pro ofertante, então fica null/null)
+ */
+fun UsuarioOfertanteDto.toUserProfile(): UserProfile {
+    val genderOption = genero.toGenderOption()
 
-private fun SleepRoutine.toApiValue(): String {
-    return when (this) {
-        SleepRoutine.MATUTINO -> "MANHA"
-        SleepRoutine.NOTURNO -> "NOITE"
-        SleepRoutine.VESPERTINO -> "TARDE"
-        SleepRoutine.FLEXIVEL -> "FLEXIVEL"
-    }
-}
+    val partyFrequency = interesses?.frequencia_festas.toPartyFrequency()
+    val cleaningHabit = interesses?.habitos_limpeza.toCleaningHabit()
+    val sleepRoutine = interesses?.horario_sono.toSleepRoutine()
 
-fun UserProfile.toUpdateRequest(): AtualizarUsuarioInteressadoRequest {
-    val habitosLimpeza = when {
-        lifestyle.cleanlinessLevel >= 5 -> "DIARIO"
-        lifestyle.cleanlinessLevel >= 4 -> "SEMANAL"
-        lifestyle.cleanlinessLevel >= 3 -> "QUINZENAL"
-        else -> "OCASIONAL"
+    val acceptsPets = run {
+        val value = interesses?.aceita_pets
+        value == true
     }
 
-    val interessesDto = InteressesUpdateDto(
-        frequencia_festas = lifestyle.partyFrequency.toApiValue(),
-        habitos_limpeza = habitosLimpeza,
-        aceita_pets = lifestyle.acceptsPets,
-        horario_sono = lifestyle.sleepRoutine.toApiValue(),
-        orcamento_min = budget.minBudget?.toDouble(),
-        orcamento_max = budget.maxBudget?.toDouble(),
-        aceita_dividir_quarto = lifestyle.acceptsSharedRoom,
+    val acceptsSharedRoom = run {
+        val value = interesses?.aceita_dividir_quarto
+        value == true
+    }
+
+    val tags = buildList {
+        genderOption?.let { add(it.label) }
+        if (acceptsPets) add("Aceita pets")
+        if (acceptsSharedRoom) add("Aceita dividir quarto") else add("Prefere quarto individual")
+        ocupacao?.let { add(it) }
+    }
+
+    val lifestyle = LifestylePreferences(
+        acceptsPets = acceptsPets,
+        isSmoker = false,
+        partyFrequency = partyFrequency,
+        isQuiet = partyFrequency == PartyFrequency.NUNCA,
+        sleepRoutine = sleepRoutine,
+        cleaningHabit = cleaningHabit,
+        acceptsSharedRoom = acceptsSharedRoom,
+        tags = tags,
     )
 
-    return AtualizarUsuarioInteressadoRequest(
+    return UserProfile(
+        id = id,
+        name = nome,
+        email = email,
+        age = idade,
+        role = ProfileRole.OFFEROR,
+        city = cidade,
+        professionOrCourse = ocupacao,
+        bio = bio.orEmpty(),
+        gender = genderOption,
+        budget = Budget(minBudget = null, maxBudget = null),
+        lifestyle = lifestyle,
+        settings = AccountSettings(
+            notificationsEnabled = true,
+            showAsOnline = true,
+            discoveryEnabled = true,
+            darkModeEnabled = true,
+        ),
+        localPhoto = null,
+        photoUrl = foto_de_perfil,
+    )
+}
+
+fun UserProfile.toBasicUpdateRequest(): AtualizarUsuarioBasicoRequest {
+    val generoValue = run {
+        if (gender == null) null else gender.apiValue
+    }
+
+    return AtualizarUsuarioBasicoRequest(
         nome = name,
         email = email,
         cidade = city,
         ocupacao = professionOrCourse,
         bio = bio,
-        genero = gender?.name,        
-        foto_de_perfil = photoUrl,
-        interesses = interessesDto,
+        genero = generoValue,
     )
 }
