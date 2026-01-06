@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/api/anuncio")
 public class AnuncioAdapterIn {
@@ -58,6 +60,11 @@ public class AnuncioAdapterIn {
             @PathVariable Integer id_anuncio
     ) {
         return ResponseEntity.ok(anuncioPortIn.reativarAnuncio(id_anuncio));
+    }
+
+    @GetMapping("/visualizarTodos")
+    public ResponseEntity<List<AnuncioResponseDTO>> visualizarTodos(){
+        return ResponseEntity.ok(anuncioPortIn.visualizarTodos());
     }
 
 

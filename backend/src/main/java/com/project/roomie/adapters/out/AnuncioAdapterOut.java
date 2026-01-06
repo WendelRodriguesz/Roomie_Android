@@ -1,12 +1,16 @@
 package com.project.roomie.adapters.out;
 
 import com.project.roomie.core.model.Anuncio;
+import com.project.roomie.core.model.enums.StatusAnuncio;
 import com.project.roomie.infra.persistence.entity.AnuncioJpaEntity;
+import com.project.roomie.infra.persistence.entity.enums.StatusAnuncioJpaEntity;
 import com.project.roomie.infra.persistence.repository.AnuncioRepository;
 import com.project.roomie.mapper.AnuncioMapper;
 import com.project.roomie.ports.out.AnuncioPortOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
+import java.util.List;
 
 @Repository
 public class AnuncioAdapterOut implements AnuncioPortOut {
@@ -38,6 +42,17 @@ public class AnuncioAdapterOut implements AnuncioPortOut {
                 .orElseThrow(() -> new RuntimeException("Anúncio não encontrado"));
 
         return anuncioMapper.JpaEntitytoModel(AnuncioJpaEntity);
+    }
+
+    @Override
+    public List<Anuncio> buscarAnunciosAtivos() {
+        StatusAnuncioJpaEntity statusJpa =
+                StatusAnuncioJpaEntity.ATIVO;
+
+        return anuncioRepository.findByStatusAnuncio(statusJpa)
+                .stream()
+                .map(anuncioMapper::JpaEntitytoModel)
+                .toList();
     }
 
 

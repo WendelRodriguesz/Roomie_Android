@@ -22,7 +22,7 @@ public class Anuncio {
     private TipoImovel tipo_imovel;
     private List<String> fotos;
     private List<Comodo> comodos;
-    private StatusAnuncio status_anuncio;
+    private StatusAnuncio statusAnuncio;
 
     public Anuncio() {
     }
@@ -171,7 +171,7 @@ public class Anuncio {
         this.comodos = comodos;
     }
 
-    public StatusAnuncio getStatus_anuncio() {return status_anuncio;}
+    public StatusAnuncio getStatusAnuncio() {return statusAnuncio;}
 
-    public void setStatus_anuncio(StatusAnuncio status_anuncio) { this.status_anuncio = status_anuncio; }
+    public void setStatusAnuncio(StatusAnuncio statusAnuncio) { this.statusAnuncio = statusAnuncio; }
 }

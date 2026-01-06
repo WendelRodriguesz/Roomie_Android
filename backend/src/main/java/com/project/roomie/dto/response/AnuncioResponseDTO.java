@@ -30,5 +30,5 @@ public class AnuncioResponseDTO {
     private TipoImovel tipo_imovel;
     private List<String> fotos;
     private List<Comodo> comodos;
-    private StatusAnuncio status_anuncio;
+    private StatusAnuncio statusAnuncio;
 }

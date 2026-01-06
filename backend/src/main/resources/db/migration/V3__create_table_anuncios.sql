@@ -11,7 +11,7 @@ CREATE TABLE anuncios (
     valor_contas DECIMAL NOT NULL,
     vagas_disponiveis INTEGER,
     tipo_imovel VARCHAR(50) NOT NULL,
-    status_anuncio VARCHAR(50) NOT NULL
+    statusAnuncio VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE anuncio_comodos (
