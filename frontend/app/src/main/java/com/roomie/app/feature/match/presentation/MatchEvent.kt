@@ -8,4 +8,5 @@ sealed interface MatchEvent {
     data object Prev : MatchEvent
     data object SeeMore : MatchEvent
     data object Refresh : MatchEvent
+    data object DismissMatchSuccess : MatchEvent
 }

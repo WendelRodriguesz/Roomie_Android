@@ -1,25 +1,18 @@
 package com.roomie.app.feature.match.ui
 
-import android.content.res.Configuration
-import android.content.res.Resources
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.Star
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.Shadow
-import androidx.compose.ui.res.colorResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.sp
 import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.RoomieGradient
@@ -34,22 +27,46 @@ fun MatchScreen(
     state: MatchState,
     onEvent: (MatchEvent) -> Unit
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    
+    LaunchedEffect(state.showMatchSuccess) {
+        if (state.showMatchSuccess) {
+            snackbarHostState.showSnackbar(
+                message = "Match enviado com sucesso! ❤️",
+                duration = SnackbarDuration.Short
+            )
+            onEvent(MatchEvent.DismissMatchSuccess)
+        }
+    }
+    
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             CenterAlignedTopAppBar(
-                title = { Text(
-                    "Encontre o apartamento ideal",
-                    style = TextStyle(
-                        fontSize = 24.sp,
-                        fontWeight = FontWeight.Bold,
-                        color = MaterialTheme.colorScheme.onSurface,
-                        shadow = Shadow(
-                            color = Color(0xFF757575), offset = Offset(5.0f, 5.0f), blurRadius = 5f
+                title = {
+                    Column(
+                        modifier = Modifier.padding(vertical = 4.dp),
+                        horizontalAlignment = Alignment.CenterHorizontally
+                    ) {
+                        Text(
+                            text = "Encontre seu match",
+                            style = MaterialTheme.typography.titleLarge,
+                            color = MaterialTheme.colorScheme.onSurface,
+                            fontWeight = FontWeight.SemiBold
                         )
-                    )
-                ) },
-                colors = TopAppBarDefaults.topAppBarColors(containerColor = MaterialTheme.colorScheme.background)
+                        Text(
+                            text = "Deslize para conhecer novos lugares",
+                            style = MaterialTheme.typography.bodySmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant,
+                            fontSize = 12.sp
+                        )
+                    }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.background,
+                    titleContentColor = MaterialTheme.colorScheme.onSurface
+                )
             )
         }
     ) { inner ->
@@ -67,48 +84,84 @@ fun MatchScreen(
                     .weight(1f),
                 contentAlignment = Alignment.Center
             ) {
-                MatchCard(
-                    listing = state.current,
-                    onLeftSideClick = { onEvent(MatchEvent.Prev) },
-                    onRightSideClick = { onEvent(MatchEvent.Next) },
-                    onSeeMore = { onEvent(MatchEvent.SeeMore) },
-                )
+                when {
+                    state.isLoading -> {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(48.dp),
+                            color = MaterialTheme.colorScheme.primary
+                        )
+                    }
+                    state.error != null -> {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center,
+                            modifier = Modifier.padding(16.dp)
+                        ) {
+                            Text(
+                                text = "Erro ao carregar",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.error
+                            )
+                            Spacer(modifier = Modifier.height(8.dp))
+                            Text(
+                                text = state.error,
+                                style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant,
+                                textAlign = androidx.compose.ui.text.style.TextAlign.Center
+                            )
+                            Spacer(modifier = Modifier.height(16.dp))
+                            Button(onClick = { onEvent(MatchEvent.Refresh) }) {
+                                Text("Tentar novamente")
+                            }
+                        }
+                    }
+                    state.current == null -> {
+                        Column(
+                            horizontalAlignment = Alignment.CenterHorizontally,
+                            verticalArrangement = Arrangement.Center
+                        ) {
+                            Text(
+                                text = "Nenhum candidato encontrado",
+                                style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    }
+                    else -> {
+                        MatchCard(
+                            listing = state.current,
+                            onLeftSideClick = { onEvent(MatchEvent.Prev) },
+                            onRightSideClick = { onEvent(MatchEvent.Next) },
+                            onSeeMore = { onEvent(MatchEvent.SeeMore) },
+                        )
+                    }
+                }
             }
 
             // Ações
-            Row(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(top = 12.dp, bottom = 34.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
+                    .padding(top = 16.dp, bottom = 34.dp),
+                contentAlignment = Alignment.Center
             ) {
-                FilledTonalIconButton(
-                    onClick = { onEvent(MatchEvent.Dislike) },
-                    colors = IconButtonDefaults.filledTonalIconButtonColors(
-                        containerColor = Color(0xFFEA98A0).copy(0.12f),
-                        contentColor   = Color(0xFFD86B78)
-                    ),
-                    modifier = Modifier.size(60.dp)
-                    ) {
-                    Icon(Icons.Outlined.Close, contentDescription = "Não curti", modifier = Modifier.size(30.dp))
-                }
-                FilledTonalIconButton(
-                    onClick = { onEvent(MatchEvent.Save) },
-                    colors = IconButtonDefaults.filledTonalIconButtonColors(
-                        containerColor = Color(0xFFC1AB75).copy(0.12f),
-                        contentColor   = Color(0xFFFFC107)
-                    ), modifier = Modifier.size(60.dp)
-                ) {
-                    Icon(Icons.Outlined.Star, contentDescription = "Salvar", modifier = Modifier.size(30.dp))
-                }
-                FilledIconButton(
+                // Botão de like
+                FloatingActionButton(
                     onClick = { onEvent(MatchEvent.Like) },
-                    colors = IconButtonDefaults.filledIconButtonColors(
-                        containerColor = Color(0xFFE91E63),
-                        contentColor   = Color.White
-                    ),modifier = Modifier.size(60.dp)) {
-                    Icon(Icons.Outlined.Favorite, contentDescription = "Curti", modifier = Modifier.size(30.dp))
+                    modifier = Modifier.size(72.dp),
+                    containerColor = Color(0xFFE91E63),
+                    contentColor = Color.White,
+                    shape = CircleShape,
+                    elevation = FloatingActionButtonDefaults.elevation(
+                        defaultElevation = 8.dp,
+                        pressedElevation = 12.dp
+                    )
+                ) {
+                    Icon(
+                        Icons.Outlined.Favorite,
+                        contentDescription = "Curti",
+                        modifier = Modifier.size(36.dp)
+                    )
                 }
             }
         }
