@@ -23,5 +23,13 @@ interface MatchApiService {
         @Query("id_usuario_ofertante") idUsuarioOfertante: Long,
         @Header("Authorization") authHeader: String
     ): Response<Unit>
+    
+    @GET("api/match/visualizarMeusLikes")
+    suspend fun visualizarMeusLikes(
+        @Query("page") page: Int,
+        @Query("size") size: Int,
+        @Query("id_ofertante") idOfertante: Long,
+        @Header("Authorization") authHeader: String
+    ): Response<com.roomie.app.feature.notifications.data.model.MatchResponse>
 }
 

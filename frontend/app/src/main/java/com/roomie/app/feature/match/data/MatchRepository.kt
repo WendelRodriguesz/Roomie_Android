@@ -87,5 +87,35 @@ class MatchRepository(
             Result.failure(e)
         }
     }
+    
+    suspend fun visualizarMeusLikes(
+        page: Int,
+        size: Int,
+        idOfertante: Long
+    ): Result<com.roomie.app.feature.notifications.data.model.MatchResponse> {
+        return try {
+            val token = AuthSession.token
+            if (token.isNullOrBlank()) {
+                return Result.failure(Exception("Token de autenticação não encontrado. Faça login novamente."))
+            }
+            
+            val authHeader = "Bearer $token"
+            val response = apiService.visualizarMeusLikes(page, size, idOfertante, authHeader)
+            
+            if (response.isSuccessful && response.body() != null) {
+                android.util.Log.d("MatchRepository", "Matches recebidos: ${response.body()!!.content.size}")
+                Result.success(response.body()!!)
+            } else {
+                val errorCode = response.code()
+                val errorMessage = response.errorBody()?.string() 
+                    ?: "Erro ao buscar matches (código: $errorCode). Tente novamente."
+                android.util.Log.e("MatchRepository", "Erro ao buscar matches: $errorCode - $errorMessage")
+                Result.failure(Exception(errorMessage))
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("MatchRepository", "Exceção ao buscar matches", e)
+            Result.failure(e)
+        }
+    }
 }
 
