@@ -37,8 +37,10 @@ import com.roomie.app.feature.profile.model.UserProfile
 fun EditProfileScreen(
     profile: UserProfile,
     isSaving: Boolean = false,
+    isUploadingPhoto: Boolean = false,
     onCancelClick: () -> Unit = {},
     onSaveClick: (UserProfile) -> Unit = {},
+    onPhotoChangeClick: () -> Unit = {},
 ) {
     var name by remember(profile.id) { mutableStateOf(profile.name) }
     var gender by remember(profile.id) { mutableStateOf(profile.gender ?: GenderOption.PREFIRO_NAO_INFORMAR) }
@@ -100,7 +102,8 @@ fun EditProfileScreen(
                 onCourseChange = { course = it },
                 bio = bio,
                 onBioChange = { bio = it },
-                onPhotoChangeClick = { }
+                isUploadingPhoto = isUploadingPhoto,
+                onPhotoChangeClick = onPhotoChangeClick
             )
 
             ComingSoonCard(

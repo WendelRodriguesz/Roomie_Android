@@ -10,10 +10,12 @@ import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.feature.profile.data.ProfileRepository
 import com.roomie.app.feature.profile.model.UserProfile
 import kotlinx.coroutines.launch
+import okhttp3.MultipartBody
 
 data class EditProfileUiState(
     val isLoading: Boolean = false,
     val isSaving: Boolean = false,
+    val isUploadingPhoto: Boolean = false,
     val profile: UserProfile? = null,
     val errorMessage: String? = null,
     val saveSuccessful: Boolean = false,
@@ -64,6 +66,42 @@ class EditProfileViewModel(
 
     fun consumeSaveSuccess() {
         uiState = uiState.copy(saveSuccessful = false)
+    }
+        
+    fun uploadPhoto(
+        role: ProfileRole,
+        userId: Long,
+        token: String,
+        bytes: ByteArray,
+        fileName: String,
+        mimeType: String?,
+    ) {
+        val current = uiState.profile ?: return
+
+        viewModelScope.launch {
+            uiState = uiState.copy(isUploadingPhoto = true, errorMessage = null)
+
+            val result = repository.uploadProfilePhoto(
+                role = role,
+                userId = userId,
+                token = token,
+                bytes = bytes,
+                fileName = fileName,
+                mimeType = mimeType,
+            )
+
+            result.onSuccess { url ->
+                uiState = uiState.copy(
+                    isUploadingPhoto = false,
+                    profile = current.copy(photoUrl = url),
+                )
+            }.onFailure { t ->
+                uiState = uiState.copy(
+                    isUploadingPhoto = false,
+                    errorMessage = t.message ?: "Erro ao enviar foto",
+                )
+            }
+        }
     }
 }
 

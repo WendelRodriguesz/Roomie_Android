@@ -77,6 +77,8 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging)
+    implementation("com.squareup.retrofit2:converter-scalars:3.0.0")
+    implementation("io.coil-kt.coil3:coil-network-okhttp:3.3.0")
 
     // DataStore para armazenamento local
     implementation(libs.androidx.datastore.preferences)
