@@ -68,12 +68,16 @@ public class AnuncioAdapterIn {
         return ResponseEntity.ok(anuncioPortIn.visualizarTodos());
     }
 
-    @GetMapping("filtrar")
+    @GetMapping("/filtrar")
     public ResponseEntity<List<AnuncioResponseDTO>> filtrar(
             @ModelAttribute AnuncioFiltroDTO anuncioFiltroDTO
             ){
         return ResponseEntity.ok(anuncioPortIn.filtrar(anuncioFiltroDTO));
     }
 
-
+    @GetMapping("/visualizar/{id_anuncio}")
+    public ResponseEntity<AnuncioResponseDTO> visualizarPorId(
+            @PathVariable Integer id_anuncio){
+        return ResponseEntity.ok(anuncioPortIn.visualizarPorId(id_anuncio));
+    }
 }
