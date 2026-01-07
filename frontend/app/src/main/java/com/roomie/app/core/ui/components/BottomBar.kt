@@ -35,28 +35,16 @@ fun BottomBar(
     ) {
         destinations.forEach { dest ->
             val isSelected = selectedRoute == dest.route
-            val isMatch = dest.route == Routes.MATCH
 
             NavigationBarItem(
                 selected = isSelected,
                 onClick = { onNavigate(dest.route) },
                 icon = {
-                    if (isMatch) {
-                        Icon(
-                            painter = rememberVectorPainter(dest.icon),
-                            contentDescription = dest.label,
-                            modifier = Modifier
-                                .size(45.dp)
-                                .padding(bottom = 5.dp),
-                            tint = MaterialTheme.colorScheme.tertiary
-                        )
-                    } else {
-                        Icon(
-                            painter = rememberVectorPainter(dest.icon),
-                            contentDescription = dest.label,
-                            modifier = Modifier.size(24.dp)
-                        )
-                    }
+                    Icon(
+                        painter = rememberVectorPainter(dest.icon),
+                        contentDescription = dest.label,
+                        modifier = Modifier.size(24.dp)
+                    )
                 },
                 colors = NavigationBarItemDefaults.colors(
                     selectedIconColor = MaterialTheme.colorScheme.primary,

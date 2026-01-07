@@ -21,14 +21,12 @@ fun bottomDestinationsFor(role: ProfileRole): List<BottomDest> {
             BottomDest(Routes.HOME,          Icons.Outlined.Home,              "Home"),
             BottomDest(Routes.CHAT,          Icons.Outlined.ChatBubbleOutline, "Chat"),
             BottomDest(Routes.MATCH,         Icons.Outlined.Favorite,          "Match"),
-            BottomDest(Routes.NOTIFICATIONS, Icons.Outlined.Notifications,     "Notifications"),
             BottomDest(Routes.PROFILE,       Icons.Outlined.Person,           "Profile"),
         )
 
         ProfileRole.OFFEROR -> listOf(
             BottomDest(Routes.MY_LISTINGS,   Icons.Outlined.Home,              "Vagas"),
             BottomDest(Routes.CHAT,          Icons.Outlined.ChatBubbleOutline, "Chat"),
-            BottomDest(Routes.MATCH,         Icons.Outlined.Favorite,          "Match"),
             BottomDest(Routes.NOTIFICATIONS, Icons.Outlined.Notifications,     "Notifications"),
             BottomDest(Routes.PROFILE,       Icons.Outlined.Person,           "Profile"),
         )

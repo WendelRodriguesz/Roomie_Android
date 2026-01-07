@@ -1,24 +1,18 @@
 package com.roomie.app.feature.match.ui
 
-import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material.icons.outlined.FmdGood
-import androidx.compose.material.icons.outlined.LocationOn
-import androidx.compose.material.icons.outlined.PinDrop
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.blur
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
@@ -26,9 +20,12 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import coil3.compose.AsyncImage
 import com.roomie.app.R
 import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
@@ -58,29 +55,57 @@ fun MatchCard(
         ) {
 
             val isPreview = LocalInspectionMode.current
-            val resName = listing.photos.firstOrNull()
+            val photoUrl = listing.photos.firstOrNull()
             val ctx = LocalContext.current
 
-
-            val painter = when {
-                isPreview -> painterResource(R.drawable.match1)
-                listing.localPhoto != null -> painterResource(listing.localPhoto!!)
-                !resName.isNullOrBlank() -> {
-                    val id = ctx.resources.getIdentifier(resName, "drawable", ctx.packageName)
-                    if (id != 0) painterResource(id) else null
+            // Carregar imagem: prioridade para localPhoto (drawable), depois URL, depois placeholder
+            when {
+                isPreview -> {
+                    Image(
+                        painter = painterResource(R.drawable.match1),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
                 }
-                else -> null
-            }
-
-            if (painter != null) {
-                Image(
-                    painter = painter,
-                    contentDescription = null,
-                    modifier = Modifier.fillMaxSize(),
-                    contentScale = ContentScale.Crop
-                )
-            } else {
-                Box(Modifier.fillMaxSize().background(Color(0xFFE0E0E0)))
+                listing.localPhoto != null -> {
+                    Image(
+                        painter = painterResource(listing.localPhoto!!),
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                }
+                !photoUrl.isNullOrBlank() -> {
+                    // Verificar se é URL (começa com http) ou nome de drawable
+                    if (photoUrl.startsWith("http://") || photoUrl.startsWith("https://")) {
+                        // É uma URL - usar AsyncImage do Coil
+                        AsyncImage(
+                            model = photoUrl,
+                            contentDescription = null,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop,
+                            error = painterResource(R.drawable.match1),
+                            placeholder = painterResource(R.drawable.match1)
+                        )
+                    } else {
+                        // É um nome de drawable - tentar carregar como resource
+                        val id = ctx.resources.getIdentifier(photoUrl, "drawable", ctx.packageName)
+                        if (id != 0) {
+                            Image(
+                                painter = painterResource(id),
+                                contentDescription = null,
+                                modifier = Modifier.fillMaxSize(),
+                                contentScale = ContentScale.Crop
+                            )
+                        } else {
+                            Box(Modifier.fillMaxSize().background(Color(0xFFE0E0E0)))
+                        }
+                    }
+                }
+                else -> {
+                    Box(Modifier.fillMaxSize().background(Color(0xFFE0E0E0)))
+                }
             }
 
 
@@ -88,10 +113,17 @@ fun MatchCard(
                 Modifier
                     .fillMaxWidth()
                     .align(Alignment.BottomCenter)
-                    .height(220.dp)
+                    .height(240.dp)
                     .background(
                         brush = Brush.verticalGradient(
-                            listOf(Color.Transparent, Color(0xAA000000), Color(0xCC000000))
+                            colors = listOf(
+                                Color.Transparent,
+                                Color(0x80000000),
+                                Color(0xCC000000),
+                                Color(0xFF000000)
+                            ),
+                            startY = 0f,
+                            endY = Float.POSITIVE_INFINITY
                         )
                     )
             )
@@ -100,13 +132,15 @@ fun MatchCard(
                 modifier = Modifier
                     .align(Alignment.BottomStart)
                     .fillMaxWidth()
-                    .padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(8.dp)
+                    .padding(20.dp),
+                verticalArrangement = Arrangement.spacedBy(10.dp)
             ) {
                 Text(
                     listing.title,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = Color(0xFFEFEFEF),
+                    style = MaterialTheme.typography.titleLarge.copy(
+                        fontWeight = FontWeight.Bold
+                    ),
+                    color = Color.White,
                     maxLines = 2,
                     overflow = TextOverflow.Ellipsis
                 )
@@ -116,44 +150,62 @@ fun MatchCard(
                     horizontalArrangement = Arrangement.SpaceBetween,
                     verticalAlignment = Alignment.CenterVertically
                 ) {
-                    Row (
-                    horizontalArrangement = Arrangement.SpaceBetween,
-                    verticalAlignment = Alignment.CenterVertically)
-                    {
-                        Icon(Icons.Outlined.FmdGood, contentDescription = "Localização", modifier = Modifier.size(24.dp), tint = Color(0xFFD3D3D3),)
+                    Row(
+                        horizontalArrangement = Arrangement.spacedBy(6.dp),
+                        verticalAlignment = Alignment.CenterVertically,
+                        modifier = Modifier.weight(1f)
+                    ) {
+                        Icon(
+                            Icons.Outlined.FmdGood,
+                            contentDescription = "Localização",
+                            modifier = Modifier.size(20.dp),
+                            tint = Color(0xFFE0E0E0)
+                        )
                         Text(
                             "${listing.neighborhood}, ${listing.city}",
                             style = MaterialTheme.typography.bodyMedium,
-                            color = Color(0xFFD3D3D3),
+                            color = Color(0xFFE0E0E0),
                             maxLines = 1,
                             overflow = TextOverflow.Ellipsis
-                        ) }
+                        )
+                    }
 
                     AssistChip(
                         onClick = onSeeMore,
-                        label = { Text("R$ %.0f".format(listing.totalRent)) },
-                        colors = SuggestionChipDefaults.suggestionChipColors(
-                            containerColor = Color(0xFF9BD32B).copy(alpha = 0.15f),
-                            labelColor     = Color(0xFF9BD32B)
+                        label = { 
+                            Text(
+                                "R$ %.0f".format(listing.totalRent),
+                                fontWeight = FontWeight.SemiBold
+                            ) 
+                        },
+                        colors = AssistChipDefaults.assistChipColors(
+                            containerColor = Color(0xFF9BD32B).copy(alpha = 0.25f),
+                            labelColor = Color(0xFF9BD32B),
+                            leadingIconContentColor = Color(0xFF9BD32B)
                         ),
                         border = null,
-                        shape = RoundedCornerShape(15.dp)
+                        shape = RoundedCornerShape(20.dp)
                     )
                 }
 
                 Text(
                     listing.description,
-                    style = MaterialTheme.typography.bodySmall,
-                    color = Color(0xFFD1D1D1),
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = Color(0xFFE5E5E5),
                     maxLines = 2,
-                    overflow = TextOverflow.Ellipsis
+                    overflow = TextOverflow.Ellipsis,
+                    lineHeight = 20.sp
                 )
 
-                LazyRow(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
-                    items(listing.tags) { tag ->
-                        TagChip(
-                            tag
-                        )
+                if (listing.tags.isNotEmpty()) {
+                    FlowRow(
+                        horizontalArrangement = Arrangement.spacedBy(8.dp),
+                        verticalArrangement = Arrangement.spacedBy(8.dp),
+                        modifier = Modifier.fillMaxWidth()
+                    ) {
+                        listing.tags.forEach { tag ->
+                            TagChip(tag)
+                        }
                     }
                 }
             }
@@ -220,13 +272,20 @@ private fun MatchCardPreview() {
 private fun TagChip(text: String) {
     SuggestionChip(
         onClick = {},
-        label = { Text(text, color = Color(0xFFCCCACA)) },
+        label = { 
+            Text(
+                text, 
+                color = Color(0xFFE0E0E0),
+                style = MaterialTheme.typography.labelSmall,
+                fontWeight = FontWeight.Medium
+            ) 
+        },
         colors = SuggestionChipDefaults.suggestionChipColors(
-            containerColor = Color(0xFFFDF5F5).copy(alpha = 0.20f),
-            labelColor     = Color(0xFF3E3E3E)
+            containerColor = Color.White.copy(alpha = 0.25f),
+            labelColor = Color(0xFFE0E0E0)
         ),
         border = null,
-        shape = RoundedCornerShape(15.dp)
+        shape = RoundedCornerShape(16.dp)
     )
 }
 
