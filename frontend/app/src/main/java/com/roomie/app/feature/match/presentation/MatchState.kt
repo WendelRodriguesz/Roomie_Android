@@ -9,7 +9,8 @@ data class MatchState(
     val error: String? = null,
     val currentPage: Int = 0,
     val isLastPage: Boolean = false,
-    val isLoadingMore: Boolean = false
+    val isLoadingMore: Boolean = false,
+    val showMatchSuccess: Boolean = false
 ) {
     val current: ListingCard? get() = items.getOrNull(index)
     val hasPrev: Boolean get() = index > 0

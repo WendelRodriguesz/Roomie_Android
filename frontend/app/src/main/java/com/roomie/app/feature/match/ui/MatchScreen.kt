@@ -3,10 +3,11 @@ package com.roomie.app.feature.match.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Close
 import androidx.compose.material.icons.outlined.Favorite
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -26,10 +27,23 @@ fun MatchScreen(
     state: MatchState,
     onEvent: (MatchEvent) -> Unit
 ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    
+    LaunchedEffect(state.showMatchSuccess) {
+        if (state.showMatchSuccess) {
+            snackbarHostState.showSnackbar(
+                message = "Match enviado com sucesso! ❤️",
+                duration = SnackbarDuration.Short
+            )
+            onEvent(MatchEvent.DismissMatchSuccess)
+        }
+    }
+    
     Scaffold(
         contentWindowInsets = WindowInsets(0, 0, 0, 0),
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
-            TopAppBar(
+            CenterAlignedTopAppBar(
                 title = {
                     Column(
                         modifier = Modifier.padding(vertical = 4.dp),
@@ -125,28 +139,12 @@ fun MatchScreen(
             }
 
             // Ações
-            Row(
+            Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp, bottom = 34.dp),
-                horizontalArrangement = Arrangement.SpaceEvenly,
-                verticalAlignment = Alignment.CenterVertically
+                contentAlignment = Alignment.Center
             ) {
-                // Botão de dislike
-                FloatingActionButton(
-                    onClick = { onEvent(MatchEvent.Dislike) },
-                    modifier = Modifier.size(64.dp),
-                    containerColor = Color(0xFFEA98A0).copy(alpha = 0.15f),
-                    contentColor = Color(0xFFD86B78),
-                    shape = CircleShape
-                ) {
-                    Icon(
-                        Icons.Outlined.Close,
-                        contentDescription = "Não curti",
-                        modifier = Modifier.size(32.dp)
-                    )
-                }
-                
                 // Botão de like
                 FloatingActionButton(
                     onClick = { onEvent(MatchEvent.Like) },

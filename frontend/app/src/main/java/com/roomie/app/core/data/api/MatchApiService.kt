@@ -6,6 +6,8 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
 
+import retrofit2.http.POST
+
 interface MatchApiService {
     @GET("api/match/buscarCandidatos")
     suspend fun buscarCandidatos(
@@ -14,5 +16,12 @@ interface MatchApiService {
         @Query("id_usuario_interessado") idUsuarioInteressado: Long,
         @Header("Authorization") authHeader: String
     ): Response<MatchCandidateResponse>
+    
+    @POST("api/match/enviarLike")
+    suspend fun enviarLike(
+        @Query("id_usuario_interessado") idUsuarioInteressado: Long,
+        @Query("id_usuario_ofertante") idUsuarioOfertante: Long,
+        @Header("Authorization") authHeader: String
+    ): Response<Unit>
 }
 

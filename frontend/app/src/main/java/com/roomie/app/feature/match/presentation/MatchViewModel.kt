@@ -90,8 +90,51 @@ class MatchViewModel(
     fun onEvent(e: MatchEvent) {
         val s = _state.value
         when (e) {
-            MatchEvent.Like,
-            MatchEvent.Dislike,
+            MatchEvent.Like -> {
+                val currentItem = s.current
+                if (currentItem != null) {
+                    val userId = AuthSession.userId
+                    val offerorUserId = currentItem.offerorUserId.toLongOrNull()
+                    
+                    if (userId != null && offerorUserId != null) {
+                        viewModelScope.launch {
+                            // Enviar like
+                            val result = repository.enviarLike(userId, offerorUserId)
+                            
+                            result.fold(
+                                onSuccess = {
+                                    // Remover o item atual da lista
+                                    val updatedItems = s.items.filter { it.id != currentItem.id }
+                                    val newIndex = if (s.index >= updatedItems.size) {
+                                        (updatedItems.size - 1).coerceAtLeast(0)
+                                    } else {
+                                        s.index
+                                    }
+                                    
+                                    _state.value = s.copy(
+                                        items = updatedItems,
+                                        index = newIndex,
+                                        showMatchSuccess = true
+                                    )
+                                    
+                                    // Verificar se precisa carregar mais após remover
+                                    if (newIndex == updatedItems.lastIndex && !s.isLastPage) {
+                                        loadMoreIfNeeded()
+                                    }
+                                },
+                                onFailure = { exception ->
+                                    _state.value = s.copy(
+                                        error = exception.message ?: "Erro ao enviar like"
+                                    )
+                                }
+                            )
+                        }
+                    }
+                }
+            }
+            MatchEvent.DismissMatchSuccess -> {
+                _state.value = s.copy(showMatchSuccess = false)
+            }
             MatchEvent.Save -> {
                 val newIndex = (s.index + 1).coerceAtMost(s.items.lastIndex)
                 _state.value = s.copy(index = newIndex)
@@ -115,6 +158,8 @@ class MatchViewModel(
             MatchEvent.Refresh -> {
                 loadInitialData()
             }
+
+            MatchEvent.Dislike -> TODO()
         }
     }
 }

@@ -58,5 +58,34 @@ class MatchRepository(
             Pair(listingCards, response.last)
         }
     }
+    
+    suspend fun enviarLike(
+        idUsuarioInteressado: Long,
+        idUsuarioOfertante: Long
+    ): Result<Unit> {
+        return try {
+            val token = AuthSession.token
+            if (token.isNullOrBlank()) {
+                return Result.failure(Exception("Token de autenticação não encontrado. Faça login novamente."))
+            }
+            
+            val authHeader = "Bearer $token"
+            val response = apiService.enviarLike(idUsuarioInteressado, idUsuarioOfertante, authHeader)
+            
+            if (response.isSuccessful) {
+                android.util.Log.d("MatchRepository", "Like enviado com sucesso")
+                Result.success(Unit)
+            } else {
+                val errorCode = response.code()
+                val errorMessage = response.errorBody()?.string() 
+                    ?: "Erro ao enviar like (código: $errorCode). Tente novamente."
+                android.util.Log.e("MatchRepository", "Erro ao enviar like: $errorCode - $errorMessage")
+                Result.failure(Exception(errorMessage))
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("MatchRepository", "Exceção ao enviar like", e)
+            Result.failure(e)
+        }
+    }
 }
 
