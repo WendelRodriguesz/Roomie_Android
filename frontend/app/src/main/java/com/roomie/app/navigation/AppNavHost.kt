@@ -24,8 +24,8 @@ import com.roomie.app.feature.notifications.ui.NotificationsScreen
 import com.roomie.app.feature.preference_registration.ui.PreferenceRegistration
 import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.feature.profile.ui.ProfileScreenRoute
+import com.roomie.app.feature.register.ui.RegisterRoute
 import com.roomie.app.feature.register.ui.RegisterRoleScreen
-import com.roomie.app.feature.register.ui.RegisterScreen
 import com.roomie.app.feature.vaga.ui.CadastrarVagasScreen
 import com.roomie.app.feature.vaga.ui.MyListingsScreen
 import com.roomie.app.feature.welcome_screen.ui.WelcomeScreen
@@ -136,7 +136,7 @@ fun AppNavHost(startDestination: String) {
          }
             composable(Routes.WELCOME_SCREEN) { WelcomeScreen(navController) }
             composable(Routes.LOGIN) { LoginScreen(navController) }
-            composable(Routes.REGISTER) { RegisterScreen(navController) }
+            composable(Routes.REGISTER) { RegisterRoute(navController) }
             composable(Routes.REGISTER_ROLE) { RegisterRoleScreen(navController) }
 
             composable(Routes.EDIT_PROFILE) {

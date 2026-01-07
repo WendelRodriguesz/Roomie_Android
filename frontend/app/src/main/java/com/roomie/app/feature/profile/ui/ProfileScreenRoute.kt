@@ -51,14 +51,11 @@ fun ProfileScreenRoute(
         }
 
         uiState.profile != null -> {
-            val profile = uiState.profile
-            if (profile != null) {
-                ProfileScreen(
-                    profile = profile,
-                    onEditClick = onEditClick,
-                    onLogoutClick = onLogoutClick,
-                )
-            }
+            ProfileScreen(
+                profile = uiState.profile,
+                onEditClick = onEditClick,
+                onLogoutClick = onLogoutClick,
+            )
         }
     }
 }

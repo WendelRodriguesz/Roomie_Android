@@ -17,7 +17,7 @@ fun RegisterRoute(navController: NavController) {
 }
 
 @Composable
-fun RegisterRoleRoute(navController: NavController) {
+fun RegisterRoleScreen(navController: NavController) {
     val backStackEntry = navController.getBackStackEntry(Routes.REGISTER)
     val viewModel: RegisterViewModel = viewModel(
         factory = RegisterViewModelFactory(),

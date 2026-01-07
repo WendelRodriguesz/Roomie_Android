@@ -1,7 +1,7 @@
 package com.roomie.app.feature.register.data
 
 import com.roomie.app.core.data.api.RetrofitClient
-import com.roomie.app.feature.profile.model.ProfileRole
+import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.feature.register.data.remote.dto.RegisterRequest
 
 class RegisterRepository {

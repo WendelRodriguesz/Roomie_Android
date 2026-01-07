@@ -26,7 +26,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
-import com.roomie.app.feature.profile.model.ProfileRole
+import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.navigation.Routes
 import com.roomie.app.feature.register.components.ObjectiveButton
 
