@@ -67,6 +67,7 @@ public class SecurityConfigurationsProd {
                         .requestMatchers(HttpMethod.PATCH, "/api/anuncio/reativar/{id_usuario}").hasAnyRole("OFERTANTE")
                         .requestMatchers(HttpMethod.GET, "/api/anuncio/visualizarTodos").hasAnyRole("INTERESSADO")
                         .requestMatchers(HttpMethod.GET, "/api/anuncio/filtrar").hasAnyRole("INTERESSADO")
+                        .requestMatchers(HttpMethod.GET, "/api/anuncio/visualizar/{id_anuncio}").hasAnyRole("OFERTANTE")
 
                         // Match
                         .requestMatchers(HttpMethod.GET, "/api/match/buscarCandidatos").hasAnyRole("INTERESSADO")
