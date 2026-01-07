@@ -3,6 +3,7 @@ package com.project.roomie.core.service;
 import com.project.roomie.core.model.Anuncio;
 import com.project.roomie.core.model.UsuarioOfertante;
 import com.project.roomie.core.model.enums.StatusAnuncio;
+import com.project.roomie.dto.create.AnuncioFiltroDTO;
 import com.project.roomie.dto.response.AnuncioResponseDTO;
 import com.project.roomie.dto.update.AnuncioUpdateDTO;
 import com.project.roomie.mapper.AnuncioMapper;
@@ -134,5 +135,15 @@ public class AnuncioService implements AnuncioPortIn {
                 .map(anuncioMapper::ModeltoResponseDTO)
                 .toList();
 
+    }
+
+    @Override
+    public List<AnuncioResponseDTO> filtrar(AnuncioFiltroDTO anuncioFiltroDTO) {
+        List<Anuncio> anuncios =
+                anuncioPortOut.buscarPorFiltro(anuncioFiltroDTO);
+
+        return anuncios.stream()
+                .map(anuncioMapper::ModeltoResponseDTO)
+                .toList();
     }
 }

@@ -1,6 +1,7 @@
 package com.project.roomie.adapters.in;
 
 import com.project.roomie.dto.create.AnuncioCreateDTO;
+import com.project.roomie.dto.create.AnuncioFiltroDTO;
 import com.project.roomie.dto.response.AnuncioResponseDTO;
 import com.project.roomie.dto.update.AnuncioUpdateDTO;
 import com.project.roomie.mapper.AnuncioMapper;
@@ -65,6 +66,13 @@ public class AnuncioAdapterIn {
     @GetMapping("/visualizarTodos")
     public ResponseEntity<List<AnuncioResponseDTO>> visualizarTodos(){
         return ResponseEntity.ok(anuncioPortIn.visualizarTodos());
+    }
+
+    @GetMapping("filtrar")
+    public ResponseEntity<List<AnuncioResponseDTO>> filtrar(
+            @ModelAttribute AnuncioFiltroDTO anuncioFiltroDTO
+            ){
+        return ResponseEntity.ok(anuncioPortIn.filtrar(anuncioFiltroDTO));
     }
 
 

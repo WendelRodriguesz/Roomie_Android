@@ -74,4 +74,7 @@ public class AnuncioJpaEntity {
     @Enumerated(EnumType.STRING)
     @Column(name = "statusanuncio", nullable = false)
     private StatusAnuncioJpaEntity statusAnuncio;
+
+    @OneToOne(mappedBy = "anuncio")
+    private UsuarioOfertanteJpaEntity ofertante;
 }
