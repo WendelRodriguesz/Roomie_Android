@@ -62,9 +62,9 @@ public class SecurityConfigurationsProd {
                         // Anuncio
                         .requestMatchers(HttpMethod.POST, "/api/anuncio/cadastrar/{id_usuario}").hasAnyRole("OFERTANTE")
                         .requestMatchers(HttpMethod.POST, "/api/anuncio/uploadNovaFoto/{id_usuario}").hasAnyRole("OFERTANTE")
-                        .requestMatchers(HttpMethod.PATCH, "/api/anuncio/atualizar/{id_usuario}").hasAnyRole("OFERTANTE")
-                        .requestMatchers(HttpMethod.PATCH, "/api/anuncio/pausar/{id_usuario}").hasAnyRole("OFERTANTE")
-                        .requestMatchers(HttpMethod.PATCH, "/api/anuncio/reativar/{id_usuario}").hasAnyRole("OFERTANTE")
+                        .requestMatchers(HttpMethod.PATCH, "/api/anuncio/atualizar/{id_anuncio}").hasAnyRole("OFERTANTE")
+                        .requestMatchers(HttpMethod.PATCH, "/api/anuncio/pausar/{id_anuncio}").hasAnyRole("OFERTANTE")
+                        .requestMatchers(HttpMethod.PATCH, "/api/anuncio/reativar/{idanuncio}").hasAnyRole("OFERTANTE")
                         .requestMatchers(HttpMethod.GET, "/api/anuncio/visualizarTodos").hasAnyRole("INTERESSADO")
                         .requestMatchers(HttpMethod.GET, "/api/anuncio/filtrar").hasAnyRole("INTERESSADO")
                         .requestMatchers(HttpMethod.GET, "/api/anuncio/visualizar/{id_anuncio}").hasAnyRole("OFERTANTE")
