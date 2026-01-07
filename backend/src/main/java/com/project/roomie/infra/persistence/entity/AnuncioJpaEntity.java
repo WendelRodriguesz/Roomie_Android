@@ -72,6 +72,9 @@ public class AnuncioJpaEntity {
     private List<ComodoJpaEntity> comodos;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private StatusAnuncioJpaEntity status_anuncio;
+    @Column(name = "statusanuncio", nullable = false)
+    private StatusAnuncioJpaEntity statusAnuncio;
+
+    @OneToOne(mappedBy = "anuncio")
+    private UsuarioOfertanteJpaEntity ofertante;
 }

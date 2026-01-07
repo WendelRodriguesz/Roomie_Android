@@ -3,6 +3,7 @@ package com.project.roomie.core.service;
 import com.project.roomie.core.model.Anuncio;
 import com.project.roomie.core.model.UsuarioOfertante;
 import com.project.roomie.core.model.enums.StatusAnuncio;
+import com.project.roomie.dto.create.AnuncioFiltroDTO;
 import com.project.roomie.dto.response.AnuncioResponseDTO;
 import com.project.roomie.dto.update.AnuncioUpdateDTO;
 import com.project.roomie.mapper.AnuncioMapper;
@@ -15,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.util.List;
 
 @Service
 public class AnuncioService implements AnuncioPortIn {
@@ -41,7 +44,7 @@ public class AnuncioService implements AnuncioPortIn {
     @Override
     public Anuncio cadastrar(Anuncio anuncio, Integer id_usuario){
 
-        anuncio.setStatus_anuncio(StatusAnuncio.ATIVO);
+        anuncio.setStatusAnuncio(StatusAnuncio.ATIVO);
 
         Anuncio novo_anuncio = anuncioPortOut.save(anuncio);
 
@@ -101,11 +104,11 @@ public class AnuncioService implements AnuncioPortIn {
     public AnuncioResponseDTO pausarAnuncio(Integer id_anuncio) {
         Anuncio anuncio = anuncioPortOut.findById(id_anuncio);
 
-        if(anuncio.getStatus_anuncio() == StatusAnuncio.PAUSADO) {
+        if(anuncio.getStatusAnuncio() == StatusAnuncio.PAUSADO) {
             throw new RuntimeException("Anúncio já está pausado");
         }
 
-        anuncio.setStatus_anuncio(StatusAnuncio.PAUSADO);
+        anuncio.setStatusAnuncio(StatusAnuncio.PAUSADO);
         anuncioPortOut.save(anuncio);
 
         return anuncioMapper.ModeltoResponseDTO(anuncio);
@@ -115,13 +118,32 @@ public class AnuncioService implements AnuncioPortIn {
     public AnuncioResponseDTO reativarAnuncio(Integer id_anuncio) {
         Anuncio anuncio = anuncioPortOut.findById(id_anuncio);
 
-        if(anuncio.getStatus_anuncio() == StatusAnuncio.ATIVO){
+        if(anuncio.getStatusAnuncio() == StatusAnuncio.ATIVO){
             throw new RuntimeException("Anúncio já esta ativo");
         }
 
-        anuncio.setStatus_anuncio(StatusAnuncio.ATIVO);
+        anuncio.setStatusAnuncio(StatusAnuncio.ATIVO);
         anuncioPortOut.save(anuncio);
 
         return anuncioMapper.ModeltoResponseDTO(anuncio);
+    }
+
+    @Override
+    public List<AnuncioResponseDTO> visualizarTodos() {
+        return anuncioPortOut.buscarAnunciosAtivos()
+                .stream()
+                .map(anuncioMapper::ModeltoResponseDTO)
+                .toList();
+
+    }
+
+    @Override
+    public List<AnuncioResponseDTO> filtrar(AnuncioFiltroDTO anuncioFiltroDTO) {
+        List<Anuncio> anuncios =
+                anuncioPortOut.buscarPorFiltro(anuncioFiltroDTO);
+
+        return anuncios.stream()
+                .map(anuncioMapper::ModeltoResponseDTO)
+                .toList();
     }
 }
