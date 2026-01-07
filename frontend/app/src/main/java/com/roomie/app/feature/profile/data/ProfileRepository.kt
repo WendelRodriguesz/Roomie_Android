@@ -5,6 +5,9 @@ import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.feature.profile.model.UserProfile
 import com.roomie.app.feature.profile.model.toUserProfile
 import com.roomie.app.feature.profile.model.toBasicUpdateRequest
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class ProfileRepository(
     private val api: ProfileApiService,
@@ -65,6 +68,41 @@ class ProfileRepository(
                 val body = response.body()
                 if (body == null) Result.failure(IllegalStateException("Resposta da API vazia na atualização"))
                 else Result.success(body.toUserProfile())
+            }
+        } catch (t: Throwable) {
+            Result.failure(t)
+        }
+    }
+    suspend fun uploadProfilePhoto(
+        role: ProfileRole,
+        userId: Long,
+        token: String,
+        bytes: ByteArray,
+        fileName: String,
+        mimeType: String?,
+    ): Result<String> {
+        return try {
+            val auth = "Bearer $token"
+            val body = bytes.toRequestBody(mimeType?.toMediaTypeOrNull())
+            val part = MultipartBody.Part.createFormData("file", fileName, body)
+
+            val response = if (role == ProfileRole.SEEKER) {
+                api.uploadFotoInteressado(userId, auth, part)
+            } else {
+                api.uploadFotoOfertante(userId, auth, part)
+            }
+
+            if (!response.isSuccessful) {
+                return Result.failure(
+                    IllegalStateException("Erro upload: ${response.code()} ${response.message()}")
+                )
+            }
+
+            val url = response.body()
+            if (url.isNullOrBlank()) {
+                Result.failure(IllegalStateException("Resposta vazia no upload"))
+            } else {
+                Result.success(url)
             }
         } catch (t: Throwable) {
             Result.failure(t)

@@ -34,6 +34,7 @@ fun BasicInfoCard(
     gender: GenderOption?,
     onGenderChange: (GenderOption) -> Unit,
 
+    isUploadingPhoto: Boolean,
     onPhotoChangeClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -59,7 +60,12 @@ fun BasicInfoCard(
             ) {
                 ProfileAvatar(profile)
                 Spacer(modifier = Modifier.height(8.dp))
-                TextButton(onClick = onPhotoChangeClick) { Text("Alterar foto") }
+                TextButton(
+                    onClick = onPhotoChangeClick,
+                    enabled = !isUploadingPhoto
+                ) {
+                    Text(if (isUploadingPhoto) "Enviando..." else "Alterar foto")
+                }
             }
 
             Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
@@ -131,6 +137,7 @@ private fun BasicInfoCardPreview() {
             onBioChange = {},
             gender = profile.gender,
             onGenderChange = {},
+            isUploadingPhoto = false,
             onPhotoChangeClick = {}
         )
     }
