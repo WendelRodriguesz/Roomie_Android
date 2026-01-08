@@ -11,6 +11,7 @@ import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.roomie.app.core.data.session.AuthSession
 import com.roomie.app.core.ui.components.BottomBar
 import com.roomie.app.core.ui.preview.RoomiePreview
@@ -18,6 +19,7 @@ import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 import com.roomie.app.feature.chat.ui.ChatScreen
 import com.roomie.app.feature.edit_profile.ui.EditProfileRoute
 import com.roomie.app.feature.home.ui.HomeRoute
+import com.roomie.app.feature.home.ui.ListingDetailRoute
 import com.roomie.app.feature.login.ui.LoginScreen
 import com.roomie.app.feature.match.ui.MatchRoute
 import com.roomie.app.feature.notifications.ui.NotificationsScreen
@@ -96,7 +98,25 @@ fun AppNavHost(startDestination: String) {
             startDestination = startDestination,
             modifier = Modifier.padding(inner)
         ) {
-            composable(Routes.HOME) { HomeRoute() }
+            composable(Routes.HOME) { 
+                HomeRoute(
+                    onListingClick = { listingId ->
+                        navController.navigate("listing_detail/$listingId")
+                    }
+                )
+            }
+            composable(
+                route = Routes.LISTING_DETAIL,
+                arguments = listOf(
+                    navArgument("listing_id") { type = androidx.navigation.NavType.IntType }
+                )
+            ) { backStackEntry ->
+                val listingId = backStackEntry.arguments?.getInt("listing_id") ?: 0
+                ListingDetailRoute(
+                    listingId = listingId,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
             composable(Routes.CHAT) { ChatScreen() }
             composable(Routes.MATCH) { MatchRoute() }
             composable(Routes.NOTIFICATIONS) { NotificationsScreen() }

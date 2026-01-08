@@ -1,5 +1,6 @@
 package com.roomie.app.feature.home.data.remote.dto
 
+import com.roomie.app.feature.home.model.ListingDetail
 import com.roomie.app.feature.match.model.ListingCard
 import com.roomie.app.feature.match.model.ListingStatus
 
@@ -30,9 +31,29 @@ fun AnuncioResponseDto.toListingCard(): ListingCard {
         status = status,
         createdInMillis = 0L,
         rating = 0.0,
-        tags = emptyList(),
+        tags = comodos,
         localPhoto = null,
         photos = fotos
+    )
+}
+
+fun AnuncioResponseDto.toListingDetail(): ListingDetail {
+    return ListingDetail(
+        id = id,
+        titulo = titulo,
+        descricao = descricao,
+        rua = rua,
+        numero = numero,
+        bairro = bairro,
+        cidade = cidade,
+        estado = estado,
+        valorAluguel = valor_aluguel,
+        valorContas = valor_contas,
+        vagasDisponiveis = vagas_disponiveis,
+        tipoImovel = tipo_imovel,
+        fotos = fotos,
+        comodos = comodos,
+        statusAnuncio = statusAnuncio
     )
 }
 

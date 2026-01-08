@@ -4,12 +4,19 @@ import com.roomie.app.feature.home.data.remote.dto.AnuncioResponseDto
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.Path
 
 interface HomeApiService {
     @GET("api/anuncio/visualizarTodos")
     suspend fun listarAnuncios(
         @Header("Authorization") authHeader: String
     ): Response<List<AnuncioResponseDto>>
+    
+    @GET("api/anuncio/visualizar/{id_anuncio}")
+    suspend fun buscarAnuncioPorId(
+        @Path("id_anuncio") idAnuncio: Int,
+        @Header("Authorization") authHeader: String
+    ): Response<AnuncioResponseDto>
 }
 
 
