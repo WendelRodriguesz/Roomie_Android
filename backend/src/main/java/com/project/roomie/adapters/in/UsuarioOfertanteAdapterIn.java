@@ -1,6 +1,8 @@
 package com.project.roomie.adapters.in;
 
+import com.project.roomie.dto.create.FirebaseTokenCreateDTO;
 import com.project.roomie.dto.create.UsuarioOfertanteCreateDTO;
+import com.project.roomie.dto.response.FirebaseTokenResponseDTO;
 import com.project.roomie.dto.response.UsuarioOfertanteResponseDTO;
 import com.project.roomie.dto.update.UsuarioOfertanteUpdateDTO;
 import com.project.roomie.mapper.UsuarioOfertanteMapper;
@@ -47,5 +49,13 @@ public class UsuarioOfertanteAdapterIn {
             @PathVariable Integer id,
             @RequestBody UsuarioOfertanteUpdateDTO usuarioOfertanteUpdateDTO ) {
         return ResponseEntity.ok(usuarioOfertantePortIn.atualizar(id, usuarioOfertanteUpdateDTO));
+    }
+
+    @PostMapping("/cadastrarFirebaseToken/{id_usuario}")
+    public FirebaseTokenResponseDTO cadastrarFireBaseToken(
+            @RequestBody FirebaseTokenCreateDTO firebaseTokenCreateDTO,
+            @PathVariable Integer id_usuario
+    ){
+        return usuarioOfertantePortIn.cadastrarFirebaseToken(firebaseTokenCreateDTO.getFirebase_token(), id_usuario);
     }
 }
