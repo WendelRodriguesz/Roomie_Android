@@ -40,7 +40,7 @@ import com.roomie.app.core.model.profileRoleFromApi
 fun WelcomeScreen(navController: NavController) {
     val context = LocalContext.current
     val authDataStore = remember { AuthDataStore(context) }
-    val authRepository = remember { AuthRepository(authDataStore) }
+    val authRepository = remember { AuthRepository(authDataStore, context) }
 
     var isCheckingSession by remember { mutableStateOf(true) }
 
@@ -68,6 +68,10 @@ fun WelcomeScreen(navController: NavController) {
             AuthSession.token = session.token
             AuthSession.refreshToken = session.refreshToken
             AuthSession.role = mappedRole
+
+            // Enviar token do Firebase para o backend após restaurar sessão
+            val firebaseTokenManager = com.roomie.app.core.data.firebase.FirebaseTokenManager(context, authDataStore)
+            firebaseTokenManager.sendTokenToBackendSuspend()
 
             val targetRoute = if (mappedRole == ProfileRole.OFFEROR) {
                 Routes.MY_LISTINGS
