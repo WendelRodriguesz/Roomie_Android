@@ -50,6 +50,7 @@ public class SecurityConfigurationsProd {
                         .requestMatchers(HttpMethod.POST, "/api/usuarioOfertante/uploadFotoDePerfil/{id_usuario}").hasAnyRole("OFERTANTE")
                         .requestMatchers(HttpMethod.GET, "/api/usuarioOfertante/visualizar/{id_usuario}").hasAnyRole("OFERTANTE")
                         .requestMatchers(HttpMethod.PATCH, "/api/usuarioOfertante/atualizar/{id}").hasAnyRole("OFERTANTE")
+                        .requestMatchers(HttpMethod.POST, "/api/usuarioOfertante/cadastrarFirebaseToken/{id_usuario}").hasAnyRole("OFERTANTE")
 
                         // Interesses interessado
                         .requestMatchers(HttpMethod.POST, "/api/interessesInteressados/cadastrar/{id_usuario}").hasAnyRole("INTERESSADO")
