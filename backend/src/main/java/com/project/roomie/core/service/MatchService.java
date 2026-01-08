@@ -102,10 +102,17 @@ public class MatchService implements MatchPortIn {
             throw new RuntimeException("Match já foi recusado");
         }
 
+        // envia pro interessado
         notificacoesPortOut.enviar(
                 match.getInteressado().getFirebase_token(),
-                "Fulano aceitou seu match"
+                "Você deu match com " + match.getOfertante().getNome()
                 );
+
+        // envia pro ofertante
+        notificacoesPortOut.enviar(
+                match.getOfertante().getFirebase_token(),
+                "Você deu match com " + match.getInteressado().getNome()
+        );
 
         match.setStatus(MatchStatus.ACEITO);
         return matchPortOut.save(matchMapper.ModeltoJpaEntity(match));
