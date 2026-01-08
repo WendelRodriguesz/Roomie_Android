@@ -17,4 +17,5 @@ public interface AnuncioPortIn {
     AnuncioResponseDTO reativarAnuncio(Integer id_anuncio);
     List<AnuncioResponseDTO> visualizarTodos();
     List<AnuncioResponseDTO> filtrar(AnuncioFiltroDTO anuncioFiltroDTO);
+    AnuncioResponseDTO visualizarPorId(Integer id);
 }

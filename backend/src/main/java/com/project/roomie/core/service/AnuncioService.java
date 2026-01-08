@@ -146,4 +146,10 @@ public class AnuncioService implements AnuncioPortIn {
                 .map(anuncioMapper::ModeltoResponseDTO)
                 .toList();
     }
+
+    @Override
+    public AnuncioResponseDTO visualizarPorId(Integer id) {
+        Anuncio anuncio = anuncioPortOut.findById(id);
+        return anuncioMapper.ModeltoResponseDTO(anuncio);
+    }
 }
