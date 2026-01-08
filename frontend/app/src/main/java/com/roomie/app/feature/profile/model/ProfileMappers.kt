@@ -1,6 +1,7 @@
 package com.roomie.app.feature.profile.model
 
 import com.roomie.app.core.model.ProfileRole
+import com.roomie.app.feature.preference_registration.model.UserPreferences
 import com.roomie.app.feature.profile.data.remote.dto.AtualizarUsuarioBasicoRequest
 import com.roomie.app.feature.profile.data.remote.dto.UsuarioInteressadoDto
 import com.roomie.app.feature.profile.data.remote.dto.UsuarioOfertanteDto
@@ -86,6 +87,8 @@ fun UsuarioInteressadoDto.toUserProfile(): UserProfile {
 
     val acceptsPets = interesses?.aceita_pets == true
     val acceptsSharedRoom = interesses?.aceita_dividir_quarto == true
+    val isSmoker = interesses?.fumante == true
+    val isDrinker = interesses?.consome_bebidas_alcoolicas == true
 
     val tags = buildList {
         genderOption?.let { add(it.label) }
@@ -103,7 +106,8 @@ fun UsuarioInteressadoDto.toUserProfile(): UserProfile {
 
     val lifestyle = LifestylePreferences(
         acceptsPets = acceptsPets,
-        isSmoker = false,
+        isSmoker = isSmoker,
+        isDrinker = isDrinker,
         partyFrequency = partyFrequency,
         isQuiet = partyFrequency == PartyFrequency.NUNCA,
         sleepRoutine = sleepRoutine,
@@ -170,6 +174,7 @@ fun UsuarioOfertanteDto.toUserProfile(): UserProfile {
     val lifestyle = LifestylePreferences(
         acceptsPets = acceptsPets,
         isSmoker = false,
+        isDrinker = false,
         partyFrequency = partyFrequency,
         isQuiet = partyFrequency == PartyFrequency.NUNCA,
         sleepRoutine = sleepRoutine,
@@ -213,5 +218,23 @@ fun UserProfile.toBasicUpdateRequest(): AtualizarUsuarioBasicoRequest {
         ocupacao = professionOrCourse,
         bio = bio,
         genero = generoValue,
+    )
+}
+
+/**
+ * Converts UserProfile to UserPreferences for editing.
+ * Note: drinksAlcohol defaults to false as it's not stored in UserProfile.
+ * This should be handled separately when loading from DTO.
+ */
+fun UserProfile.toUserPreferences(drinksAlcohol: Boolean = false): UserPreferences {
+    return UserPreferences(
+        partyFrequency = lifestyle.partyFrequency,
+        cleaningHabit = lifestyle.cleaningHabit,
+        acceptsPets = lifestyle.acceptsPets,
+        sleepRoutine = lifestyle.sleepRoutine,
+        acceptsRoomSharing = lifestyle.acceptsSharedRoom,
+        budget = budget,
+        isSmoker = lifestyle.isSmoker,
+        drinksAlcohol = drinksAlcohol,
     )
 }

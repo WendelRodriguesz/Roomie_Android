@@ -80,7 +80,11 @@ fun ProfileScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             ProfileHeaderCard(profile)
-            LifestyleCard(profile, onEditPreferencesClick = onEditPreferencesClick)
+            LifestyleCard(
+                profile = profile,
+                role = profile.role,
+                onEditPreferencesClick = onEditPreferencesClick
+            )
 
             MatchCard(
                 profile = profile,

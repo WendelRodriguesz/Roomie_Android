@@ -118,7 +118,7 @@ class ProfileRepository(
 
     suspend fun upsertPreferences(
         role: ProfileRole,
-        userId: Long,
+        interessesId: Long,
         token: String,
         hasExisting: Boolean,
         prefs: UserPreferences,
@@ -139,8 +139,8 @@ class ProfileRepository(
                     consome_bebidas_alcoolicas = prefs.drinksAlcohol,
                 )
 
-                if (hasExisting) api.updateInteressesInteressado(userId, auth, body)
-                else api.createInteressesInteressado(userId, auth, body)
+                if (hasExisting) api.updateInteressesInteressado(interessesId, auth, body)
+                else api.createInteressesInteressado(interessesId, auth, body)
 
             } else {
                 val body = InteressesOfertanteRequest(
@@ -151,8 +151,8 @@ class ProfileRepository(
                     aceita_dividir_quarto = prefs.acceptsRoomSharing,
                 )
 
-                if (hasExisting) api.updateInteressesOfertante(userId, auth, body)
-                else api.createInteressesOfertante(userId, auth, body)
+                if (hasExisting) api.updateInteressesOfertante(interessesId, auth, body)
+                else api.createInteressesOfertante(interessesId, auth, body)
             }
 
             if (!response.isSuccessful) {

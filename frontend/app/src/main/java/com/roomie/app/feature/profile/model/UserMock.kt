@@ -24,7 +24,8 @@ object UserMock {
 
         lifestyle = LifestylePreferences(
             acceptsPets = true,
-            isSmoker = false,
+            isSmoker = true,
+            isDrinker = true,
             partyFrequency = PartyFrequency.AS_VEZES,
             cleaningHabit = CleaningHabit.DIARIO,
             isQuiet = true,
@@ -64,6 +65,7 @@ object UserMock {
         lifestyle = LifestylePreferences(
             acceptsPets = false,
             isSmoker = false,
+            isDrinker = false,
             partyFrequency = PartyFrequency.NUNCA,
             cleaningHabit = CleaningHabit.QUINZENAL,
             isQuiet = true,
@@ -103,6 +105,7 @@ object UserMock {
         lifestyle = LifestylePreferences(
             acceptsPets = true,
             isSmoker = false,
+            isDrinker = true,
             partyFrequency = PartyFrequency.FREQUENTE,
             cleaningHabit = CleaningHabit.SEMANAL,
             isQuiet = false,

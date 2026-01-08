@@ -41,16 +41,16 @@ interface ProfileApiService {
     ): Response<String>
 
     // Interesses Interessados
-    @POST("api/interessesInteressados/cadastrar/{id_usuario}")
+    @POST("api/interessesInteressados/cadastrar/{id_interesses}")
     suspend fun createInteressesInteressado(
-        @Path("id_usuario") idUsuario: Long,
+        @Path("id_interesses") idInteresses: Long,
         @Header("Authorization") authHeader: String,
         @Body body: InteressesInteressadoRequest,
     ): Response<Unit>
 
-    @PATCH("api/interessesInteressados/atualizar/{id_usuario}")
+    @PATCH("api/interessesInteressados/atualizar/{id_interesses}")
     suspend fun updateInteressesInteressado(
-        @Path("id_usuario") idUsuario: Long,
+        @Path("id_interesses") idInteresses: Long,
         @Header("Authorization") authHeader: String,
         @Body body: InteressesInteressadoRequest,
     ): Response<Unit>
@@ -78,16 +78,16 @@ interface ProfileApiService {
     ): Response<String>
 
     // Interesses Ofertantes
-    @POST("api/interessesOfertantes/cadastrar/{id_usuario}")
+    @POST("api/interessesOfertantes/cadastrar/{id_interesses}")
     suspend fun createInteressesOfertante(
-        @Path("id_usuario") idUsuario: Long,
+        @Path("id_interesses") idInteresses: Long,
         @Header("Authorization") authHeader: String,
         @Body body: InteressesOfertanteRequest,
     ): Response<Unit>
 
-    @PATCH("api/interessesOfertantes/atualizar/{id_usuario}")
+    @PATCH("api/interessesOfertantes/atualizar/{id_interesses}")
     suspend fun updateInteressesOfertante(
-        @Path("id_usuario") idUsuario: Long,
+        @Path("id_interesses") idInteresses: Long,
         @Header("Authorization") authHeader: String,
         @Body body: InteressesOfertanteRequest,
     ): Response<Unit>
