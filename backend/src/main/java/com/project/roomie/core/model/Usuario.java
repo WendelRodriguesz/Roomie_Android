@@ -24,6 +24,7 @@ public class Usuario implements UserDetails {
     private Genero genero;
     private Role role;
     private String foto_de_perfil;
+    private String firebase_token;
 
     public Usuario() {
     }
@@ -39,7 +40,8 @@ public class Usuario implements UserDetails {
                    String bio,
                    Genero genero,
                    Role role,
-                   String foto_de_perfil) {
+                   String foto_de_perfil,
+                   String firebase_token) {
         this.id = id;
         this.nome = nome;
         this.email = email;
@@ -52,6 +54,7 @@ public class Usuario implements UserDetails {
         this.genero = genero;
         this.role = role;
         this.foto_de_perfil = foto_de_perfil;
+        this.firebase_token = firebase_token;
     }
 
     @Override
@@ -183,5 +186,13 @@ public class Usuario implements UserDetails {
 
     public void setFoto_de_perfil(String foto_de_perfil) {
         this.foto_de_perfil = foto_de_perfil;
+    }
+
+    public String getFirebase_token() {
+        return firebase_token;
+    }
+
+    public void setFirebase_token(String firebase_token) {
+        this.firebase_token = firebase_token;
     }
 }

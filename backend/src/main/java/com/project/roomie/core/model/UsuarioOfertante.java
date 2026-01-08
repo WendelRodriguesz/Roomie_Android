@@ -23,10 +23,11 @@ public class UsuarioOfertante extends Usuario {
                             Role role,
                             String foto_de_perfil,
                             Anuncio anuncio,
-                            InteressesOfertantes interesses){
+                            InteressesOfertantes interesses,
+                            String firebase_token){
         this.anuncio = anuncio;
         this.interesses = interesses;
-        super(id, nome, email, senha, data_de_nascimento, idade, cidade, ocupacao, bio, genero, role, foto_de_perfil);
+        super(id, nome, email, senha, data_de_nascimento, idade, cidade, ocupacao, bio, genero, role, foto_de_perfil, firebase_token);
     }
 
     public Anuncio getAnuncio() {

@@ -43,6 +43,7 @@ public class SecurityConfigurationsProd {
                         .requestMatchers(HttpMethod.POST, "/api/usuarioInteressado/uploadFotoDePerfil/{id_usuario}").hasAnyRole("INTERESSADO")
                         .requestMatchers(HttpMethod.GET, "/api/usuarioInteressado/visualizar/{id_usuario}").hasAnyRole("INTERESSADO")
                         .requestMatchers(HttpMethod.PATCH, "/api/usuarioInteressado/atualizar/{id}").hasAnyRole("INTERESSADO")
+                        .requestMatchers(HttpMethod.POST, "/api/usuarioInteressado/cadastrarFirebaseToken/{id_usuario}").hasAnyRole("INTERESSADO")
 
                         // Usuário Ofertante
                         .requestMatchers(HttpMethod.POST, "/api/usuarioOfertante/cadastrar").permitAll()
@@ -53,7 +54,6 @@ public class SecurityConfigurationsProd {
                         // Interesses interessado
                         .requestMatchers(HttpMethod.POST, "/api/interessesInteressados/cadastrar/{id_usuario}").hasAnyRole("INTERESSADO")
                         .requestMatchers(HttpMethod.PATCH, "/api/interessesInteressados/atualizar/{id_usuario}").hasAnyRole("INTERESSADO")
-
 
                         // Interesses Ofertante
                         .requestMatchers(HttpMethod.POST, "/api/interessesOfertantes/cadastrar/{id_usuario}").hasAnyRole("OFERTANTE")
