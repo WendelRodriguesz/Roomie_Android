@@ -16,6 +16,7 @@ object Routes {
     const val EDIT_PROFILE = "edit_profile"
     const val ADD_VAGA = "addvaga"
     const val PREFERENCES_REGISTRATION = "preference_registration"
+    const val LISTING_DETAIL = "listing_detail/{listing_id}"
 
     val BOTTOM_BAR_ROUTES = listOf(HOME, CHAT, MATCH, NOTIFICATIONS, PROFILE, MY_LISTINGS)
 }
