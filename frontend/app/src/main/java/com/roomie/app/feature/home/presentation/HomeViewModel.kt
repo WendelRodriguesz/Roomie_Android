@@ -20,7 +20,6 @@ class HomeViewModel : ViewModel() {
                 listings = catalog
             )
             is HomeEvent.SearchQueryChanged -> filter(event.value)
-            is HomeEvent.ToggleFavorite -> toggleFavorite(event.listingId)
             HomeEvent.FiltersClicked -> _state.value = _state.value.copy(
                 isFiltering = !_state.value.isFiltering
             )
@@ -39,14 +38,6 @@ class HomeViewModel : ViewModel() {
             }
         }
         _state.value = _state.value.copy(searchQuery = query, listings = filtered)
-    }
-
-    private fun toggleFavorite(id: String) {
-        val favorites = _state.value.favorites.toMutableSet()
-        if (!favorites.add(id)) {
-            favorites.remove(id)
-        }
-        _state.value = _state.value.copy(favorites = favorites)
     }
 }
 
