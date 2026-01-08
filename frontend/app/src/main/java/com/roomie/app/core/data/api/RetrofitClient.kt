@@ -8,7 +8,11 @@ import retrofit2.converter.gson.GsonConverterFactory
 import java.util.concurrent.TimeUnit
 
 object RetrofitClient {
+    // Ambiente em nuvem (produção já configurada)
     private const val BASE_URL = "https://roomie-wi19.onrender.com/"
+
+    // Se quiser testar local, troque para 10.0.2.2 (emulador) ou IP da máquina:
+    // private const val BASE_URL = "http://10.0.2.2:8080/"
 
     private val loggingInterceptor = HttpLoggingInterceptor().apply {
         level = HttpLoggingInterceptor.Level.BODY
@@ -32,4 +36,5 @@ object RetrofitClient {
     val profileApiService: ProfileApiService = retrofit.create(ProfileApiService::class.java)
     val registerApiService: RegisterApiService = retrofit.create(RegisterApiService::class.java)
     val matchApiService: MatchApiService = retrofit.create(MatchApiService::class.java)
+    val firebaseTokenApiService: FirebaseTokenApiService = retrofit.create(FirebaseTokenApiService::class.java)
 }
