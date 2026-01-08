@@ -5,11 +5,7 @@ import com.project.roomie.dto.create.InteressesInteressadosCreateDTO;
 import com.project.roomie.dto.response.InteressesInteressadosResponseDTO;
 import com.project.roomie.dto.update.InteressesInteressadosUpdateDTO;
 import com.project.roomie.infra.persistence.entity.InteressesInteressadosJpaEntity;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingTarget;
-import org.mapstruct.Named;
-import org.mapstruct.NullValuePropertyMappingStrategy;
+import org.mapstruct.*;
 
 
 @Mapper(componentModel = "spring")
@@ -28,6 +24,8 @@ public interface InteressesInteressadosMapper {
     InteressesInteressadosJpaEntity ModeltoJpaEntity(InteressesInteressados interessesInteressados);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(source = "orcamentoMin", target = "orcamento_min")
+    @Mapping(source = "orcamentoMax", target = "orcamento_max")
     void updateInteresseFromDto(
             InteressesInteressadosUpdateDTO dto,
             @MappingTarget InteressesInteressados interessesInteressados
