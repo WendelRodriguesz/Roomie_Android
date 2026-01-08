@@ -32,4 +32,5 @@ object RetrofitClient {
     val profileApiService: ProfileApiService = retrofit.create(ProfileApiService::class.java)
     val registerApiService: RegisterApiService = retrofit.create(RegisterApiService::class.java)
     val matchApiService: MatchApiService = retrofit.create(MatchApiService::class.java)
+    val anuncioApiService: AnuncioApiService = retrofit.create(AnuncioApiService::class.java)
 }

@@ -167,6 +167,7 @@ fun AppNavHost(startDestination: String) {
 
             composable(Routes.MY_LISTINGS) {
                 MyListingsScreen(
+                    navController = navController,
                     onCreateListingClick = { navController.navigate(Routes.ADD_VAGA) }
                 )
             }
