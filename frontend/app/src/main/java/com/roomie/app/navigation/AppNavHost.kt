@@ -36,6 +36,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import com.roomie.app.core.data.local.AuthDataStore
 import kotlinx.coroutines.launch
+import com.roomie.app.feature.edit_profile.ui.EditPreferencesRoute
 
 @Composable
 fun AppNavHost(startDestination: String) {
@@ -120,6 +121,7 @@ fun AppNavHost(startDestination: String) {
                     role = currentRole,
                     refreshSignal = profileRefreshSignal,
                     onEditClick = { navController.navigate(Routes.EDIT_PROFILE) },
+                    onEditPreferencesClick = { navController.navigate(Routes.EDIT_PREFERENCES) },
                     onLogoutClick = {
                         scope.launch {
                             authDataStore.clearUserSession()
@@ -154,6 +156,28 @@ fun AppNavHost(startDestination: String) {
                         userId = userId,
                         token = token,
                         role = currentRole,
+                        navController = navController,
+                        onCancel = { navController.popBackStack() },
+                        onSaved = {
+                            profileRefreshSignal = System.currentTimeMillis()
+                            navController.popBackStack()
+                        }
+                    )
+                }
+            }
+
+            composable(Routes.EDIT_PREFERENCES) {
+                val userId = AuthSession.userId
+                val token = AuthSession.token
+                val currentRole = AuthSession.role
+
+                if (userId == null || token.isNullOrBlank() || currentRole == null) {
+                    navController.navigate(Routes.LOGIN)
+                } else {
+                    EditPreferencesRoute(
+                        userId = userId,
+                        token = token,
+                        role = currentRole,
                         onCancel = { navController.popBackStack() },
                         onSaved = {
                             profileRefreshSignal = System.currentTimeMillis()
@@ -171,7 +195,14 @@ fun AppNavHost(startDestination: String) {
                 )
             }
 
-            composable(Routes.PREFERENCES_REGISTRATION) { PreferenceRegistration() }
+            composable(Routes.PREFERENCES_REGISTRATION) {
+                val currentRole = AuthSession.role
+                if (currentRole == null) {
+                    navController.navigate(Routes.LOGIN)
+                } else {
+                    PreferenceRegistration(role = currentRole)
+                }
+            }
         }
     }
 }

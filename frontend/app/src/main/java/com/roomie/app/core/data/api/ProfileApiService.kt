@@ -13,23 +13,49 @@ import retrofit2.http.Part
 import com.roomie.app.feature.profile.data.remote.dto.AtualizarUsuarioBasicoRequest
 import com.roomie.app.feature.profile.data.remote.dto.UsuarioOfertanteDto
 import com.roomie.app.feature.profile.data.remote.dto.UsuarioInteressadoDto
-
+import com.roomie.app.feature.profile.data.remote.dto.InteressesInteressadoRequest
+import com.roomie.app.feature.profile.data.remote.dto.InteressesOfertanteRequest
 
 interface ProfileApiService {
-
+    
+    // Usuario Interessado
     @GET("api/usuarioInteressado/visualizar/{id}")
     suspend fun getUsuarioInteressado(
         @Path("id") id: Long,
         @Header("Authorization") authHeader: String,
-    ): Response<UsuarioInteressadoDto>
-
+        ): Response<UsuarioInteressadoDto>
+        
     @PATCH("api/usuarioInteressado/atualizar/{id}")
     suspend fun updateUsuarioInteressado(
         @Path("id") id: Long,
         @Header("Authorization") authHeader: String,
         @Body body: AtualizarUsuarioBasicoRequest,
-    ): Response<UsuarioInteressadoDto>
+        ): Response<UsuarioInteressadoDto>
+        
+    @Multipart
+    @POST("api/usuarioInteressado/uploadFotoDePerfil/{id_usuario}")
+    suspend fun uploadFotoInteressado(
+        @Path("id_usuario") idUsuario: Long,
+        @Header("Authorization") authHeader: String,
+        @Part file: MultipartBody.Part
+    ): Response<String>
 
+    // Interesses Interessados
+    @POST("api/interessesInteressados/cadastrar/{id_usuario}")
+    suspend fun createInteressesInteressado(
+        @Path("id_usuario") idUsuario: Long,
+        @Header("Authorization") authHeader: String,
+        @Body body: InteressesInteressadoRequest,
+    ): Response<Unit>
+
+    @PATCH("api/interessesInteressados/atualizar/{id_usuario}")
+    suspend fun updateInteressesInteressado(
+        @Path("id_usuario") idUsuario: Long,
+        @Header("Authorization") authHeader: String,
+        @Body body: InteressesInteressadoRequest,
+    ): Response<Unit>
+
+    // Usuario Ofertante
     @GET("api/usuarioOfertante/visualizar/{id}")
     suspend fun getUsuarioOfertante(
         @Path("id") id: Long,
@@ -44,18 +70,25 @@ interface ProfileApiService {
     ): Response<UsuarioOfertanteDto>
 
     @Multipart
-    @POST("api/usuarioInteressado/uploadFotoDePerfil/{id_usuario}")
-    suspend fun uploadFotoInteressado(
-        @Path("id_usuario") idUsuario: Long,
-        @Header("Authorization") authHeader: String,
-        @Part file: MultipartBody.Part
-    ): Response<String>
-
-    @Multipart
     @POST("api/usuarioOfertante/uploadFotoDePerfil/{id_usuario}")
     suspend fun uploadFotoOfertante(
         @Path("id_usuario") idUsuario: Long,
         @Header("Authorization") authHeader: String,
         @Part file: MultipartBody.Part
     ): Response<String>
+
+    // Interesses Ofertantes
+    @POST("api/interessesOfertantes/cadastrar/{id_usuario}")
+    suspend fun createInteressesOfertante(
+        @Path("id_usuario") idUsuario: Long,
+        @Header("Authorization") authHeader: String,
+        @Body body: InteressesOfertanteRequest,
+    ): Response<Unit>
+
+    @PATCH("api/interessesOfertantes/atualizar/{id_usuario}")
+    suspend fun updateInteressesOfertante(
+        @Path("id_usuario") idUsuario: Long,
+        @Header("Authorization") authHeader: String,
+        @Body body: InteressesOfertanteRequest,
+    ): Response<Unit>
 }

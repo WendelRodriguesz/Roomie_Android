@@ -14,6 +14,7 @@ object Routes {
     const val REGISTER = "register"
     const val REGISTER_ROLE = "register_role"
     const val EDIT_PROFILE = "edit_profile"
+    const val EDIT_PREFERENCES = "edit_preferences"
     const val ADD_VAGA = "addvaga"
     const val PREFERENCES_REGISTRATION = "preference_registration"
 

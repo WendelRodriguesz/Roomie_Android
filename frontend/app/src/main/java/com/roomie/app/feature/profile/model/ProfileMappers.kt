@@ -5,41 +5,72 @@ import com.roomie.app.feature.profile.data.remote.dto.AtualizarUsuarioBasicoRequ
 import com.roomie.app.feature.profile.data.remote.dto.UsuarioInteressadoDto
 import com.roomie.app.feature.profile.data.remote.dto.UsuarioOfertanteDto
 
-private fun String?.toPartyFrequency(): PartyFrequency {
-    return when (this?.uppercase()) {
-        "NUNCA" -> PartyFrequency.NUNCA
-        "AS_VEZES", "AS VEZES" -> PartyFrequency.AS_VEZES
-        "FREQUENTE", "FREQUENTEMENTE" -> PartyFrequency.FREQUENTE
+private fun PartyFrequency?.toPartyFrequency(): PartyFrequency {
+    if (this != null) return this
+    return PartyFrequency.AS_VEZES
+}
+
+private fun CleaningHabit?.toCleaningHabit(): CleaningHabit {
+    if (this != null) return this
+    return CleaningHabit.OCASIONAL
+}
+
+private fun SleepRoutine?.toSleepRoutine(): SleepRoutine {
+    if (this != null) return this
+    return SleepRoutine.FLEXIVEL
+}
+
+private fun Any?.toPartyFrequency(): PartyFrequency {
+    return when (this) {
+        is PartyFrequency -> this
+        is String -> when (this.uppercase()) {
+            "NUNCA" -> PartyFrequency.NUNCA
+            "AS_VEZES", "AS VEZES" -> PartyFrequency.AS_VEZES
+            "FREQUENTE", "FREQUENTEMENTE" -> PartyFrequency.FREQUENTE
+            else -> PartyFrequency.AS_VEZES
+        }
         else -> PartyFrequency.AS_VEZES
     }
 }
 
-private fun String?.toCleaningHabit(): CleaningHabit {
-    return when (this?.uppercase()) {
-        "DIARIO", "DIÁRIO" -> CleaningHabit.DIARIO
-        "SEMANAL" -> CleaningHabit.SEMANAL
-        "QUINZENAL" -> CleaningHabit.QUINZENAL
+private fun Any?.toCleaningHabit(): CleaningHabit {
+    return when (this) {
+        is CleaningHabit -> this
+        is String -> when (this.uppercase()) {
+            "DIARIO", "DIÁRIO" -> CleaningHabit.DIARIO
+            "SEMANAL" -> CleaningHabit.SEMANAL
+            "QUINZENAL" -> CleaningHabit.QUINZENAL
+            else -> CleaningHabit.OCASIONAL
+        }
         else -> CleaningHabit.OCASIONAL
     }
 }
 
-private fun String?.toSleepRoutine(): SleepRoutine {
-    return when (this?.uppercase()) {
-        "MANHA", "MANHÃ", "MATUTINO" -> SleepRoutine.MATUTINO
-        "NOITE", "NOTURNO" -> SleepRoutine.NOTURNO
-        "VESPERTINO", "TARDE" -> SleepRoutine.VESPERTINO
+private fun Any?.toSleepRoutine(): SleepRoutine {
+    return when (this) {
+        is SleepRoutine -> this
+        is String -> when (this.uppercase()) {
+            "MANHA", "MANHÃ", "MATUTINO" -> SleepRoutine.MATUTINO
+            "NOITE", "NOTURNO" -> SleepRoutine.NOTURNO
+            "VESPERTINO", "TARDE" -> SleepRoutine.VESPERTINO
+            else -> SleepRoutine.FLEXIVEL
+        }
         else -> SleepRoutine.FLEXIVEL
     }
 }
 
-private fun String?.toGenderOption(): GenderOption? {
-    return when (this?.uppercase()) {
-        "MASCULINO" -> GenderOption.MASCULINO
-        "FEMININO" -> GenderOption.FEMININO
-        "NAO_BINARIO", "NÃO_BINÁRIO", "NÃO BINÁRIO" -> GenderOption.NAO_BINARIO
-        "OUTROS" -> GenderOption.PREFIRO_NAO_INFORMAR
-        "PREFIRO_NAO_DIZER", "PREFIRO NÃO DIZER", "PREFIRO_NAO_INFORMAR", "PREFIRO NÃO INFORMAR" ->
-            GenderOption.PREFIRO_NAO_INFORMAR
+private fun Any?.toGenderOption(): GenderOption? {
+    return when (this) {
+        is GenderOption -> this
+        is String -> when (this.uppercase()) {
+            "MASCULINO" -> GenderOption.MASCULINO
+            "FEMININO" -> GenderOption.FEMININO
+            "OUTROS" -> GenderOption.PREFIRO_NAO_INFORMAR
+            "NAO_BINARIO", "NÃO_BINÁRIO", "NÃO BINÁRIO" -> GenderOption.PREFIRO_NAO_INFORMAR
+            "PREFIRO_NAO_DIZER", "PREFIRO NÃO DIZER",
+            "PREFIRO_NAO_INFORMAR", "PREFIRO NÃO INFORMAR" -> GenderOption.PREFIRO_NAO_INFORMAR
+            else -> null
+        }
         else -> null
     }
 }

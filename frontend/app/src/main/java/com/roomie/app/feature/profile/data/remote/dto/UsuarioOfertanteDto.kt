@@ -1,4 +1,7 @@
 package com.roomie.app.feature.profile.data.remote.dto
+import com.roomie.app.feature.profile.model.PartyFrequency
+import com.roomie.app.feature.profile.model.SleepRoutine
+import com.roomie.app.feature.profile.model.CleaningHabit
 
 data class UsuarioOfertanteDto(
     val id: Long,
@@ -11,16 +14,24 @@ data class UsuarioOfertanteDto(
     val bio: String?,
     val genero: String?,
     val foto_de_perfil: String?,
-    val interesses: InteressesOfertantesDto?,
+    val interesses: InteressesOfertanteDto?,
     val anuncio: AnuncioDto?,
 )
 
-data class InteressesOfertantesDto(
+data class InteressesOfertanteRequest(
+    val frequencia_festas: PartyFrequency,
+    val habitos_limpeza: CleaningHabit,
+    val aceita_pets: Boolean,
+    val horario_sono: SleepRoutine,
+    val aceita_dividir_quarto: Boolean,
+)
+
+data class InteressesOfertanteDto(
     val id: Long?,
-    val frequencia_festas: String?,
-    val habitos_limpeza: String?,
+    val frequencia_festas: PartyFrequency?,
+    val habitos_limpeza: CleaningHabit?,
     val aceita_pets: Boolean?,
-    val horario_sono: String?,
+    val horario_sono: SleepRoutine?,
     val aceita_dividir_quarto: Boolean?,
 )
 

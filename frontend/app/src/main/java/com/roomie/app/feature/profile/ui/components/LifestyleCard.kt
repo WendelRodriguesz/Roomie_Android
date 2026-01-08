@@ -2,6 +2,7 @@ package com.roomie.app.feature.profile.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -9,8 +10,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.roomie.app.core.ui.preview.RoomiePreview
@@ -23,7 +27,7 @@ import com.roomie.app.feature.profile.model.UserProfile
 import com.roomie.app.feature.profile.ui.components.InfoRow
 
 @Composable
-fun LifestyleCard(profile: UserProfile) {
+fun LifestyleCard(profile: UserProfile, onEditPreferencesClick: () -> Unit = {}) {
     val lifestyle = profile.lifestyle
 
     Card(
@@ -37,13 +41,21 @@ fun LifestyleCard(profile: UserProfile) {
             modifier = Modifier.padding(16.dp),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            Text(
-                text = "Preferências de convivência",
-                style = MaterialTheme.typography.titleMedium.copy(
-                    fontWeight = FontWeight.SemiBold
-                )
-            )
-
+            Row (
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.SpaceBetween,
+                verticalAlignment = Alignment.CenterVertically
+            ){
+                Text(
+                    text = "Preferências de convivência",
+                        style = MaterialTheme.typography.titleMedium.copy(
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    )
+                TextButton (onClick = onEditPreferencesClick) { Text(text="Editar", style = MaterialTheme.typography.titleSmall.copy(
+                    fontWeight = FontWeight.Bold
+                ))}
+            }
             InfoRow(
                 label = "Gosta de ir a festas",
                 value = when (lifestyle.partyFrequency) {

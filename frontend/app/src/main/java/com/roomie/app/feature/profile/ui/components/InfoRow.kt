@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
@@ -24,14 +25,15 @@ fun InfoRow(
     ) {
         Text(
             text = label,
-            style = MaterialTheme.typography.bodyMedium,
+            style = MaterialTheme.typography.titleSmall,
+            fontWeight = FontWeight.Bold,
             color = MaterialTheme.colorScheme.onSurface
         )
         Text(
             text = value,
             style = MaterialTheme.typography.bodyMedium,
             textAlign = TextAlign.End,
-            color = MaterialTheme.colorScheme.primary
+            color = MaterialTheme.colorScheme.onSurface
         )
     }
 }
