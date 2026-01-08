@@ -105,13 +105,13 @@ public class MatchService implements MatchPortIn {
         // envia pro interessado
         notificacoesPortOut.enviar(
                 match.getInteressado().getFirebase_token(),
-                "Você deu match com " + match.getOfertante().getNome()
+                "Você deu match com " + match.getOfertante().getNome() + "!"
                 );
 
         // envia pro ofertante
         notificacoesPortOut.enviar(
                 match.getOfertante().getFirebase_token(),
-                "Você deu match com " + match.getInteressado().getNome()
+                "Você deu match com " + match.getInteressado().getNome() + "!"
         );
 
         match.setStatus(MatchStatus.ACEITO);
@@ -130,6 +130,12 @@ public class MatchService implements MatchPortIn {
         if (match.getStatus().equals(MatchStatus.RECUSADO)){
             throw new RuntimeException("Match já foi recusado antes");
         }
+
+        // envia pro interessado
+        notificacoesPortOut.enviar(
+                match.getInteressado().getFirebase_token(),
+                match.getOfertante().getNome() + " Recusou seu match" + "!"
+        );
 
         match.setStatus(MatchStatus.RECUSADO);
         return matchPortOut.save(matchMapper.ModeltoJpaEntity(match));
