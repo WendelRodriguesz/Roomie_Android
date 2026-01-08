@@ -20,11 +20,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.lifecycle.viewmodel.compose.viewModel
+import androidx.navigation.NavController
 import com.roomie.app.core.data.api.RetrofitClient
 import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.feature.edit_profile.presentation.EditProfileViewModel
 import com.roomie.app.feature.edit_profile.presentation.EditProfileViewModelFactory
 import com.roomie.app.feature.profile.data.ProfileRepository
+import com.roomie.app.navigation.Routes
 import kotlinx.coroutines.launch
 
 @Composable
@@ -32,6 +34,7 @@ fun EditProfileRoute(
     userId: Long,
     token: String,
     role: ProfileRole,
+    navController: NavController,
     onCancel: () -> Unit,
     onSaved: () -> Unit,
 ) {
@@ -118,10 +121,8 @@ fun EditProfileRoute(
                     onCancelClick = onCancel,
                     onSaveClick = { updated -> viewModel.saveProfile(role, userId, token, updated) },
                     onPhotoChangeClick = {
-                        pickPhoto.launch(
-                            PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                        )
-                    },
+                        pickPhoto.launch(PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly))
+                    }
                 )
             }
 

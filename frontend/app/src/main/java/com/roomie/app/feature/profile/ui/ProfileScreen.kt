@@ -51,6 +51,7 @@ import com.roomie.app.feature.profile.ui.components.MatchCard
 fun ProfileScreen(
     profile: UserProfile,
     onEditClick: () -> Unit = {},
+    onEditPreferencesClick: () -> Unit = {},
     onLogoutClick: () -> Unit = {},
     onMatchesClick: () -> Unit = {},
     onMyListingsClick: () -> Unit = {},
@@ -79,7 +80,11 @@ fun ProfileScreen(
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
             ProfileHeaderCard(profile)
-            LifestyleCard(profile)
+            LifestyleCard(
+                profile = profile,
+                role = profile.role,
+                onEditPreferencesClick = onEditPreferencesClick
+            )
 
             MatchCard(
                 profile = profile,

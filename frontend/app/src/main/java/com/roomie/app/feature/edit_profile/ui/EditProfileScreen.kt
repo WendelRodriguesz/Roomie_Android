@@ -61,7 +61,6 @@ fun EditProfileScreen(
                         modifier = Modifier.padding(end = 8.dp),
                         enabled = !isSaving,
                         onClick = {
-                            // atualiza só dados básicos atualmente
                             val updated = profile.copy(
                                 name = name,
                                 gender = gender,
@@ -104,40 +103,6 @@ fun EditProfileScreen(
                 onBioChange = { bio = it },
                 isUploadingPhoto = isUploadingPhoto,
                 onPhotoChangeClick = onPhotoChangeClick
-            )
-
-            ComingSoonCard(
-                title = "Preferências e orçamento",
-                text = "Por enquanto, a API só salva dados básicos (nome, cidade, ocupação, bio e gênero). " +
-                        "Quando existir endpoint de atualizar interesses/orçamento, a gente liga essa parte aqui."
-            )
-        }
-    }
-}
-
-@Composable
-private fun ComingSoonCard(
-    title: String,
-    text: String,
-    modifier: Modifier = Modifier,
-) {
-    Card(
-        modifier = modifier.fillMaxWidth(),
-        shape = RoundedCornerShape(24.dp),
-        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
-    ) {
-        Column(
-            modifier = Modifier.padding(16.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp)
-        ) {
-            Text(
-                text = title,
-                style = MaterialTheme.typography.titleMedium
-            )
-            Text(
-                text = text,
-                style = MaterialTheme.typography.bodyMedium,
-                color = MaterialTheme.colorScheme.onSurfaceVariant
             )
         }
     }
