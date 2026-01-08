@@ -1,0 +1,62 @@
+############################
+# FRONT-END (Kotlin)
+############################
+
+
+
+############################
+# BACK-END (Spring Boot)
+############################
+
+# Maven / Gradle
+/backend/target/
+/backend/build/
+/target/
+/build/
+
+# Eclipse
+/backend/.classpath
+/backend/.project
+/backend/.settings/
+/.classpath
+.project
+.settings/
+
+# IntelliJ
+/backend/.idea/
+/.idea/
+/*.iml
+**/*.iml
+
+# VS Code
+/backend/.vscode/
+/.vscode
+
+# OS
+/backend/.DS_Store
+
+# Logs
+/backend/logs/
+/backend/*.log
+/logs/
+/*.log
+
+# Environment variables
+/backend/.env
+
+# Local database / runtime files
+/backend/h2db.mv.db
+/backend/h2db.trace.db
+/backend/*.db
+/h2db.mv.db
+/h2db.trace.db
+/*.db
+
+# Others
+/backend/.gradle
+/backend/.mvn
+/backend/.spring-boot-devtools.properties
+/.gradle
+/.mvn
+/.spring-boot-devtools.properties
+.env*

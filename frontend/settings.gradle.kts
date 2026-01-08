@@ -21,4 +21,3 @@ dependencyResolutionManagement {
 
 rootProject.name = "Roomie_Android"
 include(":app")
- 

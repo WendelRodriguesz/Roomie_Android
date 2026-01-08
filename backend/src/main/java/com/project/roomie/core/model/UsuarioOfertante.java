@@ -1,0 +1,48 @@
+package com.project.roomie.core.model;
+
+import com.project.roomie.core.model.enums.Genero;
+import com.project.roomie.core.model.enums.Role;
+
+import java.time.LocalDate;
+
+public class UsuarioOfertante extends Usuario {
+
+    private Anuncio anuncio;
+    private InteressesOfertantes interesses;
+
+    public UsuarioOfertante(Integer id,
+                            String nome,
+                            String email,
+                            String senha,
+                            LocalDate data_de_nascimento,
+                            Integer idade,
+                            String cidade,
+                            String ocupacao,
+                            String bio,
+                            Genero genero,
+                            Role role,
+                            String foto_de_perfil,
+                            Anuncio anuncio,
+                            InteressesOfertantes interesses,
+                            String firebase_token){
+        this.anuncio = anuncio;
+        this.interesses = interesses;
+        super(id, nome, email, senha, data_de_nascimento, idade, cidade, ocupacao, bio, genero, role, foto_de_perfil, firebase_token);
+    }
+
+    public Anuncio getAnuncio() {
+        return anuncio;
+    }
+
+    public void setAnuncio(Anuncio anuncio) {
+        this.anuncio = anuncio;
+    }
+
+    public InteressesOfertantes getInteresses() {
+        return interesses;
+    }
+
+    public void setInteresses(InteressesOfertantes interesses) {
+        this.interesses = interesses;
+    }
+}
