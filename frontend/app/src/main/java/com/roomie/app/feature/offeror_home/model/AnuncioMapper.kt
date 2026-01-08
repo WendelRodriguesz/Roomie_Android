@@ -37,11 +37,10 @@ fun Anuncio.toAtualizarRequest(): com.roomie.app.feature.offeror_home.data.remot
         bairro = bairro,
         cidade = cidade,
         estado = estado,
-        valor_aluguel = valorAluguel,
-        valor_contas = valorContas,
-        vagas_disponiveis = vagasDisponiveis,
+        valorAluguel = valorAluguel.toFloat(),
+        valorContas = valorContas.toFloat(),
+        vagasDisponiveis = vagasDisponiveis,
         tipo_imovel = tipoImovel,
-        fotos = fotos,
         comodos = comodos
     )
 }

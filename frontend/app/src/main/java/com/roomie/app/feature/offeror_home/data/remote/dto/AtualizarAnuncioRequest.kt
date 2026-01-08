@@ -1,5 +1,7 @@
 package com.roomie.app.feature.offeror_home.data.remote.dto
 
+import com.google.gson.annotations.SerializedName
+
 data class AtualizarAnuncioRequest(
     val titulo: String,
     val descricao: String,
@@ -8,10 +10,12 @@ data class AtualizarAnuncioRequest(
     val bairro: String,
     val cidade: String,
     val estado: String,
-    val valor_aluguel: Double,
-    val valor_contas: Double,
-    val vagas_disponiveis: Int,
+    @SerializedName("valorAluguel")
+    val valorAluguel: Float,
+    @SerializedName("valorContas")
+    val valorContas: Float,
+    @SerializedName("vagasDisponiveis")
+    val vagasDisponiveis: Int,
     val tipo_imovel: String,
-    val fotos: List<String>,
     val comodos: List<String>
 )

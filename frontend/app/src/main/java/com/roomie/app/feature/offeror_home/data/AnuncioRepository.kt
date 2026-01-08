@@ -73,17 +73,49 @@ class AnuncioRepository(
     ): Result<Anuncio> {
         return try {
             val authHeader = "Bearer $token"
+            android.util.Log.d("AnuncioRepository", "🔄 Atualizando anúncio - ID: $anuncioId")
+            android.util.Log.d("AnuncioRepository", "  - Título: ${request.titulo}")
+            android.util.Log.d("AnuncioRepository", "  - Comodos: ${request.comodos}")
+            android.util.Log.d("AnuncioRepository", "  - Valor Aluguel: ${request.valorAluguel}")
+            android.util.Log.d("AnuncioRepository", "  - Tipo Imóvel: ${request.tipo_imovel}")
+            
             val response = apiService.atualizarAnuncio(idAnuncio = anuncioId, authHeader = authHeader, body = request)
+            
+            android.util.Log.d("AnuncioRepository", "📡 Resposta recebida:")
+            android.util.Log.d("AnuncioRepository", "  - Código HTTP: ${response.code()}")
+            android.util.Log.d("AnuncioRepository", "  - Sucesso: ${response.isSuccessful}")
             
             if (response.isSuccessful && response.body() != null) {
                 val anuncio = response.body()!!.toAnuncio()
+                android.util.Log.d("AnuncioRepository", "✅ Anúncio atualizado com sucesso")
                 Result.success(anuncio)
             } else {
-                val errorMessage = response.errorBody()?.string()
-                    ?: "Erro ao atualizar anúncio (código: ${response.code()})"
+                val errorBody = response.errorBody()?.string()
+                val httpCode = response.code()
+                val httpMessage = response.message()
+                
+                android.util.Log.e("AnuncioRepository", "❌ ERRO ao atualizar anúncio:")
+                android.util.Log.e("AnuncioRepository", "  - Código: $httpCode")
+                android.util.Log.e("AnuncioRepository", "  - Mensagem: $httpMessage")
+                android.util.Log.e("AnuncioRepository", "  - Error Body: ${errorBody ?: "(vazio)"}")
+                
+                val errorMessage = when (httpCode) {
+                    400 -> "Dados inválidos. Verifique se todos os campos estão preenchidos corretamente.${if (errorBody != null) "\n$errorBody" else ""}"
+                    401 -> "Não autorizado (401). Faça login novamente."
+                    403 -> "Acesso negado (403). Você não tem permissão para atualizar este anúncio."
+                    404 -> "Anúncio não encontrado (404)."
+                    500 -> "Erro interno do servidor (500). Tente novamente mais tarde."
+                    else -> errorBody?.takeIf { it.isNotBlank() }
+                        ?: "Erro ao atualizar anúncio (código: $httpCode)"
+                }
+                
                 Result.failure(Exception(errorMessage))
             }
         } catch (e: Exception) {
+            android.util.Log.e("AnuncioRepository", "💥 EXCEÇÃO ao atualizar anúncio:", e)
+            android.util.Log.e("AnuncioRepository", "  - Tipo: ${e.javaClass.simpleName}")
+            android.util.Log.e("AnuncioRepository", "  - Mensagem: ${e.message}")
+            e.printStackTrace()
             Result.failure(e)
         }
     }

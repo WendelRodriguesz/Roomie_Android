@@ -41,8 +41,6 @@ fun MyListingsScreen(
     var error by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(userId, token) {
-        if (userId == null || token.isNullOrBlank()) return@LaunchedEffect
-        
         // Primeiro tenta buscar pelo perfil (caso o backend comece a retornar)
         try {
             val profileApiService = RetrofitClient.profileApiService
@@ -113,9 +111,7 @@ fun MyListingsScreen(
                 anuncioId = anuncioId!!,
                 token = token,
                 onEditClick = { 
-                    // Por enquanto navega para a tela de cadastro
-                    // TODO: Implementar tela de edição específica
-                    navController.navigate(Routes.ADD_VAGA)
+                    navController.navigate("edit_anuncio/${anuncioId}")
                 },
                 onError = { errorMsg ->
                     android.util.Log.e("MyListingsScreen", "❌ Erro do OfferorHomeRoute: $errorMsg")

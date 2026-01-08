@@ -7,10 +7,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.roomie.app.core.data.session.AuthSession
 import com.roomie.app.core.ui.components.BottomBar
 import com.roomie.app.core.ui.preview.RoomiePreview
@@ -164,6 +166,29 @@ fun AppNavHost(startDestination: String) {
             }
 
             composable(Routes.ADD_VAGA) { CadastrarVagasScreen(navController) }
+
+            composable(
+                route = Routes.EDIT_ANUNCIO,
+                arguments = listOf(
+                    navArgument("anuncioId") { type = NavType.LongType }
+                )
+            ) { backStackEntry ->
+                val anuncioId = backStackEntry.arguments?.getLong("anuncioId")
+                val token = AuthSession.token
+
+                if (anuncioId == null || token.isNullOrBlank()) {
+                    navController.popBackStack()
+                } else {
+                    com.roomie.app.feature.offeror_home.ui.EditAnuncioRoute(
+                        anuncioId = anuncioId,
+                        token = token,
+                        onCancel = { navController.popBackStack() },
+                        onSaved = {
+                            navController.popBackStack()
+                        }
+                    )
+                }
+            }
 
             composable(Routes.MY_LISTINGS) {
                 MyListingsScreen(
