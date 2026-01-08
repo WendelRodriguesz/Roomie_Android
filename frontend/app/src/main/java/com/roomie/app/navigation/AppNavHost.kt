@@ -26,7 +26,7 @@ import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.feature.profile.ui.ProfileScreenRoute
 import com.roomie.app.feature.register.ui.RegisterRoute
 import com.roomie.app.feature.register.ui.RegisterRoleScreen
-import com.roomie.app.feature.vaga.ui.CadastrarVagasScreen
+import com.roomie.app.feature.vaga.ui.CreateListingRoute
 import com.roomie.app.feature.vaga.ui.MyListingsScreen
 import com.roomie.app.feature.welcome_screen.ui.WelcomeScreen
 import androidx.compose.runtime.mutableStateOf
@@ -163,7 +163,11 @@ fun AppNavHost(startDestination: String) {
                 }
             }
 
-            composable(Routes.ADD_VAGA) { CadastrarVagasScreen(navController) }
+            composable(Routes.ADD_VAGA) {
+                CreateListingRoute(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
 
             composable(Routes.MY_LISTINGS) {
                 MyListingsScreen(
