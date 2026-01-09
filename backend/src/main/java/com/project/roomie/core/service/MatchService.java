@@ -4,6 +4,7 @@ import com.project.roomie.core.model.*;
 import com.project.roomie.core.model.enums.MatchStatus;
 import com.project.roomie.infra.persistence.entity.MatchJpaEntity;
 import com.project.roomie.mapper.MatchMapper;
+import com.project.roomie.ports.in.ChatPortIn;
 import com.project.roomie.ports.in.MatchPortIn;
 import com.project.roomie.ports.out.MatchPortOut;
 import com.project.roomie.ports.out.NotificacoesPortOut;
@@ -16,6 +17,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
@@ -28,18 +30,21 @@ public class MatchService implements MatchPortIn {
     private final MatchPortOut matchPortOut;
     private final MatchMapper matchMapper;
     private final NotificacoesPortOut notificacoesPortOut;
+    private final ChatPortIn chatPortIn;
 
     @Autowired
     public MatchService(UsuarioOfertantePortOut usuarioOfertantePortOut,
                         UsuarioInteressadoPortOut usuarioInteressadoPortOut,
                         MatchPortOut matchPortOut,
                         MatchMapper matchMapper,
-                        NotificacoesPortOut notificacoesPortOut){
+                        NotificacoesPortOut notificacoesPortOut,
+                        ChatPortIn chatPortIn){
         this.usuarioOfertantePortOut = usuarioOfertantePortOut;
         this.usuarioInteressadoPortOut = usuarioInteressadoPortOut;
         this.matchPortOut = matchPortOut;
         this.matchMapper = matchMapper;
         this.notificacoesPortOut = notificacoesPortOut;
+        this.chatPortIn = chatPortIn;
     }
 
     @Override
@@ -113,6 +118,14 @@ public class MatchService implements MatchPortIn {
                 match.getOfertante().getFirebase_token(),
                 "Você deu match com " + match.getInteressado().getNome() + "!"
         );
+
+        // cria chat
+        chatPortIn.cadastrarChat(
+                new Chat(
+                        null,
+                        match.getInteressado().getId(),
+                        match.getOfertante().getId(),
+                        LocalDateTime.now()));
 
         match.setStatus(MatchStatus.ACEITO);
         return matchPortOut.save(matchMapper.ModeltoJpaEntity(match));
