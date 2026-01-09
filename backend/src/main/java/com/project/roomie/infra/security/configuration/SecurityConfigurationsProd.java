@@ -54,11 +54,11 @@ public class SecurityConfigurationsProd {
 
                         // Interesses interessado
                         .requestMatchers(HttpMethod.POST, "/api/interessesInteressados/cadastrar/{id_usuario}").hasAnyRole("INTERESSADO")
-                        .requestMatchers(HttpMethod.PATCH, "/api/interessesInteressados/atualizar/{id_usuario}").hasAnyRole("INTERESSADO")
+                        .requestMatchers(HttpMethod.PATCH, "/api/interessesInteressados/atualizar/{id_interesse}").hasAnyRole("INTERESSADO")
 
                         // Interesses Ofertante
                         .requestMatchers(HttpMethod.POST, "/api/interessesOfertantes/cadastrar/{id_usuario}").hasAnyRole("OFERTANTE")
-                        .requestMatchers(HttpMethod.PATCH, "/api/interessesOfertantes/atualizar/{id_usuario}").hasAnyRole("OFERTANTE")
+                        .requestMatchers(HttpMethod.PATCH, "/api/interessesOfertantes/atualizar/{id_interesse}").hasAnyRole("OFERTANTE")
 
                         // Anuncio
                         .requestMatchers(HttpMethod.POST, "/api/anuncio/cadastrar/{id_usuario}").hasAnyRole("OFERTANTE")
@@ -66,7 +66,7 @@ public class SecurityConfigurationsProd {
                         .requestMatchers(HttpMethod.DELETE, "/api/anuncio/deletarFoto/{id_usuario}").hasAnyRole("OFERTANTE")
                         .requestMatchers(HttpMethod.PATCH, "/api/anuncio/atualizar/{id_anuncio}").hasAnyRole("OFERTANTE")
                         .requestMatchers(HttpMethod.PATCH, "/api/anuncio/pausar/{id_anuncio}").hasAnyRole("OFERTANTE")
-                        .requestMatchers(HttpMethod.PATCH, "/api/anuncio/reativar/{idanuncio}").hasAnyRole("OFERTANTE")
+                        .requestMatchers(HttpMethod.PATCH, "/api/anuncio/reativar/{id_anuncio}").hasAnyRole("OFERTANTE")
                         .requestMatchers(HttpMethod.GET, "/api/anuncio/visualizarTodos").hasAnyRole("INTERESSADO")
                         .requestMatchers(HttpMethod.GET, "/api/anuncio/filtrar").hasAnyRole("INTERESSADO")
                         .requestMatchers(HttpMethod.GET, "/api/anuncio/visualizar/{id_anuncio}").hasAnyRole("OFERTANTE", "INTERESSADO")

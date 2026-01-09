@@ -7,6 +7,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
@@ -52,6 +53,7 @@ fun AppNavHost(startDestination: String) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
     var profileRefreshSignal by remember { mutableStateOf(0L) }
+    var anuncioRefreshSignal by remember { mutableStateOf(0L) }
     val role = AuthSession.role
 
     val selectedRoute = run {
@@ -190,7 +192,7 @@ fun AppNavHost(startDestination: String) {
             composable(Routes.EDIT_PREFERENCES) {
                 val userId = AuthSession.userId
                 val token = AuthSession.token
-                val currentRole = AuthSession.role
+                val currentRole =  AuthSession.role
 
                 if (userId == null || token.isNullOrBlank() || currentRole == null) {
                     navController.navigate(Routes.LOGIN)
@@ -214,8 +216,34 @@ fun AppNavHost(startDestination: String) {
                 )
             }
 
+            composable(
+                route = Routes.EDIT_ANUNCIO,
+                arguments = listOf(
+                    navArgument("anuncioId") { type = NavType.LongType }
+                )
+            ) { backStackEntry ->
+                val anuncioId = backStackEntry.arguments?.getLong("anuncioId")
+                val token = AuthSession.token
+
+                if (anuncioId == null || token.isNullOrBlank()) {
+                    navController.popBackStack()
+                } else {
+                    com.roomie.app.feature.offeror_home.ui.EditAnuncioRoute(
+                        anuncioId = anuncioId,
+                        token = token,
+                        onCancel = { navController.popBackStack() },
+                        onSaved = {
+                            anuncioRefreshSignal = System.currentTimeMillis()
+                            navController.popBackStack()
+                        }
+                    )
+                }
+            }
+
             composable(Routes.MY_LISTINGS) {
                 MyListingsScreen(
+                    navController = navController,
+                    refreshSignal = anuncioRefreshSignal,
                     onCreateListingClick = { navController.navigate(Routes.ADD_VAGA) }
                 )
             }
