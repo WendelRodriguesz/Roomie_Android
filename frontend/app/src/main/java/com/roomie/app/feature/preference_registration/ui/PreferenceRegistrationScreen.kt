@@ -10,6 +10,8 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
@@ -26,13 +28,9 @@ import com.roomie.app.core.ui.components.BudgetCard
 import com.roomie.app.feature.preference_registration.components.SectionCard
 import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
-import com.roomie.app.core.ui.components.ChipSelector
 import com.roomie.app.feature.preference_registration.components.PreferenceRegistrationLifestyleCard
 import com.roomie.app.feature.preference_registration.model.UserPreferences
 import com.roomie.app.feature.profile.model.Budget
-import com.roomie.app.feature.profile.model.CleaningHabit
-import com.roomie.app.feature.profile.model.PartyFrequency
-import com.roomie.app.feature.profile.model.SleepRoutine
 import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.feature.edit_profile.ui.components.PreferenceSwitch
 
@@ -45,6 +43,7 @@ fun PreferenceRegistration(
     onSaveClick: (UserPreferences) -> Unit = {},
     onSkipClick: () -> Unit = {},
     skipText: String = "Pular",
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() }
 ) {
     var partyFrequency by remember(initialPreferences) { mutableStateOf(initialPreferences.partyFrequency) }
     var cleaningHabit by remember(initialPreferences) { mutableStateOf(initialPreferences.cleaningHabit) }
@@ -95,7 +94,8 @@ fun PreferenceRegistration(
                     containerColor = MaterialTheme.colorScheme.background
                 )
             )
-        }
+        },
+        snackbarHost = { SnackbarHost(snackbarHostState) }
     ) { inner ->
         Column(
             modifier = Modifier

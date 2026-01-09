@@ -2,9 +2,12 @@ package com.roomie.app.feature.login.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.roomie.app.core.data.api.RetrofitClient
 import com.roomie.app.core.data.session.AuthSession
 import com.roomie.app.core.model.profileRoleFromApi
+import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.feature.login.data.AuthRepository
+import com.roomie.app.feature.profile.data.ProfileRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -13,11 +16,13 @@ import kotlinx.coroutines.launch
 data class LoginUiState(
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val isLoginSuccessful: Boolean = false
+    val isLoginSuccessful: Boolean = false,
+    val needsPreferencesSetup: Boolean = false
 )
 
 class LoginViewModel(
-    private val authRepository: AuthRepository
+    private val authRepository: AuthRepository,
+    private val profileRepository: ProfileRepository = ProfileRepository(RetrofitClient.profileApiService)
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUiState())
@@ -58,11 +63,7 @@ class LoginViewModel(
                     AuthSession.refreshToken = loginResponse.refreshToken
                     AuthSession.role = role
 
-                    _uiState.value = _uiState.value.copy(
-                        isLoading = false,
-                        isLoginSuccessful = true,
-                        errorMessage = null
-                    )
+                    checkUserInterests(loginResponse.id, loginResponse.token, role)
                 }
                 .onFailure { exception ->
                     _uiState.value = _uiState.value.copy(
@@ -76,5 +77,49 @@ class LoginViewModel(
 
     fun clearError() {
         _uiState.value = _uiState.value.copy(errorMessage = null)
+    }
+
+    private fun checkUserInterests(userId: Long, token: String, role: ProfileRole) {
+        viewModelScope.launch {
+            try {
+                val auth = "Bearer $token"
+                val api = RetrofitClient.profileApiService
+
+                val needsPreferences = when (role) {
+                    ProfileRole.SEEKER -> {
+                        val response = api.getUsuarioInteressado(userId, auth)
+                        if (response.isSuccessful && response.body() != null) {
+                            val dto = response.body()!!
+                            dto.interesses == null
+                        } else {
+                            false
+                        }
+                    }
+                    ProfileRole.OFFEROR -> {
+                        val response = api.getUsuarioOfertante(userId, auth)
+                        if (response.isSuccessful && response.body() != null) {
+                            val dto = response.body()!!
+                            dto.interesses == null
+                        } else {
+                            false
+                        }
+                    }
+                }
+                
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    isLoginSuccessful = true,
+                    errorMessage = null,
+                    needsPreferencesSetup = needsPreferences
+                )
+            } catch (e: Exception) {
+                _uiState.value = _uiState.value.copy(
+                    isLoading = false,
+                    isLoginSuccessful = true,
+                    errorMessage = null,
+                    needsPreferencesSetup = false
+                )
+            }
+        }
     }
 }

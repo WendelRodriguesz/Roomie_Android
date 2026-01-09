@@ -3,6 +3,8 @@ package com.roomie.app.feature.profile.model
 import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.feature.preference_registration.model.UserPreferences
 import com.roomie.app.feature.profile.data.remote.dto.AtualizarUsuarioBasicoRequest
+import com.roomie.app.feature.profile.data.remote.dto.InteressesInteressadoDto
+import com.roomie.app.feature.profile.data.remote.dto.InteressesOfertanteDto
 import com.roomie.app.feature.profile.data.remote.dto.UsuarioInteressadoDto
 import com.roomie.app.feature.profile.data.remote.dto.UsuarioOfertanteDto
 
@@ -221,11 +223,6 @@ fun UserProfile.toBasicUpdateRequest(): AtualizarUsuarioBasicoRequest {
     )
 }
 
-/**
- * Converts UserProfile to UserPreferences for editing.
- * Note: drinksAlcohol defaults to false as it's not stored in UserProfile.
- * This should be handled separately when loading from DTO.
- */
 fun UserProfile.toUserPreferences(drinksAlcohol: Boolean = false): UserPreferences {
     return UserPreferences(
         partyFrequency = lifestyle.partyFrequency,
@@ -236,5 +233,38 @@ fun UserProfile.toUserPreferences(drinksAlcohol: Boolean = false): UserPreferenc
         budget = budget,
         isSmoker = lifestyle.isSmoker,
         drinksAlcohol = drinksAlcohol,
+    )
+}
+
+fun InteressesInteressadoDto?.toUserPreferences(): UserPreferences? {
+    if (this == null) return null
+    
+    return UserPreferences(
+        partyFrequency = frequencia_festas.toPartyFrequency(),
+        cleaningHabit = habitos_limpeza.toCleaningHabit(),
+        acceptsPets = aceita_pets ?: false,
+        sleepRoutine = horario_sono.toSleepRoutine(),
+        acceptsRoomSharing = aceita_dividir_quarto ?: false,
+        budget = Budget(
+            minBudget = orcamento_min?.toInt(),
+            maxBudget = orcamento_max?.toInt()
+        ),
+        isSmoker = fumante ?: false,
+        drinksAlcohol = consome_bebidas_alcoolicas ?: false
+    )
+}
+
+fun InteressesOfertanteDto?.toUserPreferences(): UserPreferences? {
+    if (this == null) return null
+    
+    return UserPreferences(
+        partyFrequency = frequencia_festas.toPartyFrequency(),
+        cleaningHabit = habitos_limpeza.toCleaningHabit(),
+        acceptsPets = aceita_pets ?: false,
+        sleepRoutine = horario_sono.toSleepRoutine(),
+        acceptsRoomSharing = aceita_dividir_quarto ?: false,
+        budget = Budget(minBudget = null, maxBudget = null), // Ofertante não tem orçamento
+        isSmoker = false, // Ofertante não tem esses campos
+        drinksAlcohol = false // Ofertante não tem esses campos
     )
 }
