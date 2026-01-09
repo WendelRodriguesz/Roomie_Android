@@ -46,19 +46,25 @@ fun LoginScreen(navController: NavController) {
     var email by remember { mutableStateOf("") }
     var senha by remember { mutableStateOf("") }
 
-    LaunchedEffect(uiState.isLoginSuccessful) {
+    LaunchedEffect(uiState.isLoginSuccessful, uiState.needsPreferencesSetup) {
         if (uiState.isLoginSuccessful) {
-            val role = AuthSession.role
-
-            val targetRoute = if (role == ProfileRole.OFFEROR) {
-                Routes.MY_LISTINGS
+            if (uiState.needsPreferencesSetup) {
+                navController.navigate(Routes.PREFERENCE_INTRO) {
+                    popUpTo(Routes.LOGIN) { inclusive = true }
+                    launchSingleTop = true
+                }
             } else {
-                Routes.HOME
-            }
+                val role = AuthSession.role
+                val targetRoute = if (role == ProfileRole.OFFEROR) {
+                    Routes.MY_LISTINGS
+                } else {
+                    Routes.HOME
+                }
 
-            navController.navigate(targetRoute) {
-                popUpTo(Routes.LOGIN) { inclusive = true }
-                launchSingleTop = true
+                navController.navigate(targetRoute) {
+                    popUpTo(Routes.LOGIN) { inclusive = true }
+                    launchSingleTop = true
+                }
             }
         }
     }

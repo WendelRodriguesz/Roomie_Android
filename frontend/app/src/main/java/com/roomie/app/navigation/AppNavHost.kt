@@ -23,7 +23,7 @@ import com.roomie.app.feature.home.ui.ListingDetailRoute
 import com.roomie.app.feature.login.ui.LoginScreen
 import com.roomie.app.feature.match.ui.MatchRoute
 import com.roomie.app.feature.notifications.ui.NotificationsScreen
-import com.roomie.app.feature.preference_registration.ui.PreferenceRegistration
+import com.roomie.app.feature.preference_registration.ui.PreferenceIntroScreen
 import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.feature.profile.ui.ProfileScreenRoute
 import com.roomie.app.feature.register.ui.RegisterRoute
@@ -39,6 +39,7 @@ import androidx.compose.ui.platform.LocalContext
 import com.roomie.app.core.data.local.AuthDataStore
 import kotlinx.coroutines.launch
 import com.roomie.app.feature.edit_profile.ui.EditPreferencesRoute
+import com.roomie.app.feature.preference_registration.ui.PreferenceRegistrationRoute
 
 @Composable
 fun AppNavHost(startDestination: String) {
@@ -220,12 +221,27 @@ fun AppNavHost(startDestination: String) {
             }
 
             composable(Routes.PREFERENCES_REGISTRATION) {
+                val userId = AuthSession.userId
+                val token = AuthSession.token
                 val currentRole = AuthSession.role
-                if (currentRole == null) {
-                    navController.navigate(Routes.LOGIN)
+
+                if (userId == null || token.isNullOrBlank() || currentRole == null) {
+                    navController.navigate(Routes.LOGIN) {
+                        popUpTo(navController.graph.findStartDestination().id) { inclusive = true }
+                        launchSingleTop = true
+                    }
                 } else {
-                    PreferenceRegistration(role = currentRole)
+                    PreferenceRegistrationRoute(
+                        navController = navController,
+                        role = currentRole,
+                        userId = userId,
+                        token = token
+                    )
                 }
+            }
+
+            composable(Routes.PREFERENCE_INTRO) {
+                PreferenceIntroScreen(navController = navController)
             }
         }
     }
