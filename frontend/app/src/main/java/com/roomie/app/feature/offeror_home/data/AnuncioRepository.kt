@@ -195,4 +195,52 @@ class AnuncioRepository(
             Result.failure(e)
         }
     }
+
+    suspend fun deletarFoto(
+        userId: Long,
+        token: String,
+        urlFoto: String
+    ): Result<Unit> {
+        return try {
+            val authHeader = "Bearer $token"
+            android.util.Log.d("AnuncioRepository", "🗑️ Deletando foto")
+            android.util.Log.d("AnuncioRepository", "  - User ID: $userId")
+            android.util.Log.d("AnuncioRepository", "  - URL Foto: $urlFoto")
+            
+            val response = apiService.deletarFoto(userId, authHeader, urlFoto)
+            
+            android.util.Log.d("AnuncioRepository", "📡 Resposta recebida:")
+            android.util.Log.d("AnuncioRepository", "  - Código HTTP: ${response.code()}")
+            android.util.Log.d("AnuncioRepository", "  - Sucesso: ${response.isSuccessful}")
+            
+            if (response.isSuccessful) {
+                android.util.Log.d("AnuncioRepository", "✅ Foto deletada com sucesso")
+                Result.success(Unit)
+            } else {
+                val errorBody = response.errorBody()?.string()
+                val httpCode = response.code()
+                val httpMessage = response.message()
+                
+                android.util.Log.e("AnuncioRepository", "❌ ERRO ao deletar foto:")
+                android.util.Log.e("AnuncioRepository", "  - Código: $httpCode")
+                android.util.Log.e("AnuncioRepository", "  - Mensagem: $httpMessage")
+                android.util.Log.e("AnuncioRepository", "  - Error Body: ${errorBody ?: "(vazio)"}")
+                
+                val errorMessage = when (httpCode) {
+                    400 -> "Requisição inválida ao deletar a foto."
+                    401 -> "Não autorizado (401). Faça login novamente."
+                    403 -> "Acesso negado (403). Você não tem permissão para deletar esta foto."
+                    404 -> "Foto não encontrada (404)."
+                    else -> errorBody ?: "Erro ao deletar foto (código: $httpCode)"
+                }
+                Result.failure(Exception(errorMessage))
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("AnuncioRepository", "💥 EXCEÇÃO ao deletar foto:", e)
+            android.util.Log.e("AnuncioRepository", "  - Tipo: ${e.javaClass.simpleName}")
+            android.util.Log.e("AnuncioRepository", "  - Mensagem: ${e.message}")
+            e.printStackTrace()
+            Result.failure(e)
+        }
+    }
 }

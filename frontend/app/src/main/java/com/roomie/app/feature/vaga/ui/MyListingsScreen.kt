@@ -17,6 +17,7 @@ import com.roomie.app.navigation.Routes
 @Composable
 fun MyListingsScreen(
     navController: NavController,
+    refreshSignal: Long = 0L,
     onCreateListingClick: () -> Unit
 ) {
     val userId = AuthSession.userId
@@ -110,6 +111,7 @@ fun MyListingsScreen(
             OfferorHomeRoute(
                 anuncioId = anuncioId!!,
                 token = token,
+                refreshSignal = refreshSignal,
                 onEditClick = { 
                     navController.navigate(Routes.EDIT_ANUNCIO.replace("{anuncioId}", anuncioId.toString()))
                 },

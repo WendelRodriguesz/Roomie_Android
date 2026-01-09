@@ -8,6 +8,7 @@ import androidx.compose.runtime.remember
 import androidx.lifecycle.viewmodel.compose.viewModel
 import com.roomie.app.core.data.api.RetrofitClient
 import com.roomie.app.feature.offeror_home.data.AnuncioRepository
+import com.roomie.app.feature.offeror_home.presentation.OfferorHomeEvent
 import com.roomie.app.feature.offeror_home.presentation.OfferorHomeViewModel
 import com.roomie.app.feature.offeror_home.presentation.OfferorHomeViewModelFactory
 
@@ -15,6 +16,7 @@ import com.roomie.app.feature.offeror_home.presentation.OfferorHomeViewModelFact
 fun OfferorHomeRoute(
     anuncioId: Long,
     token: String,
+    refreshSignal: Long = 0L,
     onEditClick: () -> Unit = {},
     onError: (String) -> Unit = {}
 ) {
@@ -33,6 +35,14 @@ fun OfferorHomeRoute(
     // Logs para debug
     LaunchedEffect(anuncioId, token) {
         android.util.Log.d("OfferorHomeRoute", "Carregando anúncio - ID: $anuncioId")
+    }
+
+    // Recarrega quando o refreshSignal muda (ex: quando volta da edição)
+    LaunchedEffect(refreshSignal) {
+        if (refreshSignal > 0) {
+            android.util.Log.d("OfferorHomeRoute", "🔄 Recarregando anúncio devido ao refreshSignal: $refreshSignal")
+            viewModel.onEvent(OfferorHomeEvent.LoadAnuncio)
+        }
     }
 
     // Mostrar erros via callback

@@ -1,14 +1,16 @@
 package com.roomie.app.feature.offeror_home.ui
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -22,11 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.AsyncImage
-import com.roomie.app.core.ui.components.ImagePickerBox
 import com.roomie.app.core.ui.components.LabeledOutlinedField
 import com.roomie.app.core.ui.components.RoomieSelect
+import com.roomie.app.feature.vaga.ui.components.ImageGalleryCard
 
 private fun formatarNomeComodo(comodo: String): String {
     return when (comodo) {
@@ -168,6 +172,15 @@ fun EditAnuncioScreen(
                 .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
+            // Card de fotos primeiro (seguindo a mesma ordem do CreateListingScreen)
+            ImageGalleryCardForUrls(
+                imageUrls = fotos,
+                onAddClick = onFotoAdded,
+                onRemoveClick = { index -> onFotoRemoved(fotos[index]) },
+                maxImages = 10,
+                isUploading = isUploadingPhoto
+            )
+
             LabeledOutlinedField(
                 title = "Título",
                 value = titulo,
@@ -326,99 +339,147 @@ fun EditAnuncioScreen(
                 }
             }
 
-            HorizontalDivider()
+        }
+    }
+}
 
+// Versão adaptada do ImageGalleryCard que aceita URLs (String) ao invés de Uri
+@Composable
+private fun ImageGalleryCardForUrls(
+    imageUrls: List<String>,
+    onAddClick: () -> Unit,
+    onRemoveClick: (Int) -> Unit,
+    maxImages: Int = 10,
+    isUploading: Boolean = false,
+    modifier: Modifier = Modifier
+) {
+    Card(
+        shape = RoundedCornerShape(24.dp),
+        modifier = modifier.fillMaxWidth(),
+        colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+    ) {
+        Column(
+            modifier = Modifier.padding(16.dp),
+            verticalArrangement = Arrangement.spacedBy(12.dp)
+        ) {
             Text(
-                text = "Fotos do Imóvel",
-                style = MaterialTheme.typography.titleMedium,
-                color = MaterialTheme.colorScheme.primary
+                text = "Fotos do imóvel",
+                style = MaterialTheme.typography.titleMedium.copy(fontWeight = FontWeight.SemiBold)
             )
-            
-            FotosManager(
-                fotos = fotos,
-                isUploading = isUploadingPhoto,
-                onAddFotoClick = onFotoAdded,
-                onRemoveFoto = onFotoRemoved
-            )
+
+            LazyRow(
+                horizontalArrangement = Arrangement.spacedBy(12.dp),
+                modifier = Modifier.fillMaxWidth()
+            ) {
+                if (imageUrls.size < maxImages) {
+                    item {
+                        AddImageButtonForUrls(
+                            onClick = onAddClick,
+                            modifier = Modifier.size(110.dp),
+                            isLoading = isUploading
+                        )
+                    }
+                }
+
+                itemsIndexed(imageUrls) { index, imageUrl ->
+                    ImageThumbnailForUrl(
+                        imageUrl = imageUrl,
+                        onRemoveClick = { onRemoveClick(index) },
+                        modifier = Modifier.size(110.dp)
+                    )
+                }
+            }
+
+            if (imageUrls.isNotEmpty()) {
+                Text(
+                    text = "${imageUrls.size} foto(s) selecionada(s)${if (imageUrls.size < maxImages) " • Adicione até ${maxImages} fotos" else ""}",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            } else {
+                Text(
+                    text = "Adicione fotos do imóvel",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
         }
     }
 }
 
 @Composable
-private fun FotosManager(
-    fotos: List<String>,
-    isUploading: Boolean,
-    onAddFotoClick: () -> Unit,
-    onRemoveFoto: (String) -> Unit
+private fun AddImageButtonForUrls(
+    onClick: () -> Unit,
+    modifier: Modifier = Modifier,
+    isLoading: Boolean = false
 ) {
-    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
-        LazyVerticalGrid(
-            columns = GridCells.Fixed(3),
-            horizontalArrangement = Arrangement.spacedBy(8.dp),
-            verticalArrangement = Arrangement.spacedBy(8.dp),
-            modifier = Modifier.heightIn(max = 360.dp)
-        ) {
-            items(fotos) { fotoUrl ->
-                Box(modifier = Modifier
-                    .aspectRatio(1f)
-                    .clip(RoundedCornerShape(12.dp))
-                ) {
-                    AsyncImage(
-                        model = fotoUrl,
-                        contentDescription = null,
-                        modifier = Modifier.fillMaxSize(),
-                        contentScale = ContentScale.Crop
-                    )
-                    IconButton(
-                        onClick = { onRemoveFoto(fotoUrl) },
-                        modifier = Modifier
-                            .align(Alignment.TopEnd)
-                            .size(32.dp)
-                    ) {
-                        Box(
-                            modifier = Modifier
-                                .background(
-                                    Color.Black.copy(alpha = 0.6f),
-                                    shape = RoundedCornerShape(50)
-                                )
-                                .size(24.dp),
-                            contentAlignment = Alignment.Center
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.Close,
-                                contentDescription = "Excluir foto",
-                                tint = Color.White,
-                                modifier = Modifier.size(16.dp)
-                            )
-                        }
-                    }
-                }
-            }
-            
-            // Botão para adicionar nova foto
-            item {
-                ImagePickerBox(
-                    imageUri = null,
-                    onClick = onAddFotoClick,
-                    modifier = Modifier.aspectRatio(1f)
+    Box(
+        modifier = modifier
+            .clip(RoundedCornerShape(12.dp))
+            .background(MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.5f))
+            .clickable(enabled = !isLoading, onClick = onClick),
+        contentAlignment = Alignment.Center
+    ) {
+        if (isLoading) {
+            CircularProgressIndicator(
+                modifier = Modifier.size(32.dp),
+                color = MaterialTheme.colorScheme.primary
+            )
+        } else {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.spacedBy(8.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = "Adicionar foto",
+                    tint = MaterialTheme.colorScheme.primary,
+                    modifier = Modifier.size(32.dp)
+                )
+                Text(
+                    text = "Adicionar",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.primary,
+                    fontSize = 12.sp
                 )
             }
         }
-        
-        if (isUploading) {
-            Row(
-                modifier = Modifier.fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                CircularProgressIndicator(modifier = Modifier.size(24.dp))
-                Spacer(modifier = Modifier.width(8.dp))
-                Text(
-                    text = "Enviando foto...",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
-                )
-            }
+    }
+}
+
+@Composable
+private fun ImageThumbnailForUrl(
+    imageUrl: String,
+    onRemoveClick: () -> Unit,
+    modifier: Modifier = Modifier
+) {
+    Box(modifier = modifier) {
+        AsyncImage(
+            model = imageUrl,
+            contentDescription = null,
+            modifier = Modifier
+                .fillMaxSize()
+                .clip(RoundedCornerShape(12.dp)),
+            contentScale = ContentScale.Crop
+        )
+
+        // Botão de remover (canto superior direito)
+        Box(
+            modifier = Modifier
+                .align(Alignment.TopEnd)
+                .padding(4.dp)
+                .size(24.dp)
+                .clip(CircleShape)
+                .background(MaterialTheme.colorScheme.error)
+                .clickable(onClick = onRemoveClick),
+            contentAlignment = Alignment.Center
+        ) {
+            Icon(
+                imageVector = Icons.Default.Close,
+                contentDescription = "Remover foto",
+                tint = MaterialTheme.colorScheme.onError,
+                modifier = Modifier.size(16.dp)
+            )
         }
     }
 }

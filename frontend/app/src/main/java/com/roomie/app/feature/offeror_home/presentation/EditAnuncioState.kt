@@ -6,6 +6,7 @@ data class EditAnuncioState(
     val isLoading: Boolean = false,
     val isSaving: Boolean = false,
     val isUploadingPhoto: Boolean = false,
+    val isDeletingPhoto: Boolean = false,
     val anuncio: Anuncio? = null,
     val errorMessage: String? = null,
     val successMessage: String? = null

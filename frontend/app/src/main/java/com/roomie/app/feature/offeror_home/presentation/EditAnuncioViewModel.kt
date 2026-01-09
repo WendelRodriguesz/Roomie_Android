@@ -223,17 +223,35 @@ class EditAnuncioViewModel(
     }
 
     private fun removeFoto(fotoUrl: String) {
-        // Por enquanto, apenas remove da UI localmente
-        // Quando o backend tiver o endpoint, fazer a requisição aqui
-        val anuncioAtual = _state.value.anuncio
-        if (anuncioAtual != null) {
-            val novasFotos = anuncioAtual.fotos.filter { it != fotoUrl }
-            // Atualiza localmente (quando tiver endpoint, fazer requisição e recarregar)
-            _state.update {
-                it.copy(
-                    anuncio = anuncioAtual.copy(fotos = novasFotos)
-                )
-            }
+        viewModelScope.launch {
+            _state.update { it.copy(isDeletingPhoto = true, errorMessage = null) }
+            
+            android.util.Log.d("EditAnuncioViewModel", "🗑️ Deletando foto: $fotoUrl")
+            
+            val result = repository.deletarFoto(userId, token, fotoUrl)
+            
+            result.fold(
+                onSuccess = {
+                    // Recarrega o anúncio para atualizar a lista de fotos
+                    android.util.Log.d("EditAnuncioViewModel", "✅ Foto deletada com sucesso, recarregando anúncio...")
+                    loadAnuncio()
+                    _state.update { 
+                        it.copy(
+                            isDeletingPhoto = false,
+                            successMessage = "Foto removida com sucesso!"
+                        )
+                    }
+                },
+                onFailure = { throwable ->
+                    android.util.Log.e("EditAnuncioViewModel", "❌ Erro ao deletar foto: ${throwable.message}")
+                    _state.update {
+                        it.copy(
+                            isDeletingPhoto = false,
+                            errorMessage = throwable.message ?: "Erro ao remover foto"
+                        )
+                    }
+                }
+            )
         }
     }
 }

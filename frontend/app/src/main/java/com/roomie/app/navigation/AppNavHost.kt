@@ -52,6 +52,7 @@ fun AppNavHost(startDestination: String) {
     val backStackEntry by navController.currentBackStackEntryAsState()
     val currentRoute = backStackEntry?.destination?.route
     var profileRefreshSignal by remember { mutableStateOf(0L) }
+    var anuncioRefreshSignal by remember { mutableStateOf(0L) }
     val role = AuthSession.role
 
     val selectedRoute = run {
@@ -230,7 +231,11 @@ fun AppNavHost(startDestination: String) {
                         anuncioId = anuncioId,
                         token = token,
                         onCancel = { navController.popBackStack() },
-                        onSaved = { navController.popBackStack() }
+                        onSaved = {
+                            anuncioRefreshSignal = System.currentTimeMillis()
+                            android.util.Log.d("AppNavHost", "🔄 Atualizando refreshSignal do anúncio: $anuncioRefreshSignal")
+                            navController.popBackStack()
+                        }
                     )
                 }
             }
@@ -238,6 +243,7 @@ fun AppNavHost(startDestination: String) {
             composable(Routes.MY_LISTINGS) {
                 MyListingsScreen(
                     navController = navController,
+                    refreshSignal = anuncioRefreshSignal,
                     onCreateListingClick = { navController.navigate(Routes.ADD_VAGA) }
                 )
             }
