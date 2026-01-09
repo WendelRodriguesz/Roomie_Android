@@ -4,6 +4,9 @@ import com.roomie.app.core.data.api.AnuncioApiService
 import com.roomie.app.feature.offeror_home.data.remote.dto.AtualizarAnuncioRequest
 import com.roomie.app.feature.offeror_home.model.Anuncio
 import com.roomie.app.feature.offeror_home.model.toAnuncio
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.toRequestBody
 
 class AnuncioRepository(
     private val apiService: AnuncioApiService
@@ -155,6 +158,37 @@ class AnuncioRepository(
             } else {
                 val errorMessage = response.errorBody()?.string()
                     ?: "Erro ao reativar anúncio (código: ${response.code()})"
+                Result.failure(Exception(errorMessage))
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
+    suspend fun uploadNovaFoto(
+        userId: Long,
+        token: String,
+        bytes: ByteArray,
+        fileName: String,
+        mimeType: String?
+    ): Result<String> {
+        return try {
+            val authHeader = "Bearer $token"
+            val body = bytes.toRequestBody(mimeType?.toMediaTypeOrNull())
+            val part = MultipartBody.Part.createFormData("file", fileName, body)
+            
+            val response = apiService.uploadNovaFoto(userId, authHeader, part)
+            
+            if (response.isSuccessful) {
+                val url = response.body()
+                if (url.isNullOrBlank()) {
+                    Result.failure(Exception("Resposta vazia no upload"))
+                } else {
+                    Result.success(url)
+                }
+            } else {
+                val errorMessage = response.errorBody()?.string()
+                    ?: "Erro ao fazer upload da foto (código: ${response.code()})"
                 Result.failure(Exception(errorMessage))
             }
         } catch (e: Exception) {

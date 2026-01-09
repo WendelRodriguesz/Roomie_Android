@@ -15,6 +15,8 @@ sealed interface EditAnuncioEvent {
     data class UpdateComodos(val comodos: List<String>) : EditAnuncioEvent
     data object LoadAnuncio : EditAnuncioEvent
     data object SaveAnuncio : EditAnuncioEvent
+    data class UploadFoto(val bytes: ByteArray, val fileName: String, val mimeType: String?) : EditAnuncioEvent
+    data class RemoveFoto(val fotoUrl: String) : EditAnuncioEvent
     data object DismissError : EditAnuncioEvent
     data object DismissSuccess : EditAnuncioEvent
 }

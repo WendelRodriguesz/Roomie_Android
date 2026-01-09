@@ -111,7 +111,7 @@ fun MyListingsScreen(
                 anuncioId = anuncioId!!,
                 token = token,
                 onEditClick = { 
-                    navController.navigate("edit_anuncio/${anuncioId}")
+                    navController.navigate(Routes.EDIT_ANUNCIO.replace("{anuncioId}", anuncioId.toString()))
                 },
                 onError = { errorMsg ->
                     android.util.Log.e("MyListingsScreen", "❌ Erro do OfferorHomeRoute: $errorMsg")

@@ -183,9 +183,7 @@ fun AppNavHost(startDestination: String) {
                         anuncioId = anuncioId,
                         token = token,
                         onCancel = { navController.popBackStack() },
-                        onSaved = {
-                            navController.popBackStack()
-                        }
+                        onSaved = { navController.popBackStack() }
                     )
                 }
             }

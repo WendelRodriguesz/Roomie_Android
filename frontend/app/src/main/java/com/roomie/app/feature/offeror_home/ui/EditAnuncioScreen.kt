@@ -1,8 +1,15 @@
 package com.roomie.app.feature.offeror_home.ui
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.lazy.grid.GridCells
+import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
+import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -12,10 +19,28 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
+import coil.compose.AsyncImage
+import com.roomie.app.core.ui.components.ImagePickerBox
 import com.roomie.app.core.ui.components.LabeledOutlinedField
 import com.roomie.app.core.ui.components.RoomieSelect
+
+private fun formatarNomeComodo(comodo: String): String {
+    return when (comodo) {
+        "SALA_DE_ESTAR" -> "Sala de Estar"
+        "SALA_DE_JANTAR" -> "Sala de Jantar"
+        "COZINHA" -> "Cozinha"
+        "BANHEIRO" -> "Banheiro"
+        "QUARTO" -> "Quarto"
+        "LAVANDERIA" -> "Lavanderia"
+        "GARAGEM" -> "Garagem"
+        "VARANDA" -> "Varanda"
+        else -> comodo.lowercase().replace("_", " ").replaceFirstChar { it.uppercase() }
+    }
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -32,7 +57,9 @@ fun EditAnuncioScreen(
     vagasDisponiveis: String,
     tipoImovel: String,
     comodos: List<String>,
+    fotos: List<String> = emptyList(),
     isSaving: Boolean = false,
+    isUploadingPhoto: Boolean = false,
     onTituloChange: (String) -> Unit = {},
     onDescricaoChange: (String) -> Unit = {},
     onRuaChange: (String) -> Unit = {},
@@ -45,16 +72,28 @@ fun EditAnuncioScreen(
     onVagasDisponiveisChange: (String) -> Unit = {},
     onTipoImovelChange: (String) -> Unit = {},
     onComodosChange: (List<String>) -> Unit = {},
+    onFotoAdded: () -> Unit = {},
+    onFotoRemoved: (String) -> Unit = {},
     onCancelClick: () -> Unit = {},
     onSaveClick: () -> Unit = {},
-    errorMessage: String? = null
+    errorMessage: String? = null,
+    successMessage: String? = null
 ) {
     val tiposImovel = remember {
         listOf("CASA", "APARTAMENTO", "KITNET", "REPUBLICA", "OUTROS")
     }
 
     val comodosDisponiveis = remember {
-        listOf("SALA", "COZINHA", "QUARTO", "BANHEIRO", "VARANDA", "GARAGEM", "LAVANDERIA", "ESCRITORIO")
+        listOf(
+            "SALA_DE_ESTAR",
+            "SALA_DE_JANTAR",
+            "COZINHA",
+            "BANHEIRO",
+            "QUARTO",
+            "LAVANDERIA",
+            "GARAGEM",
+            "VARANDA"
+        )
     }
 
     val scrollState = rememberScrollState()
@@ -72,6 +111,15 @@ fun EditAnuncioScreen(
             snackbarHostState.showSnackbar(
                 message = message,
                 duration = SnackbarDuration.Long
+            )
+        }
+    }
+
+    LaunchedEffect(successMessage) {
+        successMessage?.let { message ->
+            snackbarHostState.showSnackbar(
+                message = message,
+                duration = SnackbarDuration.Short
             )
         }
     }
@@ -271,11 +319,105 @@ fun EditAnuncioScreen(
                         )
                         Spacer(modifier = Modifier.width(8.dp))
                         Text(
-                            text = comodo.lowercase().replaceFirstChar { it.uppercase() },
+                            text = formatarNomeComodo(comodo),
                             style = MaterialTheme.typography.bodyLarge
                         )
                     }
                 }
+            }
+
+            HorizontalDivider()
+
+            Text(
+                text = "Fotos do Imóvel",
+                style = MaterialTheme.typography.titleMedium,
+                color = MaterialTheme.colorScheme.primary
+            )
+            
+            FotosManager(
+                fotos = fotos,
+                isUploading = isUploadingPhoto,
+                onAddFotoClick = onFotoAdded,
+                onRemoveFoto = onFotoRemoved
+            )
+        }
+    }
+}
+
+@Composable
+private fun FotosManager(
+    fotos: List<String>,
+    isUploading: Boolean,
+    onAddFotoClick: () -> Unit,
+    onRemoveFoto: (String) -> Unit
+) {
+    Column(verticalArrangement = Arrangement.spacedBy(12.dp)) {
+        LazyVerticalGrid(
+            columns = GridCells.Fixed(3),
+            horizontalArrangement = Arrangement.spacedBy(8.dp),
+            verticalArrangement = Arrangement.spacedBy(8.dp),
+            modifier = Modifier.heightIn(max = 360.dp)
+        ) {
+            items(fotos) { fotoUrl ->
+                Box(modifier = Modifier
+                    .aspectRatio(1f)
+                    .clip(RoundedCornerShape(12.dp))
+                ) {
+                    AsyncImage(
+                        model = fotoUrl,
+                        contentDescription = null,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop
+                    )
+                    IconButton(
+                        onClick = { onRemoveFoto(fotoUrl) },
+                        modifier = Modifier
+                            .align(Alignment.TopEnd)
+                            .size(32.dp)
+                    ) {
+                        Box(
+                            modifier = Modifier
+                                .background(
+                                    Color.Black.copy(alpha = 0.6f),
+                                    shape = RoundedCornerShape(50)
+                                )
+                                .size(24.dp),
+                            contentAlignment = Alignment.Center
+                        ) {
+                            Icon(
+                                imageVector = Icons.Default.Close,
+                                contentDescription = "Excluir foto",
+                                tint = Color.White,
+                                modifier = Modifier.size(16.dp)
+                            )
+                        }
+                    }
+                }
+            }
+            
+            // Botão para adicionar nova foto
+            item {
+                ImagePickerBox(
+                    imageUri = null,
+                    onClick = onAddFotoClick,
+                    modifier = Modifier.aspectRatio(1f)
+                )
+            }
+        }
+        
+        if (isUploading) {
+            Row(
+                modifier = Modifier.fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
+                verticalAlignment = Alignment.CenterVertically
+            ) {
+                CircularProgressIndicator(modifier = Modifier.size(24.dp))
+                Spacer(modifier = Modifier.width(8.dp))
+                Text(
+                    text = "Enviando foto...",
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.7f)
+                )
             }
         }
     }

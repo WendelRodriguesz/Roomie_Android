@@ -14,6 +14,7 @@ import kotlinx.coroutines.launch
 class EditAnuncioViewModel(
     private val repository: AnuncioRepository,
     private val anuncioId: Long,
+    private val userId: Long,
     private val token: String
 ) : ViewModel() {
 
@@ -77,6 +78,8 @@ class EditAnuncioViewModel(
             is EditAnuncioEvent.UpdateComodos -> _comodos.value = event.comodos
             is EditAnuncioEvent.LoadAnuncio -> loadAnuncio()
             is EditAnuncioEvent.SaveAnuncio -> saveAnuncio()
+            is EditAnuncioEvent.UploadFoto -> uploadFoto(event.bytes, event.fileName, event.mimeType)
+            is EditAnuncioEvent.RemoveFoto -> removeFoto(event.fotoUrl)
             is EditAnuncioEvent.DismissError -> _state.update { it.copy(errorMessage = null) }
             is EditAnuncioEvent.DismissSuccess -> _state.update { it.copy(successMessage = null) }
         }
@@ -189,17 +192,62 @@ class EditAnuncioViewModel(
             )
         }
     }
+
+    private fun uploadFoto(bytes: ByteArray, fileName: String, mimeType: String?) {
+        viewModelScope.launch {
+            _state.update { it.copy(isUploadingPhoto = true, errorMessage = null) }
+            
+            val result = repository.uploadNovaFoto(userId, token, bytes, fileName, mimeType)
+            
+            result.fold(
+                onSuccess = { fotoUrl ->
+                    // Recarrega o anúncio para atualizar a lista de fotos
+                    loadAnuncio()
+                    _state.update { 
+                        it.copy(
+                            isUploadingPhoto = false,
+                            successMessage = "Foto adicionada com sucesso!"
+                        )
+                    }
+                },
+                onFailure = { throwable ->
+                    _state.update {
+                        it.copy(
+                            isUploadingPhoto = false,
+                            errorMessage = throwable.message ?: "Erro ao fazer upload da foto"
+                        )
+                    }
+                }
+            )
+        }
+    }
+
+    private fun removeFoto(fotoUrl: String) {
+        // Por enquanto, apenas remove da UI localmente
+        // Quando o backend tiver o endpoint, fazer a requisição aqui
+        val anuncioAtual = _state.value.anuncio
+        if (anuncioAtual != null) {
+            val novasFotos = anuncioAtual.fotos.filter { it != fotoUrl }
+            // Atualiza localmente (quando tiver endpoint, fazer requisição e recarregar)
+            _state.update {
+                it.copy(
+                    anuncio = anuncioAtual.copy(fotos = novasFotos)
+                )
+            }
+        }
+    }
 }
 
 class EditAnuncioViewModelFactory(
     private val repository: AnuncioRepository,
     private val anuncioId: Long,
+    private val userId: Long,
     private val token: String
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(EditAnuncioViewModel::class.java)) {
             @Suppress("UNCHECKED_CAST")
-            return EditAnuncioViewModel(repository, anuncioId, token) as T
+            return EditAnuncioViewModel(repository, anuncioId, userId, token) as T
         }
         throw IllegalArgumentException("Unknown ViewModel class")
     }
