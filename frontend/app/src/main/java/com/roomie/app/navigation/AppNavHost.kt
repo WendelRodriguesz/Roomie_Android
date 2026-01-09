@@ -192,7 +192,7 @@ fun AppNavHost(startDestination: String) {
             composable(Routes.EDIT_PREFERENCES) {
                 val userId = AuthSession.userId
                 val token = AuthSession.token
-                val currentRole = AuthSession.role
+                val currentRole =  AuthSession.role
 
                 if (userId == null || token.isNullOrBlank() || currentRole == null) {
                     navController.navigate(Routes.LOGIN)
@@ -234,7 +234,6 @@ fun AppNavHost(startDestination: String) {
                         onCancel = { navController.popBackStack() },
                         onSaved = {
                             anuncioRefreshSignal = System.currentTimeMillis()
-                            android.util.Log.d("AppNavHost", "🔄 Atualizando refreshSignal do anúncio: $anuncioRefreshSignal")
                             navController.popBackStack()
                         }
                     )

@@ -104,14 +104,12 @@ fun EditAnuncioScreen(
     val snackbarHostState = remember { SnackbarHostState() }
     var comodosSelecionados by remember(comodos) { mutableStateOf(comodos.toMutableSet()) }
 
-    // Atualiza os cômodos selecionados quando o anúncio é carregado
     LaunchedEffect(comodos) {
         comodosSelecionados = comodos.toMutableSet()
     }
 
     LaunchedEffect(errorMessage) {
         errorMessage?.let { message ->
-            android.util.Log.d("EditAnuncioScreen", "📢 Mostrando mensagem de erro: $message")
             snackbarHostState.showSnackbar(
                 message = message,
                 duration = SnackbarDuration.Long
@@ -131,7 +129,7 @@ fun EditAnuncioScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Editar Anúncio") },
+                title = { Text("Editar vaga") },
                 actions = {
                     TextButton(onClick = onCancelClick) {
                         Text("Cancelar")
@@ -172,12 +170,11 @@ fun EditAnuncioScreen(
                 .verticalScroll(scrollState),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            // Card de fotos primeiro (seguindo a mesma ordem do CreateListingScreen)
             ImageGalleryCardForUrls(
                 imageUrls = fotos,
                 onAddClick = onFotoAdded,
                 onRemoveClick = { index -> onFotoRemoved(fotos[index]) },
-                maxImages = 10,
+                maxImages = 6,
                 isUploading = isUploadingPhoto
             )
 
@@ -319,15 +316,12 @@ fun EditAnuncioScreen(
                         Checkbox(
                             checked = comodosSelecionados.contains(comodo),
                             onCheckedChange = { checked ->
-                                android.util.Log.d("EditAnuncioScreen", "Cômodo $comodo: $checked")
                                 if (checked) {
                                     comodosSelecionados.add(comodo)
                                 } else {
                                     comodosSelecionados.remove(comodo)
                                 }
-                                val novosComodos = comodosSelecionados.toList()
-                                android.util.Log.d("EditAnuncioScreen", "Novos cômodos selecionados: $novosComodos")
-                                onComodosChange(novosComodos)
+                                onComodosChange(comodosSelecionados.toList())
                             }
                         )
                         Spacer(modifier = Modifier.width(8.dp))
@@ -343,13 +337,12 @@ fun EditAnuncioScreen(
     }
 }
 
-// Versão adaptada do ImageGalleryCard que aceita URLs (String) ao invés de Uri
 @Composable
 private fun ImageGalleryCardForUrls(
     imageUrls: List<String>,
     onAddClick: () -> Unit,
     onRemoveClick: (Int) -> Unit,
-    maxImages: Int = 10,
+    maxImages: Int = 6,
     isUploading: Boolean = false,
     modifier: Modifier = Modifier
 ) {
@@ -463,7 +456,6 @@ private fun ImageThumbnailForUrl(
             contentScale = ContentScale.Crop
         )
 
-        // Botão de remover (canto superior direito)
         Box(
             modifier = Modifier
                 .align(Alignment.TopEnd)

@@ -21,7 +21,6 @@ class EditAnuncioViewModel(
     private val _state = MutableStateFlow(EditAnuncioState())
     val state: StateFlow<EditAnuncioState> = _state.asStateFlow()
 
-    // Campos editáveis
     private val _titulo = MutableStateFlow("")
     val titulo: StateFlow<String> = _titulo.asStateFlow()
 
@@ -147,11 +146,6 @@ class EditAnuncioViewModel(
                 0
             }
 
-            android.util.Log.d("EditAnuncioViewModel", "💾 Preparando requisição de atualização")
-            android.util.Log.d("EditAnuncioViewModel", "  - Comodos: ${_comodos.value}")
-            android.util.Log.d("EditAnuncioViewModel", "  - Título: ${_titulo.value}")
-            android.util.Log.d("EditAnuncioViewModel", "  - Tipo Imóvel: ${_tipoImovel.value}")
-            
             val request = AtualizarAnuncioRequest(
                 titulo = _titulo.value,
                 descricao = _descricao.value,
@@ -166,8 +160,6 @@ class EditAnuncioViewModel(
                 tipo_imovel = _tipoImovel.value,
                 comodos = _comodos.value
             )
-            
-            android.util.Log.d("EditAnuncioViewModel", "📤 Enviando requisição com ${request.comodos.size} cômodos")
 
             val result = repository.atualizarAnuncio(anuncioId, token, request)
 
@@ -226,14 +218,10 @@ class EditAnuncioViewModel(
         viewModelScope.launch {
             _state.update { it.copy(isDeletingPhoto = true, errorMessage = null) }
             
-            android.util.Log.d("EditAnuncioViewModel", "🗑️ Deletando foto: $fotoUrl")
-            
             val result = repository.deletarFoto(userId, token, fotoUrl)
             
             result.fold(
                 onSuccess = {
-                    // Recarrega o anúncio para atualizar a lista de fotos
-                    android.util.Log.d("EditAnuncioViewModel", "✅ Foto deletada com sucesso, recarregando anúncio...")
                     loadAnuncio()
                     _state.update { 
                         it.copy(
@@ -243,7 +231,6 @@ class EditAnuncioViewModel(
                     }
                 },
                 onFailure = { throwable ->
-                    android.util.Log.e("EditAnuncioViewModel", "❌ Erro ao deletar foto: ${throwable.message}")
                     _state.update {
                         it.copy(
                             isDeletingPhoto = false,

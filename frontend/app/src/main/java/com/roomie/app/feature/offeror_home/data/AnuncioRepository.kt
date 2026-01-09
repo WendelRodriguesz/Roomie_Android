@@ -17,38 +17,18 @@ class AnuncioRepository(
     ): Result<Anuncio> {
         return try {
             val authHeader = "Bearer $token"
-            android.util.Log.d("AnuncioRepository", "🔍 Iniciando busca de anúncio")
-            android.util.Log.d("AnuncioRepository", "  - ID do anúncio: $anuncioId")
-            android.util.Log.d("AnuncioRepository", "  - Token (primeiros 20 chars): ${token.take(20)}...")
-            android.util.Log.d("AnuncioRepository", "  - Auth Header: $authHeader")
-            
             val response = apiService.visualizarAnuncio(anuncioId, authHeader)
-            
-            android.util.Log.d("AnuncioRepository", "📡 Resposta recebida:")
-            android.util.Log.d("AnuncioRepository", "  - Código HTTP: ${response.code()}")
-            android.util.Log.d("AnuncioRepository", "  - Sucesso: ${response.isSuccessful}")
-            android.util.Log.d("AnuncioRepository", "  - Tem body: ${response.body() != null}")
             
             if (response.isSuccessful && response.body() != null) {
                 val dto = response.body()!!
-                android.util.Log.d("AnuncioRepository", "✅ Anúncio recebido com sucesso:")
-                android.util.Log.d("AnuncioRepository", "  - Título: ${dto.titulo}")
-                android.util.Log.d("AnuncioRepository", "  - Status: ${dto.status}")
-                android.util.Log.d("AnuncioRepository", "  - ID: ${dto.id}")
                 val anuncio = dto.toAnuncio()
                 Result.success(anuncio)
             } else {
                 val errorBody = response.errorBody()?.string()
                 val httpCode = response.code()
-                val httpMessage = response.message()
                 
-                android.util.Log.e("AnuncioRepository", "❌ ERRO na resposta HTTP:")
-                android.util.Log.e("AnuncioRepository", "  - Código: $httpCode")
-                android.util.Log.e("AnuncioRepository", "  - Mensagem: $httpMessage")
-                android.util.Log.e("AnuncioRepository", "  - Error Body: ${errorBody ?: "(vazio)"}")
-                android.util.Log.e("AnuncioRepository", "  - Headers: ${response.headers()}")
+                android.util.Log.e("AnuncioRepository", "Erro ao visualizar anúncio: código $httpCode")
                 
-                // Mensagem de erro mais descritiva baseada no código HTTP
                 val errorMessage = when (httpCode) {
                     403 -> "Acesso negado (403). Verifique se o token está válido e se você tem permissão para visualizar este anúncio."
                     401 -> "Não autorizado (401). Faça login novamente."
@@ -61,10 +41,7 @@ class AnuncioRepository(
                 Result.failure(Exception(errorMessage))
             }
         } catch (e: Exception) {
-            android.util.Log.e("AnuncioRepository", "💥 EXCEÇÃO ao visualizar anúncio:", e)
-            android.util.Log.e("AnuncioRepository", "  - Tipo: ${e.javaClass.simpleName}")
-            android.util.Log.e("AnuncioRepository", "  - Mensagem: ${e.message}")
-            e.printStackTrace()
+            android.util.Log.e("AnuncioRepository", "Exceção ao visualizar anúncio", e)
             Result.failure(e)
         }
     }
@@ -76,31 +53,16 @@ class AnuncioRepository(
     ): Result<Anuncio> {
         return try {
             val authHeader = "Bearer $token"
-            android.util.Log.d("AnuncioRepository", "🔄 Atualizando anúncio - ID: $anuncioId")
-            android.util.Log.d("AnuncioRepository", "  - Título: ${request.titulo}")
-            android.util.Log.d("AnuncioRepository", "  - Comodos: ${request.comodos}")
-            android.util.Log.d("AnuncioRepository", "  - Valor Aluguel: ${request.valorAluguel}")
-            android.util.Log.d("AnuncioRepository", "  - Tipo Imóvel: ${request.tipo_imovel}")
-            
             val response = apiService.atualizarAnuncio(idAnuncio = anuncioId, authHeader = authHeader, body = request)
-            
-            android.util.Log.d("AnuncioRepository", "📡 Resposta recebida:")
-            android.util.Log.d("AnuncioRepository", "  - Código HTTP: ${response.code()}")
-            android.util.Log.d("AnuncioRepository", "  - Sucesso: ${response.isSuccessful}")
             
             if (response.isSuccessful && response.body() != null) {
                 val anuncio = response.body()!!.toAnuncio()
-                android.util.Log.d("AnuncioRepository", "✅ Anúncio atualizado com sucesso")
                 Result.success(anuncio)
             } else {
                 val errorBody = response.errorBody()?.string()
                 val httpCode = response.code()
-                val httpMessage = response.message()
                 
-                android.util.Log.e("AnuncioRepository", "❌ ERRO ao atualizar anúncio:")
-                android.util.Log.e("AnuncioRepository", "  - Código: $httpCode")
-                android.util.Log.e("AnuncioRepository", "  - Mensagem: $httpMessage")
-                android.util.Log.e("AnuncioRepository", "  - Error Body: ${errorBody ?: "(vazio)"}")
+                android.util.Log.e("AnuncioRepository", "Erro ao atualizar anúncio: código $httpCode")
                 
                 val errorMessage = when (httpCode) {
                     400 -> "Dados inválidos. Verifique se todos os campos estão preenchidos corretamente.${if (errorBody != null) "\n$errorBody" else ""}"
@@ -115,10 +77,7 @@ class AnuncioRepository(
                 Result.failure(Exception(errorMessage))
             }
         } catch (e: Exception) {
-            android.util.Log.e("AnuncioRepository", "💥 EXCEÇÃO ao atualizar anúncio:", e)
-            android.util.Log.e("AnuncioRepository", "  - Tipo: ${e.javaClass.simpleName}")
-            android.util.Log.e("AnuncioRepository", "  - Mensagem: ${e.message}")
-            e.printStackTrace()
+            android.util.Log.e("AnuncioRepository", "Exceção ao atualizar anúncio", e)
             Result.failure(e)
         }
     }
@@ -203,28 +162,15 @@ class AnuncioRepository(
     ): Result<Unit> {
         return try {
             val authHeader = "Bearer $token"
-            android.util.Log.d("AnuncioRepository", "🗑️ Deletando foto")
-            android.util.Log.d("AnuncioRepository", "  - User ID: $userId")
-            android.util.Log.d("AnuncioRepository", "  - URL Foto: $urlFoto")
-            
             val response = apiService.deletarFoto(userId, authHeader, urlFoto)
             
-            android.util.Log.d("AnuncioRepository", "📡 Resposta recebida:")
-            android.util.Log.d("AnuncioRepository", "  - Código HTTP: ${response.code()}")
-            android.util.Log.d("AnuncioRepository", "  - Sucesso: ${response.isSuccessful}")
-            
             if (response.isSuccessful) {
-                android.util.Log.d("AnuncioRepository", "✅ Foto deletada com sucesso")
                 Result.success(Unit)
             } else {
                 val errorBody = response.errorBody()?.string()
                 val httpCode = response.code()
-                val httpMessage = response.message()
                 
-                android.util.Log.e("AnuncioRepository", "❌ ERRO ao deletar foto:")
-                android.util.Log.e("AnuncioRepository", "  - Código: $httpCode")
-                android.util.Log.e("AnuncioRepository", "  - Mensagem: $httpMessage")
-                android.util.Log.e("AnuncioRepository", "  - Error Body: ${errorBody ?: "(vazio)"}")
+                android.util.Log.e("AnuncioRepository", "Erro ao deletar foto: código $httpCode")
                 
                 val errorMessage = when (httpCode) {
                     400 -> "Requisição inválida ao deletar a foto."
@@ -236,10 +182,7 @@ class AnuncioRepository(
                 Result.failure(Exception(errorMessage))
             }
         } catch (e: Exception) {
-            android.util.Log.e("AnuncioRepository", "💥 EXCEÇÃO ao deletar foto:", e)
-            android.util.Log.e("AnuncioRepository", "  - Tipo: ${e.javaClass.simpleName}")
-            android.util.Log.e("AnuncioRepository", "  - Mensagem: ${e.message}")
-            e.printStackTrace()
+            android.util.Log.e("AnuncioRepository", "Exceção ao deletar foto", e)
             Result.failure(e)
         }
     }

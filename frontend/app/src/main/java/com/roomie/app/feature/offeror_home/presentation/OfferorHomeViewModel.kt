@@ -27,7 +27,6 @@ class OfferorHomeViewModel(
             OfferorHomeEvent.PausarAnuncio -> pausarAnuncio()
             OfferorHomeEvent.ReativarAnuncio -> reativarAnuncio()
             OfferorHomeEvent.EditarAnuncio -> {
-                // Navegação será tratada na UI
             }
             OfferorHomeEvent.DismissError -> {
                 _state.value = _state.value.copy(errorMessage = null)
@@ -42,11 +41,8 @@ class OfferorHomeViewModel(
         viewModelScope.launch {
             _state.value = _state.value.copy(isLoading = true, errorMessage = null)
             
-            android.util.Log.d("OfferorHomeViewModel", "🔄 Carregando anúncio ID: $anuncioId")
-            
             repository.visualizarAnuncio(anuncioId, token)
                 .onSuccess { anuncio ->
-                    android.util.Log.d("OfferorHomeViewModel", "✅ Anúncio carregado: ${anuncio.titulo}")
                     _state.value = _state.value.copy(
                         isLoading = false,
                         anuncio = anuncio,
@@ -55,8 +51,7 @@ class OfferorHomeViewModel(
                 }
                 .onFailure { exception ->
                     val errorMsg = exception.message ?: "Erro desconhecido ao carregar anúncio"
-                    android.util.Log.e("OfferorHomeViewModel", "❌ Erro ao carregar anúncio: $errorMsg", exception)
-                    android.util.Log.e("OfferorHomeViewModel", "  - Tipo: ${exception.javaClass.simpleName}")
+                    android.util.Log.e("OfferorHomeViewModel", "Erro ao carregar anúncio", exception)
                     _state.value = _state.value.copy(
                         isLoading = false,
                         errorMessage = errorMsg

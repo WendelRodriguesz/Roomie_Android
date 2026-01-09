@@ -42,11 +42,9 @@ fun MyListingsScreen(
     var error by remember { mutableStateOf<String?>(null) }
 
     LaunchedEffect(userId, token) {
-        // Primeiro tenta buscar pelo perfil (caso o backend comece a retornar)
         try {
             val profileApiService = RetrofitClient.profileApiService
             val auth = "Bearer $token"
-            android.util.Log.d("MyListingsScreen", "Buscando perfil do ofertante - userId: $userId")
             val profileResponse = profileApiService.getUsuarioOfertante(userId, auth)
             
             if (profileResponse.isSuccessful && profileResponse.body() != null) {
@@ -54,36 +52,27 @@ fun MyListingsScreen(
                 val anuncioIdFromProfile = body.anuncio?.id
                 
                 if (anuncioIdFromProfile != null) {
-                    android.util.Log.d("MyListingsScreen", "✅ Anúncio encontrado no perfil! ID: $anuncioIdFromProfile")
-                    // Limpa estados antes de setar o ID
                     error = null
                     isLoading = false
                     anuncioId = anuncioIdFromProfile
-                    android.util.Log.d("MyListingsScreen", "Estado atualizado - anuncioId: $anuncioId, error: $error, isLoading: $isLoading")
                     return@LaunchedEffect
                 } else {
-                    android.util.Log.w("MyListingsScreen", "⚠️ Anúncio não encontrado no perfil (campo null)")
-                    error = null // Limpa erro para tentar método alternativo
+                    error = null
                 }
             }
         } catch (e: Exception) {
-            android.util.Log.w("MyListingsScreen", "Erro ao buscar via perfil", e)
         }
         
-        // Como o perfil não retorna o anúncio, tenta usar o ID do usuário como ID do anúncio
-        // Isso é uma solução temporária - o ideal é criar um endpoint no backend
-        android.util.Log.d("MyListingsScreen", "Perfil não retornou anúncio. Tentando buscar anúncio com ID = userId: $userId")
         try {
             val result = anuncioRepository.visualizarAnuncio(userId.toLong(), token)
             
             result.fold(
                 onSuccess = { anuncio ->
-                    android.util.Log.d("MyListingsScreen", "✅ Anúncio encontrado! ID: ${anuncio.id}")
                     anuncioId = anuncio.id
                     isLoading = false
                 },
                 onFailure = { exception ->
-                    android.util.Log.e("MyListingsScreen", "❌ Anúncio não encontrado com ID = userId", exception)
+                    android.util.Log.e("MyListingsScreen", "Erro ao buscar anúncio", exception)
                     isLoading = false
                     error = "Não foi possível encontrar seu anúncio. Por favor, certifique-se de que você possui um anúncio cadastrado ou cadastre uma vaga primeiro."
                 }
@@ -106,8 +95,6 @@ fun MyListingsScreen(
         }
         
         anuncioId != null -> {
-            // Prioridade: Se encontrou o anúncio, mostra a tela
-            android.util.Log.d("MyListingsScreen", "🎨 Renderizando OfferorHomeRoute com anuncioId: $anuncioId")
             OfferorHomeRoute(
                 anuncioId = anuncioId!!,
                 token = token,
@@ -116,16 +103,12 @@ fun MyListingsScreen(
                     navController.navigate(Routes.EDIT_ANUNCIO.replace("{anuncioId}", anuncioId.toString()))
                 },
                 onError = { errorMsg ->
-                    android.util.Log.e("MyListingsScreen", "❌ Erro do OfferorHomeRoute: $errorMsg")
-                    // Não reseta o anuncioId imediatamente, apenas mostra o erro
-                    // O usuário pode tentar recarregar
                     error = errorMsg
                 }
             )
         }
         
         error != null -> {
-            // Mostra erro apenas se não encontrou anúncio
             Column(
                 modifier = Modifier
                     .fillMaxSize()

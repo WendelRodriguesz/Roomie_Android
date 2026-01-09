@@ -41,10 +41,8 @@ fun OfferorHomeScreen(
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
-    // Mostrar mensagens de sucesso
     LaunchedEffect(state.successMessage) {
         state.successMessage?.let { message ->
-            android.util.Log.d("OfferorHomeScreen", "📢 Mostrando mensagem de sucesso: $message")
             snackbarHostState.showSnackbar(
                 message = message,
                 duration = SnackbarDuration.Short
@@ -53,12 +51,9 @@ fun OfferorHomeScreen(
         }
     }
 
-    // Mostrar mensagens de erro (apenas se houver anúncio carregado)
     LaunchedEffect(state.errorMessage, state.anuncio) {
         state.errorMessage?.let { message ->
-            android.util.Log.d("OfferorHomeScreen", "📢 Mostrando mensagem de erro: $message")
             if (state.anuncio != null) {
-                // Se houver anúncio, mostra erro como snackbar
                 snackbarHostState.showSnackbar(
                     message = message,
                     duration = SnackbarDuration.Long

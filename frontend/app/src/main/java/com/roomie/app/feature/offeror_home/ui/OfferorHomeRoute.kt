@@ -32,31 +32,15 @@ fun OfferorHomeRoute(
 
     val state by viewModel.state.collectAsState()
 
-    // Logs para debug
-    LaunchedEffect(anuncioId, token) {
-        android.util.Log.d("OfferorHomeRoute", "Carregando anúncio - ID: $anuncioId")
-    }
-
-    // Recarrega quando o refreshSignal muda (ex: quando volta da edição)
     LaunchedEffect(refreshSignal) {
         if (refreshSignal > 0) {
-            android.util.Log.d("OfferorHomeRoute", "🔄 Recarregando anúncio devido ao refreshSignal: $refreshSignal")
             viewModel.onEvent(OfferorHomeEvent.LoadAnuncio)
         }
     }
 
-    // Mostrar erros via callback
     LaunchedEffect(state.errorMessage) {
         state.errorMessage?.let { error ->
-            android.util.Log.e("OfferorHomeRoute", "Erro no ViewModel: $error")
             onError(error)
-        }
-    }
-    
-    // Log quando o anúncio é carregado
-    LaunchedEffect(state.anuncio) {
-        state.anuncio?.let {
-            android.util.Log.d("OfferorHomeRoute", "Anúncio carregado com sucesso: ${it.titulo}")
         }
     }
 
