@@ -86,6 +86,39 @@ public class AnuncioService implements AnuncioPortIn {
     }
 
     @Override
+    public ResponseEntity<String> deletarFoto(String urlFoto, Integer id_usuario) {
+        try {
+            UsuarioOfertante usuario = usuarioOfertantePortOut.findById(id_usuario);
+
+            if (usuario == null || usuario.getAnuncio() == null) {
+                return ResponseEntity.badRequest().body("Usuário ou anúncio não encontrado");
+            }
+
+            Anuncio anuncio = usuario.getAnuncio();
+
+            if (!anuncio.getFotos().contains(urlFoto)) {
+                return ResponseEntity.badRequest().body("Foto não encontrada no anúncio");
+            }
+
+            // Remove a foto da lista
+            anuncio.getFotos().remove(urlFoto);
+
+            // Deleta a foto do bucket
+            bucketPortOut.delete(urlFoto);
+
+            // Salva as alterações
+            anuncioPortOut.save(anuncio);
+            usuario.setAnuncio(anuncio);
+            usuarioOfertantePortOut.save(usuario);
+
+            return ResponseEntity.ok("Foto excluída com sucesso");
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Erro ao excluir foto: " + e.getMessage());
+        }
+    }
+
+    @Override
     public AnuncioResponseDTO atualizar(Integer id_anuncio, AnuncioUpdateDTO anuncioUpdateDTO) {
         Anuncio anuncio = anuncioPortOut.findById(id_anuncio);
 
