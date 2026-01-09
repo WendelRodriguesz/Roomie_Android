@@ -17,6 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -96,17 +99,39 @@ public class AnuncioService implements AnuncioPortIn {
 
             Anuncio anuncio = usuario.getAnuncio();
 
-            if (!anuncio.getFotos().contains(urlFoto)) {
+            if (anuncio.getFotos() == null) {
+                anuncio.setFotos(new ArrayList<>());
+            }
+
+            String urlDecodificada = URLDecoder.decode(urlFoto, StandardCharsets.UTF_8.toString());
+            
+            urlDecodificada = urlDecodificada.trim();
+            
+            String fotoEncontrada = null;
+            for (String foto : anuncio.getFotos()) {
+                if (foto != null && foto.trim().equals(urlDecodificada)) {
+                    fotoEncontrada = foto;
+                    break;
+                }
+            }
+
+            if (fotoEncontrada == null) {
+                for (String foto : anuncio.getFotos()) {
+                    if (foto != null && foto.trim().equals(urlFoto.trim())) {
+                        fotoEncontrada = foto;
+                        break;
+                    }
+                }
+            }
+
+            if (fotoEncontrada == null) {
                 return ResponseEntity.badRequest().body("Foto não encontrada no anúncio");
             }
 
-            // Remove a foto da lista
-            anuncio.getFotos().remove(urlFoto);
+            anuncio.getFotos().remove(fotoEncontrada);
 
-            // Deleta a foto do bucket
-            bucketPortOut.delete(urlFoto);
+            bucketPortOut.delete(fotoEncontrada);
 
-            // Salva as alterações
             anuncioPortOut.save(anuncio);
             usuario.setAnuncio(anuncio);
             usuarioOfertantePortOut.save(usuario);
