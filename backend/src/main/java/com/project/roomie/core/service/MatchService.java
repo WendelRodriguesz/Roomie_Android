@@ -6,6 +6,7 @@ import com.project.roomie.infra.persistence.entity.MatchJpaEntity;
 import com.project.roomie.mapper.MatchMapper;
 import com.project.roomie.ports.in.MatchPortIn;
 import com.project.roomie.ports.out.MatchPortOut;
+import com.project.roomie.ports.out.NotificacoesPortOut;
 import com.project.roomie.ports.out.UsuarioInteressadoPortOut;
 import com.project.roomie.ports.out.UsuarioOfertantePortOut;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,16 +27,19 @@ public class MatchService implements MatchPortIn {
     private final UsuarioInteressadoPortOut usuarioInteressadoPortOut;
     private final MatchPortOut matchPortOut;
     private final MatchMapper matchMapper;
+    private final NotificacoesPortOut notificacoesPortOut;
 
     @Autowired
     public MatchService(UsuarioOfertantePortOut usuarioOfertantePortOut,
                         UsuarioInteressadoPortOut usuarioInteressadoPortOut,
                         MatchPortOut matchPortOut,
-                        MatchMapper matchMapper){
+                        MatchMapper matchMapper,
+                        NotificacoesPortOut notificacoesPortOut){
         this.usuarioOfertantePortOut = usuarioOfertantePortOut;
         this.usuarioInteressadoPortOut = usuarioInteressadoPortOut;
         this.matchPortOut = matchPortOut;
         this.matchMapper = matchMapper;
+        this.notificacoesPortOut = notificacoesPortOut;
     }
 
     @Override
@@ -98,6 +102,18 @@ public class MatchService implements MatchPortIn {
             throw new RuntimeException("Match já foi recusado");
         }
 
+        // envia pro interessado
+        notificacoesPortOut.enviar(
+                match.getInteressado().getFirebase_token(),
+                "Você deu match com " + match.getOfertante().getNome() + "!"
+                );
+
+        // envia pro ofertante
+        notificacoesPortOut.enviar(
+                match.getOfertante().getFirebase_token(),
+                "Você deu match com " + match.getInteressado().getNome() + "!"
+        );
+
         match.setStatus(MatchStatus.ACEITO);
         return matchPortOut.save(matchMapper.ModeltoJpaEntity(match));
     }
@@ -114,6 +130,12 @@ public class MatchService implements MatchPortIn {
         if (match.getStatus().equals(MatchStatus.RECUSADO)){
             throw new RuntimeException("Match já foi recusado antes");
         }
+
+        // envia pro interessado
+        notificacoesPortOut.enviar(
+                match.getInteressado().getFirebase_token(),
+                match.getOfertante().getNome() + " Recusou seu match" + "!"
+        );
 
         match.setStatus(MatchStatus.RECUSADO);
         return matchPortOut.save(matchMapper.ModeltoJpaEntity(match));

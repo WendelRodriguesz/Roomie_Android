@@ -20,6 +20,7 @@ import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 import com.roomie.app.feature.chat.ui.ChatScreen
 import com.roomie.app.feature.edit_profile.ui.EditProfileRoute
 import com.roomie.app.feature.home.ui.HomeRoute
+import com.roomie.app.feature.home.ui.ListingDetailRoute
 import com.roomie.app.feature.login.ui.LoginScreen
 import com.roomie.app.feature.match.ui.MatchRoute
 import com.roomie.app.feature.notifications.ui.NotificationsScreen
@@ -28,7 +29,7 @@ import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.feature.profile.ui.ProfileScreenRoute
 import com.roomie.app.feature.register.ui.RegisterRoute
 import com.roomie.app.feature.register.ui.RegisterRoleScreen
-import com.roomie.app.feature.vaga.ui.CadastrarVagasScreen
+import com.roomie.app.feature.vaga.ui.CreateListingRoute
 import com.roomie.app.feature.vaga.ui.MyListingsScreen
 import com.roomie.app.feature.welcome_screen.ui.WelcomeScreen
 import androidx.compose.runtime.mutableStateOf
@@ -38,6 +39,7 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.platform.LocalContext
 import com.roomie.app.core.data.local.AuthDataStore
 import kotlinx.coroutines.launch
+import com.roomie.app.feature.edit_profile.ui.EditPreferencesRoute
 
 @Composable
 fun AppNavHost(startDestination: String) {
@@ -98,7 +100,25 @@ fun AppNavHost(startDestination: String) {
             startDestination = startDestination,
             modifier = Modifier.padding(inner)
         ) {
-            composable(Routes.HOME) { HomeRoute() }
+            composable(Routes.HOME) { 
+                HomeRoute(
+                    onListingClick = { listingId ->
+                        navController.navigate("listing_detail/$listingId")
+                    }
+                )
+            }
+            composable(
+                route = Routes.LISTING_DETAIL,
+                arguments = listOf(
+                    navArgument("listing_id") { type = androidx.navigation.NavType.IntType }
+                )
+            ) { backStackEntry ->
+                val listingId = backStackEntry.arguments?.getInt("listing_id") ?: 0
+                ListingDetailRoute(
+                    listingId = listingId,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
             composable(Routes.CHAT) { ChatScreen() }
             composable(Routes.MATCH) { MatchRoute() }
             composable(Routes.NOTIFICATIONS) { NotificationsScreen() }
@@ -122,6 +142,7 @@ fun AppNavHost(startDestination: String) {
                     role = currentRole,
                     refreshSignal = profileRefreshSignal,
                     onEditClick = { navController.navigate(Routes.EDIT_PROFILE) },
+                    onEditPreferencesClick = { navController.navigate(Routes.EDIT_PREFERENCES) },
                     onLogoutClick = {
                         scope.launch {
                             authDataStore.clearUserSession()
@@ -156,6 +177,7 @@ fun AppNavHost(startDestination: String) {
                         userId = userId,
                         token = token,
                         role = currentRole,
+                        navController = navController,
                         onCancel = { navController.popBackStack() },
                         onSaved = {
                             profileRefreshSignal = System.currentTimeMillis()
@@ -165,7 +187,32 @@ fun AppNavHost(startDestination: String) {
                 }
             }
 
-            composable(Routes.ADD_VAGA) { CadastrarVagasScreen(navController) }
+            composable(Routes.EDIT_PREFERENCES) {
+                val userId = AuthSession.userId
+                val token = AuthSession.token
+                val currentRole = AuthSession.role
+
+                if (userId == null || token.isNullOrBlank() || currentRole == null) {
+                    navController.navigate(Routes.LOGIN)
+                } else {
+                    EditPreferencesRoute(
+                        userId = userId,
+                        token = token,
+                        role = currentRole,
+                        onCancel = { navController.popBackStack() },
+                        onSaved = {
+                            profileRefreshSignal = System.currentTimeMillis()
+                            navController.popBackStack()
+                        }
+                    )
+                }
+            }
+
+            composable(Routes.ADD_VAGA) {
+                CreateListingRoute(
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
 
             composable(
                 route = Routes.EDIT_ANUNCIO,
@@ -195,7 +242,14 @@ fun AppNavHost(startDestination: String) {
                 )
             }
 
-            composable(Routes.PREFERENCES_REGISTRATION) { PreferenceRegistration() }
+            composable(Routes.PREFERENCES_REGISTRATION) {
+                val currentRole = AuthSession.role
+                if (currentRole == null) {
+                    navController.navigate(Routes.LOGIN)
+                } else {
+                    PreferenceRegistration(role = currentRole)
+                }
+            }
         }
     }
 }

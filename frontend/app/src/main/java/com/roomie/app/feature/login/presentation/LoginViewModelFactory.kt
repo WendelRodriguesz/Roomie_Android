@@ -12,7 +12,7 @@ class LoginViewModelFactory(
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         if (modelClass.isAssignableFrom(LoginViewModel::class.java)) {
             val authDataStore = AuthDataStore(context)
-            val authRepository = AuthRepository(authDataStore)
+            val authRepository = AuthRepository(authDataStore, context)
             @Suppress("UNCHECKED_CAST")
             return LoginViewModel(authRepository) as T
         }

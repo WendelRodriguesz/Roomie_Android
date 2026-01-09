@@ -23,6 +23,9 @@ public interface AnuncioMapper {
     AnuncioJpaEntity ModeltoJpaEntity(Anuncio anuncios);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(source = "valorAluguel", target = "valor_aluguel")
+    @Mapping(source = "valorContas", target = "valor_contas")
+    @Mapping(source = "vagasDisponiveis", target="vagas_disponiveis")
     void updateAnuncioFromDto(
             AnuncioUpdateDTO dto,
             @MappingTarget Anuncio anuncio

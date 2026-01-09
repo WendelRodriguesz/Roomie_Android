@@ -35,8 +35,9 @@ public class UsuarioInteressadoJpaEntity extends UsuarioJpaEntity{
                                        GeneroJpaEntity genero,
                                        RoleJpaEntity role,
                                        String foto_de_perfil,
-                                       InteressesInteressadosJpaEntity interesses){
+                                       InteressesInteressadosJpaEntity interesses,
+                                       String firebase_token){
         this.interesses = interesses;
-        super(id, nome, email, senha, data_de_nascimento, idade, cidade, ocupacao, bio, genero, role, foto_de_perfil);
+        super(id, nome, email, senha, data_de_nascimento, idade, cidade, ocupacao, bio, genero, role, foto_de_perfil, firebase_token);
     }
 }

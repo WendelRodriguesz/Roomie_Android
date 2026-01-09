@@ -22,6 +22,7 @@ fun ProfileScreenRoute(
     role: ProfileRole,
     refreshSignal: Long = 0L,
     onEditClick: () -> Unit = {},
+    onEditPreferencesClick: () -> Unit = {},
     onLogoutClick: () -> Unit = {},
 ) {
     val repository = remember { ProfileRepository(RetrofitClient.profileApiService) }
@@ -54,6 +55,7 @@ fun ProfileScreenRoute(
             ProfileScreen(
                 profile = uiState.profile,
                 onEditClick = onEditClick,
+                onEditPreferencesClick = onEditPreferencesClick,
                 onLogoutClick = onLogoutClick,
             )
         }

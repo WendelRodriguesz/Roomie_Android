@@ -16,5 +16,6 @@ CREATE TABLE usuarios(
     id_anuncio INTEGER,
     FOREIGN KEY (id_anuncio) REFERENCES anuncios(id),
     id_interesses_ofertantes INTEGER,
-    FOREIGN KEY (id_interesses_ofertantes) REFERENCES interesses_ofertantes(id)
+    FOREIGN KEY (id_interesses_ofertantes) REFERENCES interesses_ofertantes(id),
+    firebase_token TEXT
 );

@@ -14,9 +14,11 @@ object Routes {
     const val REGISTER = "register"
     const val REGISTER_ROLE = "register_role"
     const val EDIT_PROFILE = "edit_profile"
+    const val EDIT_PREFERENCES = "edit_preferences"
     const val ADD_VAGA = "addvaga"
     const val EDIT_ANUNCIO = "edit_anuncio/{anuncioId}"
     const val PREFERENCES_REGISTRATION = "preference_registration"
+    const val LISTING_DETAIL = "listing_detail/{listing_id}"
 
     val BOTTOM_BAR_ROUTES = listOf(HOME, CHAT, MATCH, NOTIFICATIONS, PROFILE, MY_LISTINGS)
 }

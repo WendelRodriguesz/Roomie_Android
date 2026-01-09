@@ -43,17 +43,18 @@ public class SecurityConfigurationsProd {
                         .requestMatchers(HttpMethod.POST, "/api/usuarioInteressado/uploadFotoDePerfil/{id_usuario}").hasAnyRole("INTERESSADO")
                         .requestMatchers(HttpMethod.GET, "/api/usuarioInteressado/visualizar/{id_usuario}").hasAnyRole("INTERESSADO")
                         .requestMatchers(HttpMethod.PATCH, "/api/usuarioInteressado/atualizar/{id}").hasAnyRole("INTERESSADO")
+                        .requestMatchers(HttpMethod.POST, "/api/usuarioInteressado/cadastrarFirebaseToken/{id_usuario}").hasAnyRole("INTERESSADO")
 
                         // Usuário Ofertante
                         .requestMatchers(HttpMethod.POST, "/api/usuarioOfertante/cadastrar").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/usuarioOfertante/uploadFotoDePerfil/{id_usuario}").hasAnyRole("OFERTANTE")
                         .requestMatchers(HttpMethod.GET, "/api/usuarioOfertante/visualizar/{id_usuario}").hasAnyRole("OFERTANTE")
                         .requestMatchers(HttpMethod.PATCH, "/api/usuarioOfertante/atualizar/{id}").hasAnyRole("OFERTANTE")
+                        .requestMatchers(HttpMethod.POST, "/api/usuarioOfertante/cadastrarFirebaseToken/{id_usuario}").hasAnyRole("OFERTANTE")
 
                         // Interesses interessado
                         .requestMatchers(HttpMethod.POST, "/api/interessesInteressados/cadastrar/{id_usuario}").hasAnyRole("INTERESSADO")
                         .requestMatchers(HttpMethod.PATCH, "/api/interessesInteressados/atualizar/{id_interesse}").hasAnyRole("INTERESSADO")
-
 
                         // Interesses Ofertante
                         .requestMatchers(HttpMethod.POST, "/api/interessesOfertantes/cadastrar/{id_usuario}").hasAnyRole("OFERTANTE")
@@ -67,7 +68,7 @@ public class SecurityConfigurationsProd {
                         .requestMatchers(HttpMethod.PATCH, "/api/anuncio/reativar/{id_anuncio}").hasAnyRole("OFERTANTE")
                         .requestMatchers(HttpMethod.GET, "/api/anuncio/visualizarTodos").hasAnyRole("INTERESSADO")
                         .requestMatchers(HttpMethod.GET, "/api/anuncio/filtrar").hasAnyRole("INTERESSADO")
-                        .requestMatchers(HttpMethod.GET, "/api/anuncio/visualizar/{id_anuncio}").hasAnyRole("OFERTANTE")
+                        .requestMatchers(HttpMethod.GET, "/api/anuncio/visualizar/{id_anuncio}").hasAnyRole("OFERTANTE", "INTERESSADO")
 
                         // Match
                         .requestMatchers(HttpMethod.GET, "/api/match/buscarCandidatos").hasAnyRole("INTERESSADO")

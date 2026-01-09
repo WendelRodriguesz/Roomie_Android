@@ -57,4 +57,7 @@ public class UsuarioJpaEntity {
 
     @Column(length = 500)
     private String foto_de_perfil;
+
+    @Column(name = "firebase_token", columnDefinition = "TEXT")
+    private String firebase_token;
 }

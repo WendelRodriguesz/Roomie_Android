@@ -29,8 +29,8 @@ import coil.compose.AsyncImage
 
 @Composable
 fun ImagePickerBox(
-    imageUri: Uri?,               // a imagem selecionada
-    onClick: () -> Unit,          // ação ao clicar no box
+    imageUri: Uri?,               
+    onClick: () -> Unit,          
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -44,7 +44,6 @@ fun ImagePickerBox(
     ) {
 
         if (imageUri == null) {
-            // Layout padrão (ícone + texto)
             Column(horizontalAlignment = Alignment.CenterHorizontally) {
 
                 Icon(
@@ -65,7 +64,6 @@ fun ImagePickerBox(
             }
 
         } else {
-            // Preview usando Coil para carregar o Uri selecionado
             AsyncImage(
                 model = imageUri,
                 contentDescription = null,

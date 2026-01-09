@@ -33,30 +33,37 @@ import com.roomie.app.feature.profile.model.Budget
 import com.roomie.app.feature.profile.model.CleaningHabit
 import com.roomie.app.feature.profile.model.PartyFrequency
 import com.roomie.app.feature.profile.model.SleepRoutine
+import com.roomie.app.core.model.ProfileRole
+import com.roomie.app.feature.edit_profile.ui.components.PreferenceSwitch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun PreferenceRegistration(
+    role: ProfileRole,
     initialPreferences: UserPreferences = UserPreferences(),
     isSaving: Boolean = false,
     onSaveClick: (UserPreferences) -> Unit = {},
     onSkipClick: () -> Unit = {},
+    skipText: String = "Pular",
 ) {
-    var partyFrequency by remember { mutableStateOf(initialPreferences.partyFrequency) }
-    var cleaningHabit by remember { mutableStateOf(initialPreferences.cleaningHabit) }
-    var acceptsPets by remember { mutableStateOf(initialPreferences.acceptsPets) }
-    var sleepRoutine by remember { mutableStateOf(initialPreferences.sleepRoutine) }
-    var minBudget by remember { mutableIntStateOf(initialPreferences.budget.minBudget ?: 800) }
-    var maxBudget by remember { mutableIntStateOf(initialPreferences.budget.maxBudget ?: 1200) }
-    var acceptsRoomSharing by remember { mutableStateOf(initialPreferences.acceptsRoomSharing) }
+    var partyFrequency by remember(initialPreferences) { mutableStateOf(initialPreferences.partyFrequency) }
+    var cleaningHabit by remember(initialPreferences) { mutableStateOf(initialPreferences.cleaningHabit) }
+    var acceptsPets by remember(initialPreferences) { mutableStateOf(initialPreferences.acceptsPets) }
+    var sleepRoutine by remember(initialPreferences) { mutableStateOf(initialPreferences.sleepRoutine) }
+    var acceptsRoomSharing by remember(initialPreferences) { mutableStateOf(initialPreferences.acceptsRoomSharing) }
+
+    var minBudget by remember(initialPreferences) { mutableIntStateOf(initialPreferences.budget.minBudget ?: 800) }
+    var maxBudget by remember(initialPreferences) { mutableIntStateOf(initialPreferences.budget.maxBudget ?: 1200) }
+
+    var isSmoker by remember(initialPreferences) { mutableStateOf(initialPreferences.isSmoker) }
+    var drinksAlcohol by remember(initialPreferences) { mutableStateOf(initialPreferences.drinksAlcohol) }
 
     Scaffold(
         topBar = {
             TopAppBar(
                 title = { Text("Preferências") },
                 actions = {
-                    TextButton(onClick = onSkipClick) { Text("Pular") }
-
+                    TextButton(onClick = onSkipClick) { Text(skipText) }
                     Button(
                         modifier = Modifier.padding(end = 8.dp),
                         enabled = !isSaving,
@@ -69,16 +76,18 @@ fun PreferenceRegistration(
                                 finalMax = tmp
                             }
 
-                            onSaveClick(
-                                UserPreferences(
-                                    partyFrequency = partyFrequency,
-                                    cleaningHabit = cleaningHabit,
-                                    acceptsPets = acceptsPets,
-                                    sleepRoutine = sleepRoutine,
-                                    budget = Budget(finalMin, finalMax),
-                                    acceptsRoomSharing = acceptsRoomSharing,
-                                )
+                            val prefs = UserPreferences(
+                                partyFrequency = partyFrequency,
+                                cleaningHabit = cleaningHabit,
+                                acceptsPets = acceptsPets,
+                                sleepRoutine = sleepRoutine,
+                                budget = Budget(finalMin, finalMax),
+                                acceptsRoomSharing = acceptsRoomSharing,
+                                isSmoker = isSmoker,
+                                drinksAlcohol = drinksAlcohol,
                             )
+
+                            onSaveClick(prefs)
                         }
                     ) { Text(if (isSaving) "Salvando..." else "Salvar") }
                 },
@@ -87,10 +96,10 @@ fun PreferenceRegistration(
                 )
             )
         }
-    ) { innerPadding ->
+    ) { inner ->
         Column(
             modifier = Modifier
-                .padding(innerPadding)
+                .padding(inner)
                 .fillMaxSize()
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 16.dp)
@@ -114,13 +123,28 @@ fun PreferenceRegistration(
                 onCleaningHabitChange = { cleaningHabit = it },
             )
 
+            // Só Interessado
+            if (role == ProfileRole.SEEKER) {
+                SectionCard(title = "Hábitos") {
+                    PreferenceSwitch(
+                        label = "Fumante",
+                        checked = isSmoker,
+                        onCheckedChange = { isSmoker = it }
+                    )
+                    PreferenceSwitch(
+                        label = "Consome bebidas alcoólicas",
+                        checked = drinksAlcohol,
+                        onCheckedChange = { drinksAlcohol = it }
+                    )
+                }
 
-            BudgetCard(
-                minBudget = minBudget,
-                onMinBudgetChange = { minBudget = it },
-                maxBudget = maxBudget,
-                onMaxBudgetChange = { maxBudget = it }
-            )
+                BudgetCard(
+                    minBudget = minBudget,
+                    onMinBudgetChange = { minBudget = it },
+                    maxBudget = maxBudget,
+                    onMaxBudgetChange = { maxBudget = it }
+                )
+            }
         }
     }
 }
@@ -129,6 +153,6 @@ fun PreferenceRegistration(
 @Composable
 private fun PreferenceRegistrationPreview() {
     Roomie_AndroidTheme(dynamicColor = false) {
-        PreferenceRegistration()
+        PreferenceRegistration(ProfileRole.SEEKER)
     }
 }

@@ -21,9 +21,10 @@ public class UsuarioInteressado extends Usuario {
                                        Genero genero,
                                        Role role,
                                        String foto_de_perfil,
-                                       InteressesInteressados interesses){
+                                       InteressesInteressados interesses,
+                                       String firebase_token){
         this.interesses = interesses;
-        super(id, nome, email, senha, data_de_nascimento, idade, cidade, ocupacao, bio, genero, role, foto_de_perfil);
+        super(id, nome, email, senha, data_de_nascimento, idade, cidade, ocupacao, bio, genero, role, foto_de_perfil, firebase_token);
     }
 
     public InteressesInteressados getInteresses() {

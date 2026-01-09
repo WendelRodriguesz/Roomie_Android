@@ -39,6 +39,7 @@ enum class GenderOption(
 data class Budget(val minBudget: Int?, val maxBudget: Int?)
 data class LifestylePreferences(
     val acceptsPets: Boolean,
+    val isDrinker: Boolean,
     val isSmoker: Boolean,
     val partyFrequency: PartyFrequency,
     val isQuiet: Boolean,

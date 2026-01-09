@@ -1,6 +1,8 @@
 package com.roomie.app.feature.login.data
 
+import android.content.Context
 import com.roomie.app.core.data.api.RetrofitClient
+import com.roomie.app.core.data.firebase.FirebaseTokenManager
 import com.roomie.app.core.data.local.AuthDataStore
 import com.roomie.app.core.data.model.UserSession
 import com.roomie.app.feature.login.data.model.LoginRequest
@@ -9,9 +11,13 @@ import com.roomie.app.feature.login.data.model.RefreshRequest
 import kotlinx.coroutines.flow.firstOrNull
 
 class AuthRepository(
-    private val authDataStore: AuthDataStore
+    private val authDataStore: AuthDataStore,
+    private val context: Context? = null
 ) {
     private val authApiService = RetrofitClient.authApiService
+    private val firebaseTokenManager: FirebaseTokenManager? = context?.let { 
+        FirebaseTokenManager(it, authDataStore)
+    }
 
     suspend fun login(email: String, senha: String): Result<LoginResponse> {
         return try {
@@ -29,6 +35,9 @@ class AuthRepository(
                     role = loginResponse.role
                 )
                 authDataStore.saveUserSession(session)
+                
+                // Enviar token do Firebase para o backend
+                firebaseTokenManager?.sendTokenToBackendSuspend()
                 
                 Result.success(loginResponse)
             } else {
@@ -62,6 +71,9 @@ class AuthRepository(
                     )
 
                     authDataStore.saveUserSession(updatedSession)
+
+                    // Enviar token do Firebase para o backend após refresh
+                    firebaseTokenManager?.sendTokenToBackendSuspend()
 
                     Result.success(updatedSession)
                 } else {
