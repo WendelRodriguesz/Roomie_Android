@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.roomie.app.core.data.api.RetrofitClient
 import com.roomie.app.core.data.session.AuthSession
-import com.roomie.app.core.model.profileRoleFromApi
 import com.roomie.app.core.model.ProfileRole
+import com.roomie.app.core.model.profileRoleFromApi
 import com.roomie.app.feature.login.data.AuthRepository
 import com.roomie.app.feature.profile.data.ProfileRepository
 import kotlinx.coroutines.flow.MutableStateFlow

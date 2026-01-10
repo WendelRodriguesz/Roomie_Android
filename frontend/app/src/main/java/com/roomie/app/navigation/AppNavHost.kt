@@ -1,11 +1,16 @@
 package com.roomie.app.navigation
 
+import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Surface
-import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
@@ -13,12 +18,16 @@ import androidx.navigation.compose.composable
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
+import com.roomie.app.core.data.local.AuthDataStore
 import com.roomie.app.core.data.session.AuthSession
+import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.core.ui.components.BottomBar
 import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
+import com.roomie.app.feature.chat.conversation.ui.ChatConversationRoute
 import com.roomie.app.feature.chat.ui.ChatRoute
 import com.roomie.app.feature.chat.ui.ChatUserDetailRoute
+import com.roomie.app.feature.edit_profile.ui.EditPreferencesRoute
 import com.roomie.app.feature.edit_profile.ui.EditProfileRoute
 import com.roomie.app.feature.home.ui.HomeRoute
 import com.roomie.app.feature.home.ui.ListingDetailRoute
@@ -26,22 +35,17 @@ import com.roomie.app.feature.login.ui.LoginScreen
 import com.roomie.app.feature.match.ui.MatchRoute
 import com.roomie.app.feature.notifications.ui.NotificationsScreen
 import com.roomie.app.feature.preference_registration.ui.PreferenceIntroScreen
-import com.roomie.app.core.model.ProfileRole
+import com.roomie.app.feature.preference_registration.ui.PreferenceRegistrationRoute
 import com.roomie.app.feature.profile.ui.ProfileScreenRoute
-import com.roomie.app.feature.register.ui.RegisterRoute
 import com.roomie.app.feature.register.ui.RegisterRoleScreen
+import com.roomie.app.feature.register.ui.RegisterRoute
 import com.roomie.app.feature.vaga.ui.CreateListingRoute
 import com.roomie.app.feature.vaga.ui.MyListingsScreen
 import com.roomie.app.feature.welcome_screen.ui.WelcomeScreen
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.platform.LocalContext
-import com.roomie.app.core.data.local.AuthDataStore
 import kotlinx.coroutines.launch
-import com.roomie.app.feature.edit_profile.ui.EditPreferencesRoute
-import com.roomie.app.feature.preference_registration.ui.PreferenceRegistrationRoute
+import java.net.URLDecoder
+import java.net.URLEncoder
+import java.nio.charset.StandardCharsets
 
 @Composable
 fun AppNavHost(startDestination: String) {
@@ -124,14 +128,52 @@ fun AppNavHost(startDestination: String) {
             }
             composable(Routes.CHAT) {
                 ChatRoute(
-                    onChatClick = { chatId ->
-                        // TODO: Implementar navegação para o chat em si quando implementado
+                    onChatClick = { chatId, otherUserId, otherUserName, otherUserPhotoUrl ->
+                        // Codificar o nome e foto para URL
+                        val encodedName = URLEncoder.encode(otherUserName, StandardCharsets.UTF_8.toString())
+                        val encodedPhoto = if (otherUserPhotoUrl != null) {
+                            URLEncoder.encode(otherUserPhotoUrl, StandardCharsets.UTF_8.toString())
+                        } else {
+                            ""
+                        }
+                        navController.navigate("chat_conversation/$chatId/$otherUserId/$encodedName/$encodedPhoto")
                     },
                     onViewUserDetails = { userId, isOfertante ->
                         val isOfertanteStr = if (isOfertante) "true" else "false"
                         navController.navigate("chat_user_detail/$userId/$isOfertanteStr")
                     }
                 )
+            }
+            composable(
+                route = Routes.CHAT_CONVERSATION,
+                arguments = listOf(
+                    navArgument("chatId") { type = NavType.LongType },
+                    navArgument("otherUserId") { type = NavType.LongType },
+                    navArgument("otherUserName") { type = NavType.StringType },
+                    navArgument("otherUserPhotoUrl") { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                val chatId = backStackEntry.arguments?.getLong("chatId") ?: 0L
+                val otherUserId = backStackEntry.arguments?.getLong("otherUserId") ?: 0L
+                val otherUserName = URLDecoder.decode(
+                    backStackEntry.arguments?.getString("otherUserName") ?: "",
+                    StandardCharsets.UTF_8.toString()
+                )
+                val otherUserPhotoUrl = backStackEntry.arguments?.getString("otherUserPhotoUrl")
+                    ?.takeIf { it.isNotBlank() }
+                    ?.let { URLDecoder.decode(it, StandardCharsets.UTF_8.toString()) }
+
+                if (chatId == 0L || otherUserId == 0L || otherUserName.isEmpty()) {
+                    navController.popBackStack()
+                } else {
+                    ChatConversationRoute(
+                        chatId = chatId,
+                        otherUserId = otherUserId,
+                        otherUserName = otherUserName,
+                        otherUserPhotoUrl = otherUserPhotoUrl,
+                        onNavigateBack = { navController.popBackStack() }
+                    )
+                }
             }
             composable(
                 route = Routes.CHAT_USER_DETAIL,

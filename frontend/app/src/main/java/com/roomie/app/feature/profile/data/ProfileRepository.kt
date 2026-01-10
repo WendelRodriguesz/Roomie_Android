@@ -6,15 +6,11 @@ import com.roomie.app.feature.preference_registration.model.UserPreferences
 import com.roomie.app.feature.profile.data.remote.dto.InteressesInteressadoRequest
 import com.roomie.app.feature.profile.data.remote.dto.InteressesOfertanteRequest
 import com.roomie.app.feature.profile.model.UserProfile
-import com.roomie.app.feature.profile.model.*
-
-import com.roomie.app.feature.profile.data.remote.dto.UsuarioInteressadoDto
-import com.roomie.app.feature.profile.data.remote.dto.UsuarioOfertanteDto
+import com.roomie.app.feature.profile.model.toBasicUpdateRequest
+import com.roomie.app.feature.profile.model.toUserProfile
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
 import okhttp3.MultipartBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import com.roomie.app.feature.profile.model.toUserProfile
-import com.roomie.app.feature.profile.model.toBasicUpdateRequest
 
 class ProfileRepository(
     private val api: ProfileApiService,

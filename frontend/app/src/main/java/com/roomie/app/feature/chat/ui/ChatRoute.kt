@@ -4,15 +4,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.lifecycle.viewmodel.compose.viewModel
-import com.roomie.app.feature.chat.presentation.ChatEvent
-import com.roomie.app.feature.chat.presentation.ChatViewModel
-import com.roomie.app.feature.chat.presentation.ChatUserDetailEvent
 import com.roomie.app.feature.chat.presentation.ChatUserDetailViewModel
 import com.roomie.app.feature.chat.presentation.ChatUserDetailViewModelFactory
+import com.roomie.app.feature.chat.presentation.ChatViewModel
 
 @Composable
 fun ChatRoute(
-    onChatClick: (Long) -> Unit = {},
+    onChatClick: (Long, Long, String, String?) -> Unit = { _, _, _, _ -> },
     onViewUserDetails: (Long, Boolean) -> Unit = { _, _ -> },
     viewModel: ChatViewModel = viewModel()
 ) {
@@ -21,7 +19,14 @@ fun ChatRoute(
     ChatScreen(
         state = state,
         onEvent = viewModel::onEvent,
-        onChatClick = onChatClick,
+        onChatClick = { chatItem ->
+            onChatClick(
+                chatItem.chatId,
+                chatItem.otherUserId,
+                chatItem.otherUserName,
+                chatItem.otherUserPhotoUrl
+            )
+        },
         onViewUserDetails = onViewUserDetails
     )
 }

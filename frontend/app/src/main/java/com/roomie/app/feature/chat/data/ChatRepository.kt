@@ -5,8 +5,9 @@ import com.roomie.app.core.data.api.RetrofitClient
 import com.roomie.app.core.data.session.AuthSession
 import com.roomie.app.feature.chat.data.remote.dto.ChatDto
 import com.roomie.app.feature.chat.model.AnuncioInfo
-import com.roomie.app.feature.chat.model.ChatUserDetail
 import com.roomie.app.feature.chat.model.ChatListItem
+import com.roomie.app.feature.chat.model.ChatUserDetail
+import com.roomie.app.feature.chat.model.Mensagem
 import com.roomie.app.feature.profile.data.remote.dto.UsuarioInteressadoDto
 import com.roomie.app.feature.profile.data.remote.dto.UsuarioOfertanteDto
 
@@ -82,6 +83,42 @@ class ChatRepository(
         }
     }
 
+    suspend fun visualizarMensagens(idChat: Long): Result<List<Mensagem>> {
+        return try {
+            val token = AuthSession.token
+            val userId = AuthSession.userId
+            if (token.isNullOrBlank() || userId == null) {
+                Result.failure(Exception("Token de autenticação não encontrado. Faça login novamente."))
+            } else {
+                val authHeader = "Bearer $token"
+                val response = api.visualizarMensagens(idChat, authHeader)
+
+                if (response.isSuccessful && response.body() != null) {
+                    val mensagensDto = response.body()!!
+                    val mensagens = mensagensDto.map { dto ->
+                        Mensagem(
+                            id = dto.id,
+                            idChat = dto.id_chat,
+                            idRemetente = dto.id_remetente,
+                            idDestinatario = dto.id_destinatario,
+                            conteudo = dto.conteudo,
+                            enviadaEm = dto.enviada_em,
+                            isMine = dto.id_remetente == userId
+                        )
+                    }
+                    Result.success(mensagens)
+                } else {
+                    val errorCode = response.code()
+                    val errorMessage = response.errorBody()?.string()
+                        ?: "Erro ao buscar mensagens (código: $errorCode). Tente novamente."
+                    Result.failure(Exception(errorMessage))
+                }
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+
     suspend fun carregarListaChats(userId: Long): Result<List<ChatListItem>> {
         return try {
             val chatsResult = visualizarMeusChats(userId)
@@ -94,7 +131,6 @@ class ChatRepository(
                         val otherUserId = if (isOfertante) chat.id_interessado else chat.id_ofertante
                         
                         if (isOfertante) {
-                            // Usuário logado é ofertante, busca interessado
                             getUsuarioInteressado(otherUserId).fold(
                                 onSuccess = { userDto ->
                                     val chatItem = ChatListItem(
@@ -112,12 +148,10 @@ class ChatRepository(
                                     )
                                     chatItems.add(chatItem)
                                 },
-                                onFailure = { 
-                                    // Ignora erros individuais, continua com os outros chats
+                                onFailure = {
                                 }
                             )
                         } else {
-                            // Usuário logado é interessado, busca ofertante
                             getUsuarioOfertante(otherUserId).fold(
                                 onSuccess = { userDto ->
                                     val chatItem = ChatListItem(
@@ -135,8 +169,7 @@ class ChatRepository(
                                     )
                                     chatItems.add(chatItem)
                                 },
-                                onFailure = { 
-                                    // Ignora erros individuais, continua com os outros chats
+                                onFailure = {
                                 }
                             )
                         }

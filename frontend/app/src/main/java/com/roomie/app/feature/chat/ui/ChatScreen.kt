@@ -1,26 +1,23 @@
 package com.roomie.app.feature.chat.ui
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.Button
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
-import androidx.compose.material3.TopAppBar
 import androidx.compose.material3.TopAppBarDefaults
-import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -36,7 +33,7 @@ import com.roomie.app.feature.chat.ui.components.ChatListItemCard
 fun ChatScreen(
     state: ChatState,
     onEvent: (ChatEvent) -> Unit,
-    onChatClick: (Long) -> Unit = {},
+    onChatClick: (com.roomie.app.feature.chat.model.ChatListItem) -> Unit = {},
     onViewUserDetails: (Long, Boolean) -> Unit = { _, _ -> },
     modifier: Modifier = Modifier
 ) {
@@ -126,13 +123,8 @@ fun ChatScreen(
                     ) { chatItem ->
                         ChatListItemCard(
                             chatItem = chatItem,
-                            onItemClick = { onChatClick(chatItem.chatId) },
+                            onItemClick = { onChatClick(chatItem) },
                             onViewDetails = {
-                                // Quando clicamos em ver detalhes, passamos o tipo do OUTRO usuário
-                                // Se o usuário logado é ofertante (chatItem.isOfertante = true),
-                                // então o outro é interessado (false)
-                                // Se o usuário logado é interessado (chatItem.isOfertante = false),
-                                // então o outro é ofertante (true)
                                 val otherUserIsOfertante = !chatItem.isOfertante
                                 onViewUserDetails(chatItem.otherUserId, otherUserIsOfertante)
                             }

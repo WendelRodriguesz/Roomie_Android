@@ -1,6 +1,7 @@
 package com.roomie.app.core.data.api
 
 import com.roomie.app.feature.chat.data.remote.dto.ChatDto
+import com.roomie.app.feature.chat.data.remote.dto.MensagemDto
 import com.roomie.app.feature.profile.data.remote.dto.UsuarioInteressadoDto
 import com.roomie.app.feature.profile.data.remote.dto.UsuarioOfertanteDto
 import retrofit2.Response
@@ -14,6 +15,12 @@ interface ChatApiService {
         @Path("id_usuario") idUsuario: Long,
         @Header("Authorization") authHeader: String
     ): Response<List<ChatDto>>
+    
+    @GET("api/mensagem/visualizarMensagens/{id_chat}")
+    suspend fun visualizarMensagens(
+        @Path("id_chat") idChat: Long,
+        @Header("Authorization") authHeader: String
+    ): Response<List<MensagemDto>>
     
     @GET("api/usuarioInteressado/visualizar/{id_interessado}")
     suspend fun getUsuarioInteressado(
