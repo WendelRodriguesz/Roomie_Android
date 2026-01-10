@@ -79,27 +79,31 @@ class StompWebSocketManager private constructor() {
                 ?.subscribeOn(Schedulers.io())
                 ?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe { lifecycleEvent ->
+                    Log.d("StompWebSocket", "Lifecycle event: ${lifecycleEvent.type}")
                     when (lifecycleEvent.type) {
                         LifecycleEvent.Type.OPENED -> {
                             isConnected = true
                             isConnecting = false
                             _connectionState.value = ConnectionState.Connected
-                            Log.d("StompWebSocket", "Connected to WebSocket - ready for subscriptions")
+                            Log.d("StompWebSocket", "WebSocket OPENED - ready for subscriptions")
                         }
                         LifecycleEvent.Type.CLOSED -> {
                             isConnected = false
                             isConnecting = false
                             _connectionState.value = ConnectionState.Disconnected
-                            Log.d("StompWebSocket", "Disconnected from WebSocket")
+                            Log.d("StompWebSocket", "WebSocket CLOSED")
                         }
                         LifecycleEvent.Type.ERROR -> {
                             isConnected = false
                             isConnecting = false
                             val errorMsg = lifecycleEvent.exception?.message ?: "Unknown error"
                             _connectionState.value = ConnectionState.Error(errorMsg)
-                            Log.e("StompWebSocket", "WebSocket error: ${lifecycleEvent.exception}")
+                            Log.e("StompWebSocket", "WebSocket ERROR: ${lifecycleEvent.exception}")
+                            lifecycleEvent.exception?.printStackTrace()
                         }
-                        else -> {}
+                        else -> {
+                            Log.d("StompWebSocket", "Other lifecycle event: ${lifecycleEvent.type}")
+                        }
                     }
                 }
 
@@ -115,11 +119,13 @@ class StompWebSocketManager private constructor() {
     }
 
     fun subscribeToChat(chatId: Long, onMessageReceived: (Mensagem) -> Unit): io.reactivex.disposables.Disposable? {
+        Log.d("StompWebSocket", "subscribeToChat called for chatId: $chatId, isConnected: $isConnected, stompClient: ${stompClient != null}")
+
         if (!isConnected || stompClient == null) {
-            Log.e("StompWebSocket", "Cannot subscribe: not connected")
+            Log.e("StompWebSocket", "Cannot subscribe: isConnected=$isConnected, stompClient=${stompClient != null}")
             return null
         }
-        
+
         activeSubscriptions[chatId]?.let { oldSub ->
             try {
                 if (!oldSub.isDisposed) {
@@ -130,38 +136,55 @@ class StompWebSocketManager private constructor() {
             }
             activeSubscriptions.remove(chatId)
         }
-        
-        val destination = "/topic/chat/$chatId"
-        
+
+        val destination = "/queue/chat/$chatId"
+
+        Log.d("StompWebSocket", "Attempting to subscribe to destination: $destination")
+
         return try {
-            val topicSub = stompClient?.topic(destination)
+            val topicObservable = stompClient?.topic(destination)
+            Log.d("StompWebSocket", "Topic observable created: ${topicObservable != null}")
+
+            val topicSub = topicObservable
                 ?.subscribeOn(Schedulers.io())
                 ?.observeOn(AndroidSchedulers.mainThread())
                 ?.subscribe(
                     { stompMessage: StompMessage ->
                         try {
                             val payload = stompMessage.payload
-                            Log.d("StompWebSocket", "Received message on $destination: $payload")
-                            val mensagemDto = gson.fromJson(payload, MensagemDto::class.java)
+                            Log.d("StompWebSocket", "Raw message received on $destination: $payload")
+                            
+                            val mensagemCreateDto = gson.fromJson(payload, MensagemCreateDto::class.java)
+                            Log.d("StompWebSocket", "Parsed DTO: id_chat=${mensagemCreateDto.id_chat}, id_remetente=${mensagemCreateDto.id_remetente}, conteudo=${mensagemCreateDto.conteudo}")
                             
                             val userId = AuthSession.userId
-                            val isMine = userId != null && mensagemDto.id_remetente == userId
+                            val isMine = userId != null && mensagemCreateDto.id_remetente == userId.toInt()
+                            
+                            val timestampAtualUtc = java.time.Instant.now()
+                            val utcDateTime = java.time.LocalDateTime.ofInstant(
+                                timestampAtualUtc,
+                                java.time.ZoneId.of("UTC")
+                            )
+                            val timestampFormatado = utcDateTime.format(
+                                java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
+                            )
                             
                             val mensagem = Mensagem(
-                                id = mensagemDto.id,
-                                idChat = mensagemDto.id_chat,
-                                idRemetente = mensagemDto.id_remetente,
-                                idDestinatario = mensagemDto.id_destinatario,
-                                conteudo = mensagemDto.conteudo,
-                                enviadaEm = mensagemDto.enviada_em,
+                                id = timestampAtualUtc.toEpochMilli(),
+                                idChat = mensagemCreateDto.id_chat.toLong(),
+                                idRemetente = mensagemCreateDto.id_remetente.toLong(),
+                                idDestinatario = mensagemCreateDto.id_destinatario.toLong(),
+                                conteudo = mensagemCreateDto.conteudo,
+                                enviadaEm = timestampFormatado,
                                 isMine = isMine
                             )
                             
-                            Log.d("StompWebSocket", "Calling onMessageReceived: id=${mensagem.id}, remetente=${mensagem.idRemetente}, userId=$userId, isMine=${mensagem.isMine}, conteudo=${mensagem.conteudo.take(50)}")
+                            Log.d("StompWebSocket", "Created Mensagem: idChat=${mensagem.idChat}, remetente=${mensagem.idRemetente}, userId=$userId, isMine=${mensagem.isMine}")
                             onMessageReceived(mensagem)
                         } catch (e: JsonSyntaxException) {
                             Log.e("StompWebSocket", "Error parsing message JSON: ${e.message}", e)
                             Log.e("StompWebSocket", "Payload was: ${stompMessage.payload}")
+                            e.printStackTrace()
                         } catch (e: Exception) {
                             Log.e("StompWebSocket", "Error processing message: ${e.message}", e)
                             e.printStackTrace()
@@ -173,22 +196,22 @@ class StompWebSocketManager private constructor() {
                     }
                 )
 
-            topicSub?.let { 
+            topicSub?.let {
                 activeSubscriptions[chatId] = it
                 disposables.add(it)
-                Log.d("StompWebSocket", "Successfully subscribed to $destination")
+                Log.d("StompWebSocket", "Successfully subscribed to $destination, subscription active: ${!it.isDisposed}, activeSubscriptions size: ${activeSubscriptions.size}")
             } ?: run {
-                Log.e("StompWebSocket", "Failed to create subscription to $destination")
+                Log.e("StompWebSocket", "Failed to create subscription to $destination - topicSub is null")
             }
-            
+
             topicSub
         } catch (e: Exception) {
-            Log.e("StompWebSocket", "Error subscribing to $destination: ${e.message}", e)
+            Log.e("StompWebSocket", "Exception subscribing to $destination: ${e.message}", e)
             e.printStackTrace()
             null
         }
     }
-    
+
     fun unsubscribeFromChat(chatId: Long) {
         activeSubscriptions[chatId]?.let { sub ->
             try {
@@ -250,16 +273,16 @@ class StompWebSocketManager private constructor() {
                 }
             }
             activeSubscriptions.clear()
-            
+
             disposables.clear()
             isConnected = false
-            
+
             try {
                 stompClient?.disconnect()
             } catch (e: Exception) {
                 Log.w("StompWebSocket", "Error during disconnect: ${e.message}")
             }
-            
+
             stompClient = null
             _connectionState.value = ConnectionState.Disconnected
             Log.d("StompWebSocket", "Disconnected from WebSocket")
@@ -267,7 +290,7 @@ class StompWebSocketManager private constructor() {
             Log.e("StompWebSocket", "Error disconnecting: ${e.message}", e)
         }
     }
-    
+
     fun isConnected(): Boolean = isConnected && stompClient != null
 
     sealed class ConnectionState {
@@ -277,4 +300,3 @@ class StompWebSocketManager private constructor() {
         data class Error(val message: String) : ConnectionState()
     }
 }
-
