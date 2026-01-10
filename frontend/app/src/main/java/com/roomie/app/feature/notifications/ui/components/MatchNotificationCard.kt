@@ -40,7 +40,7 @@ fun MatchNotificationCard(
     
     val density = LocalDensity.current
     var offsetX by remember { mutableStateOf(0f) }
-    val swipeThresholdPx = with(density) { 120.dp.toPx() } // Threshold de 120dp
+    val swipeThresholdPx = with(density) { 120.dp.toPx() }
     
     val alpha by animateFloatAsState(
         targetValue = if (abs(offsetX) > 20f) 0.7f else 1f,
@@ -51,7 +51,6 @@ fun MatchNotificationCard(
     Box(
         modifier = Modifier.fillMaxWidth()
     ) {
-        // Background indicativo de ação
         if (isPending && abs(offsetX) > 20f) {
             Box(
                 modifier = Modifier
@@ -114,7 +113,6 @@ fun MatchNotificationCard(
                     .animateContentSize(animationSpec = tween(300)),
                 verticalArrangement = Arrangement.spacedBy(12.dp)
             ) {
-                // Header - sempre visível
                 Row(
                     modifier = Modifier.fillMaxWidth(),
                     horizontalArrangement = Arrangement.SpaceBetween,
@@ -125,7 +123,6 @@ fun MatchNotificationCard(
                         horizontalArrangement = Arrangement.spacedBy(12.dp),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
-                        // Avatar
                         if (!interessado.fotoDePerfil.isNullOrBlank()) {
                             AsyncImage(
                                 model = interessado.fotoDePerfil,
@@ -182,14 +179,12 @@ fun MatchNotificationCard(
                     )
                 }
                 
-                // Conteúdo expandido
                 if (isExpanded) {
                     Divider()
                     
                     Column(
                         verticalArrangement = Arrangement.spacedBy(16.dp)
                     ) {
-                        // Informações básicas
                         InfoSection(
                             title = "Informações Pessoais",
                             items = listOf(
@@ -200,7 +195,6 @@ fun MatchNotificationCard(
                             )
                         )
                         
-                        // Bio
                         if (interessado.bio.isNotBlank()) {
                             Column {
                                 Text(
@@ -217,8 +211,6 @@ fun MatchNotificationCard(
                                 )
                             }
                         }
-                        
-                        // Interesses
                         InfoSection(
                             title = "Interesses e Preferências",
                             items = listOf(
@@ -238,7 +230,6 @@ fun MatchNotificationCard(
                     }
                 }
                 
-                // Botões de ação (apenas para PENDENTE)
                 if (isPending && isExpanded) {
                     Divider()
                     Row(

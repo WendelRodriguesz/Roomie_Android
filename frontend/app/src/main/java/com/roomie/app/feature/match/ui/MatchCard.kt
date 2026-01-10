@@ -58,7 +58,6 @@ fun MatchCard(
             val photoUrl = listing.photos.firstOrNull()
             val ctx = LocalContext.current
 
-            // Carregar imagem: prioridade para localPhoto (drawable), depois URL, depois placeholder
             when {
                 isPreview -> {
                     Image(
@@ -77,9 +76,7 @@ fun MatchCard(
                     )
                 }
                 !photoUrl.isNullOrBlank() -> {
-                    // Verificar se é URL (começa com http) ou nome de drawable
                     if (photoUrl.startsWith("http://") || photoUrl.startsWith("https://")) {
-                        // É uma URL - usar AsyncImage do Coil
                         AsyncImage(
                             model = photoUrl,
                             contentDescription = null,
@@ -89,7 +86,6 @@ fun MatchCard(
                             placeholder = painterResource(R.drawable.match1)
                         )
                     } else {
-                        // É um nome de drawable - tentar carregar como resource
                         val id = ctx.resources.getIdentifier(photoUrl, "drawable", ctx.packageName)
                         if (id != 0) {
                             Image(

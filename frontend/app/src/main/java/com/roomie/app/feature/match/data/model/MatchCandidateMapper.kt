@@ -7,25 +7,20 @@ fun MatchCandidate.toListingCard(): ListingCard {
     val anuncio = this.anuncio
     val totalRent = anuncio.valorAluguel + anuncio.valorContas
     
-    // Criar tags baseadas nos dados disponíveis
     val tags = mutableListOf<String>()
     
-    // Adicionar tipo de imóvel
     if (anuncio.tipoImovel.isNotBlank()) {
         tags.add(anuncio.tipoImovel.lowercase().replaceFirstChar { it.uppercase() })
     }
     
-    // Adicionar vagas disponíveis
     if (anuncio.vagasDisponiveis > 0) {
         tags.add("${anuncio.vagasDisponiveis} vaga${if (anuncio.vagasDisponiveis > 1) "s" else ""}")
     }
     
-    // Adicionar se aceita pets
     if (interesses.aceitaPets) {
         tags.add("Aceita pets")
     }
     
-    // Adicionar cômodos (limitando para não ficar muito longo)
     anuncio.comodos.take(3).forEach { comodo ->
         val comodoFormatado = comodo.lowercase()
             .replace("_", " ")
@@ -35,7 +30,6 @@ fun MatchCandidate.toListingCard(): ListingCard {
         }
     }
     
-    // Garantir que temos pelo menos algumas tags
     if (tags.isEmpty()) {
         tags.add("Disponível")
     }
@@ -59,8 +53,8 @@ fun MatchCandidate.toListingCard(): ListingCard {
         status = ListingStatus.ACTIVE,
         createdInMillis = System.currentTimeMillis(),
         rating = 0.0, // Não disponível na API
-        tags = tags.take(5), // Limitar a 5 tags
-        photos = anuncio.fotos ?: emptyList() // Garantir que não seja null
+        tags = tags.take(5), 
+        photos = anuncio.fotos ?: emptyList()
     )
 }
 

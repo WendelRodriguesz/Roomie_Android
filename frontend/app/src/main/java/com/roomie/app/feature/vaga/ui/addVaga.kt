@@ -108,7 +108,6 @@ fun CadastrarVagasScreen(navController: NavController){
                 horizontalArrangement = Arrangement.spacedBy(12.dp),
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // PRIMEIRA FOTO — IMAGE PICKER
                 ImagePickerBox(
                     imageUri = selectedImages.getOrNull(0),
                     onClick = {
@@ -119,7 +118,6 @@ fun CadastrarVagasScreen(navController: NavController){
                     modifier = Modifier.size(110.dp)
                 )
 
-                // MAIS DUAS FOTOS DO LADO
                 repeat(2) { index ->
                     val uri = selectedImages.getOrNull(index + 1)
 
@@ -147,7 +145,6 @@ fun CadastrarVagasScreen(navController: NavController){
         }
 
 
-        // ---------- ENDEREÇO ----------
         item {
             Text("Endereço aproximado", fontWeight = FontWeight.SemiBold)
             Spacer(Modifier.height(6.dp))
@@ -161,7 +158,6 @@ fun CadastrarVagasScreen(navController: NavController){
             Spacer(Modifier.height(20.dp))
         }
 
-        // ---------- VALORES ----------
         item {
             Text("Valores", fontWeight = FontWeight.SemiBold)
             Spacer(Modifier.height(6.dp))
@@ -183,7 +179,6 @@ fun CadastrarVagasScreen(navController: NavController){
             Spacer(Modifier.height(20.dp))
         }
 
-        // ---------- MORADORES ----------
         item {
             Text("Informações sobre a moradia", fontWeight = FontWeight.SemiBold)
             Spacer(Modifier.height(10.dp))
@@ -207,7 +202,6 @@ fun CadastrarVagasScreen(navController: NavController){
             Spacer(Modifier.height(20.dp))
         }
 
-        // ---------- REGRAS ----------
         item {
             Text("Regras da casa", fontWeight = FontWeight.SemiBold)
             Spacer(Modifier.height(10.dp))
@@ -301,7 +295,6 @@ fun CadastrarVagasScreen(navController: NavController){
             }
         }
 
-        // ---------- PETS ----------
         item {
             Text("Aceitação de pets", fontWeight = FontWeight.SemiBold)
             Spacer(Modifier.height(10.dp))
@@ -315,7 +308,6 @@ fun CadastrarVagasScreen(navController: NavController){
             Spacer(Modifier.height(20.dp))
         }
 
-        // ---------- DESCRIÇÃO ----------
         item {
             Text("Descrição da vaga", fontWeight = FontWeight.SemiBold)
             Spacer(Modifier.height(6.dp))
@@ -329,7 +321,6 @@ fun CadastrarVagasScreen(navController: NavController){
             Spacer(Modifier.height(20.dp))
         }
 
-        // ---------- TÍTULO ----------
         item {
             Text("Título da vaga", fontWeight = FontWeight.SemiBold)
             Spacer(Modifier.height(6.dp))
@@ -343,7 +334,6 @@ fun CadastrarVagasScreen(navController: NavController){
             Spacer(Modifier.height(30.dp))
         }
 
-        // ---------- BOTÃO ----------
         item {
             GradientButton(
                 text = "Iniciar",
@@ -352,7 +342,6 @@ fun CadastrarVagasScreen(navController: NavController){
                     .fillMaxWidth()
                     .height(52.dp),
                 onClick = {
-                    // TODO: enviar dados (campos + selectedImages) para o backend
                 }
             )
 

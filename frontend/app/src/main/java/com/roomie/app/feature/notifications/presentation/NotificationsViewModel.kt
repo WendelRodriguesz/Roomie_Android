@@ -93,7 +93,6 @@ class NotificationsViewModel(
             val matchIndex = currentState.matches.indexOfFirst { it.id == matchId }
             if (matchIndex == -1) return@launch
 
-            // Otimistic update
             val updatedMatches = currentState.matches.toMutableList()
             updatedMatches[matchIndex] = updatedMatches[matchIndex].copy(status = "ACEITO")
             _state.value = currentState.copy(matches = updatedMatches)
@@ -101,11 +100,9 @@ class NotificationsViewModel(
             val result = repository.aceitarMatch(matchId)
             result.fold(
                 onSuccess = {
-                    // Apenas recarregue a lista para garantir sincronização
                     loadInitialData()
                 },
                 onFailure = { exception ->
-                    // Reverter otimistic update
                     _state.value = currentState.copy(
                         error = exception.message ?: "Erro ao aceitar match"
                     )
@@ -121,7 +118,6 @@ class NotificationsViewModel(
             val matchIndex = currentState.matches.indexOfFirst { it.id == matchId }
             if (matchIndex == -1) return@launch
 
-            // Otimistic update
             val updatedMatches = currentState.matches.toMutableList()
             updatedMatches[matchIndex] = updatedMatches[matchIndex].copy(status = "RECUSADO")
             _state.value = currentState.copy(matches = updatedMatches)
@@ -147,7 +143,6 @@ class NotificationsViewModel(
                 viewModelScope.launch {
                     val result = repository.aceitarMatch(e.matchId)
                     if (result.isSuccess) {
-                        // Atualize a lista de matches, por exemplo, removendo ou mudando status
                         loadInitialData()
                     } else {
                         _state.value = _state.value.copy(error = result.exceptionOrNull()?.message)
