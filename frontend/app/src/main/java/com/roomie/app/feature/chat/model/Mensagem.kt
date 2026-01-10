@@ -6,6 +6,6 @@ data class Mensagem(
     val idRemetente: Long,
     val idDestinatario: Long,
     val conteudo: String,
-    val enviadaEm: String,
+    var enviadaEm: String,
     val isMine: Boolean
 )

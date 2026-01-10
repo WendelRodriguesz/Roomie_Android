@@ -138,7 +138,10 @@ class StompWebSocketManager private constructor() {
         }
         
         val destination = "/queue/chat/$chatId"
+<<<<<<< Updated upstream
         Log.d("StompWebSocket", "Attempting to subscribe to destination: $destination")
+=======
+>>>>>>> Stashed changes
         
         return try {
             val topicObservable = stompClient?.topic(destination)
@@ -151,29 +154,55 @@ class StompWebSocketManager private constructor() {
                     { stompMessage: StompMessage ->
                         try {
                             val payload = stompMessage.payload
+<<<<<<< Updated upstream
                             Log.d("StompWebSocket", "Raw message received on $destination: $payload")
                             
                             val mensagemCreateDto = gson.fromJson(payload, MensagemCreateDto::class.java)
                             Log.d("StompWebSocket", "Parsed DTO: id_chat=${mensagemCreateDto.id_chat}, id_remetente=${mensagemCreateDto.id_remetente}, conteudo=${mensagemCreateDto.conteudo}")
+=======
+                            Log.d("StompWebSocket", "Received message on $destination: $payload")
+                            val mensagemCreateDto = gson.fromJson(payload, MensagemCreateDto::class.java)
+>>>>>>> Stashed changes
                             
                             val userId = AuthSession.userId
                             val isMine = userId != null && mensagemCreateDto.id_remetente == userId.toInt()
                             
+<<<<<<< Updated upstream
                             val timestampAtual = java.time.LocalDateTime.now().format(
+=======
+                            val timestampAtualUtc = java.time.Instant.now()
+                            val utcDateTime = java.time.LocalDateTime.ofInstant(
+                                timestampAtualUtc,
+                                java.time.ZoneId.of("UTC")
+                            )
+                            val timestampFormatado = utcDateTime.format(
+>>>>>>> Stashed changes
                                 java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
                             )
                             
                             val mensagem = Mensagem(
+<<<<<<< Updated upstream
                                 id = System.currentTimeMillis(),
+=======
+                                id = timestampAtualUtc.toEpochMilli(),
+>>>>>>> Stashed changes
                                 idChat = mensagemCreateDto.id_chat.toLong(),
                                 idRemetente = mensagemCreateDto.id_remetente.toLong(),
                                 idDestinatario = mensagemCreateDto.id_destinatario.toLong(),
                                 conteudo = mensagemCreateDto.conteudo,
+<<<<<<< Updated upstream
                                 enviadaEm = timestampAtual,
                                 isMine = isMine
                             )
                             
                             Log.d("StompWebSocket", "Created Mensagem: idChat=${mensagem.idChat}, remetente=${mensagem.idRemetente}, userId=$userId, isMine=${mensagem.isMine}")
+=======
+                                enviadaEm = timestampFormatado,
+                                isMine = isMine
+                            )
+                            
+                            Log.d("StompWebSocket", "Calling onMessageReceived: idChat=${mensagem.idChat}, remetente=${mensagem.idRemetente}, userId=$userId, isMine=${mensagem.isMine}")
+>>>>>>> Stashed changes
                             onMessageReceived(mensagem)
                         } catch (e: JsonSyntaxException) {
                             Log.e("StompWebSocket", "Error parsing message JSON: ${e.message}", e)

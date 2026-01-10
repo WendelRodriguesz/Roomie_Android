@@ -159,6 +159,14 @@ class ChatConversationViewModel(
                             
                             if (optimisticIndex >= 0) {
                                 Log.d("ChatViewModel", "Replacing optimistic message at index $optimisticIndex")
+                                val mensagemOtimista = mensagensAtualizadas[optimisticIndex]
+                                val timestampOtimista = parseDateTime(mensagemOtimista.enviadaEm)
+                                val timestampReal = parseDateTime(mensagem.enviadaEm)
+                                
+                                if (timestampReal.isBefore(timestampOtimista)) {
+                                    mensagem.enviadaEm = mensagemOtimista.enviadaEm
+                                }
+                                
                                 mensagensAtualizadas[optimisticIndex] = mensagem
                             } else {
                                 Log.d("ChatViewModel", "Adding new message (mine) to list, current size: ${mensagensAtualizadas.size}")
@@ -221,18 +229,16 @@ class ChatConversationViewModel(
                     val ultimaMensagem = mensagensAtualizadas.maxByOrNull { parseDateTime(it.enviadaEm) }
                     val ultimoTimestamp = ultimaMensagem?.let { parseDateTime(it.enviadaEm) } 
                         ?: java.time.Instant.now()
-
                     ultimoTimestamp.plusSeconds(1)
                 } else {
-
                     java.time.Instant.now()
                 }
 
-                val localDateTime = java.time.LocalDateTime.ofInstant(
+                val utcDateTime = java.time.LocalDateTime.ofInstant(
                     timestampOtimista, 
-                    java.time.ZoneId.systemDefault()
+                    java.time.ZoneId.of("UTC")
                 )
-                val timestampFormatado = localDateTime.format(
+                val timestampFormatado = utcDateTime.format(
                     java.time.format.DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss")
                 )
                 
@@ -267,11 +273,9 @@ class ChatConversationViewModel(
 
     private fun parseDateTime(dateString: String): java.time.Instant {
         return try {
-
             try {
                 return java.time.Instant.parse(dateString)
             } catch (e: Exception) {
-
             }
             
             val formatos = listOf(
@@ -286,7 +290,7 @@ class ChatConversationViewModel(
                 try {
                     val formatter = java.time.format.DateTimeFormatter.ofPattern(formato)
                     val localDateTime = java.time.LocalDateTime.parse(dateString, formatter)
-                    return localDateTime.atZone(java.time.ZoneId.systemDefault()).toInstant()
+                    return localDateTime.atZone(java.time.ZoneId.of("UTC")).toInstant()
                 } catch (e: java.time.format.DateTimeParseException) {
                     continue
                 }
@@ -306,7 +310,7 @@ class ChatConversationViewModel(
                     val segundo = horaParte.getOrElse(2) { 0 }
                     
                     val localDateTime = java.time.LocalDateTime.of(ano, mes, dia, hora, minuto, segundo)
-                    return localDateTime.atZone(java.time.ZoneId.systemDefault()).toInstant()
+                    return localDateTime.atZone(java.time.ZoneId.of("UTC")).toInstant()
                 }
             }
 

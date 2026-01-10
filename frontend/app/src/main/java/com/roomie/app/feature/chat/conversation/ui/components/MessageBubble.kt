@@ -82,46 +82,74 @@ fun MessageBubble(
 
 private fun formatarData(dataString: String): String {
     return try {
+        val localDateTime = parsearParaLocalDateTime(dataString) ?: return "00:00"
+        val hoje = LocalDateTime.now()
+        val hojeDate = hoje.toLocalDate()
+        val mensagemDate = localDateTime.toLocalDate()
+        
+        return if (mensagemDate == hojeDate) {
+            localDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
+        } else if (mensagemDate.year == hojeDate.year) {
+            localDateTime.format(DateTimeFormatter.ofPattern("dd/MM HH:mm"))
+        } else {
+            localDateTime.format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))
+        }
+    } catch (e: Exception) {
+        "00:00"
+    }
+}
+
+private fun parsearParaLocalDateTime(dataString: String): LocalDateTime? {
+    return try {
+        try {
+            val instant = java.time.Instant.parse(dataString)
+            return LocalDateTime.ofInstant(instant, java.time.ZoneId.systemDefault())
+        } catch (e: Exception) {
+        }
+        
         val formatos = listOf(
             "yyyy-MM-dd'T'HH:mm:ss.SSSSSS",
-            "yyyy-MM-dd'T'HH:mm:ss",
             "yyyy-MM-dd'T'HH:mm:ss.SSS",
             "yyyy-MM-dd'T'HH:mm:ss.S",
+            "yyyy-MM-dd'T'HH:mm:ss",
             "yyyy-MM-dd'T'HH:mm"
         )
         
-        var localDateTime: LocalDateTime? = null
         for (formato in formatos) {
             try {
                 val formatter = DateTimeFormatter.ofPattern(formato)
-                localDateTime = LocalDateTime.parse(dataString, formatter)
-                break
+                val localDateTime = LocalDateTime.parse(dataString, formatter)
+                val instant = localDateTime.atZone(java.time.ZoneId.of("UTC")).toInstant()
+                return LocalDateTime.ofInstant(instant, java.time.ZoneId.systemDefault())
             } catch (e: DateTimeParseException) {
                 continue
             }
         }
 
-        if (localDateTime != null) {
-            return localDateTime.format(DateTimeFormatter.ofPattern("HH:mm"))
-        }
-
         val partes = dataString.split("T")
         if (partes.size >= 2) {
-            val horaCompleta = partes[1]
-            val horaMinuto = horaCompleta.split(":").take(2).joinToString(":")
-            if (horaMinuto.matches(Regex("\\d{2}:\\d{2}"))) {
-                return horaMinuto
+            try {
+                val dataParte = partes[0].split("-")
+                val horaParte = partes[1].split(":").mapNotNull { it.split(".")[0].toIntOrNull() }
+                
+                if (dataParte.size == 3 && horaParte.size >= 2) {
+                    val ano = dataParte[0].toIntOrNull() ?: 1970
+                    val mes = dataParte[1].toIntOrNull() ?: 1
+                    val dia = dataParte[2].toIntOrNull() ?: 1
+                    val hora = horaParte[0]
+                    val minuto = horaParte.getOrElse(1) { 0 }
+                    val segundo = horaParte.getOrElse(2) { 0 }
+                    
+                    val utcDateTime = LocalDateTime.of(ano, mes, dia, hora, minuto, segundo)
+                    val instant = utcDateTime.atZone(java.time.ZoneId.of("UTC")).toInstant()
+                    return LocalDateTime.ofInstant(instant, java.time.ZoneId.systemDefault())
+                }
+            } catch (e: Exception) {
             }
         }
 
-        try {
-            val instant = java.time.Instant.parse(dataString)
-            val localDateTimeFromInstant = LocalDateTime.ofInstant(instant, java.time.ZoneId.systemDefault())
-            return localDateTimeFromInstant.format(DateTimeFormatter.ofPattern("HH:mm"))
-        } catch (e: Exception) {
-            "00:00"
-        }
+        null
     } catch (e: Exception) {
-        "00:00"
+        null
     }
 }
