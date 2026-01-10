@@ -46,30 +46,6 @@ fun SettingsCard(
             )
 
             SettingSwitch(
-                label = "Notificações",
-                checked = settings.notificationsEnabled,
-                onCheckedChange = { checked ->
-                    appSettingsState.value = settings.copy(notificationsEnabled = checked)
-                }
-            )
-
-            SettingSwitch(
-                label = "Aparecer como online",
-                checked = settings.showAsOnline,
-                onCheckedChange = { checked ->
-                    appSettingsState.value = settings.copy(showAsOnline = checked)
-                }
-            )
-
-            SettingSwitch(
-                label = "Descoberta",
-                checked = settings.discoveryEnabled,
-                onCheckedChange = { checked ->
-                    appSettingsState.value = settings.copy(discoveryEnabled = checked)
-                }
-            )
-
-            SettingSwitch(
                 label = "Modo escuro",
                 checked = settings.darkModeEnabled,
                 onCheckedChange = { checked ->

@@ -86,13 +86,6 @@ fun ProfileScreen(
                 onEditPreferencesClick = onEditPreferencesClick
             )
 
-            MatchCard(
-                profile = profile,
-                onMatchesClick = onMatchesClick,
-                onMyListingsClick = onMyListingsClick,
-                onLikedListingsClick = onLikedListingsClick
-            )
-
             SettingsCard(profile, onLogoutClick)
         }
     }
