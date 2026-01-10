@@ -137,7 +137,7 @@ class StompWebSocketManager private constructor() {
             activeSubscriptions.remove(chatId)
         }
         
-        val destination = "/topic/chat/$chatId"
+        val destination = "/queue/chat/$chatId"
         Log.d("StompWebSocket", "Attempting to subscribe to destination: $destination")
         
         return try {
