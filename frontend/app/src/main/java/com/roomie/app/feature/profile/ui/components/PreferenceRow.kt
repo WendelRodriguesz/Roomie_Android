@@ -13,7 +13,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
 import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
-import com.roomie.app.feature.profile.model.UserMock
 
 @Composable
 fun PreferenceRow(

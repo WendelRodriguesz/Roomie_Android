@@ -12,6 +12,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
+import com.roomie.app.core.data.firebase.NotificationHelper
 import com.roomie.app.core.ui.theme.AppSettings
 import com.roomie.app.core.ui.theme.LocalAppSettings
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
@@ -24,6 +25,9 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         actionBar?.hide()
         installSplashScreen()
+        
+        // Criar canal de notificações ao iniciar o app
+        NotificationHelper.createNotificationChannel(this)
 
         setContent {
             val appSettingsState = remember {

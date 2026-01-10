@@ -1,34 +1,146 @@
 package com.roomie.app.feature.vaga.ui
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Button
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
+import com.roomie.app.core.data.api.RetrofitClient
+import com.roomie.app.core.data.session.AuthSession
+import com.roomie.app.feature.offeror_home.data.AnuncioRepository
+import com.roomie.app.feature.offeror_home.ui.OfferorHomeRoute
+import com.roomie.app.navigation.Routes
 
 @Composable
 fun MyListingsScreen(
+    navController: NavController,
+    refreshSignal: Long = 0L,
     onCreateListingClick: () -> Unit
 ) {
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .padding(16.dp),
-        verticalArrangement = Arrangement.spacedBy(12.dp)
-    ) {
-        Text(
-            text = "Minhas vagas",
-            style = MaterialTheme.typography.titleLarge
-        )
-        Text(text = "Tela do ofertante (gerenciar vagas) — em construção.")
+    val userId = AuthSession.userId
+    val token = AuthSession.token
 
-        Button(onClick = onCreateListingClick) {
-            Text("Cadastrar nova vaga")
+    if (userId == null || token.isNullOrBlank()) {
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.Center
+        ) {
+            Text(
+                text = "Usuário não autenticado",
+                style = MaterialTheme.typography.bodyLarge
+            )
+        }
+        return
+    }
+
+    val anuncioRepository = remember { AnuncioRepository(RetrofitClient.anuncioApiService) }
+    var anuncioId by remember { mutableStateOf<Long?>(null) }
+    var isLoading by remember { mutableStateOf(true) }
+    var error by remember { mutableStateOf<String?>(null) }
+
+    LaunchedEffect(userId, token) {
+        try {
+            val profileApiService = RetrofitClient.profileApiService
+            val auth = "Bearer $token"
+            val profileResponse = profileApiService.getUsuarioOfertante(userId, auth)
+            
+            if (profileResponse.isSuccessful && profileResponse.body() != null) {
+                val body = profileResponse.body()!!
+                val anuncioIdFromProfile = body.anuncio?.id
+                
+                if (anuncioIdFromProfile != null) {
+                    error = null
+                    isLoading = false
+                    anuncioId = anuncioIdFromProfile
+                    return@LaunchedEffect
+                } else {
+                    error = null
+                }
+            }
+        } catch (e: Exception) {
+        }
+        
+        try {
+            val result = anuncioRepository.visualizarAnuncio(userId.toLong(), token)
+            
+            result.fold(
+                onSuccess = { anuncio ->
+                    anuncioId = anuncio.id
+                    isLoading = false
+                },
+                onFailure = { exception ->
+                    android.util.Log.e("MyListingsScreen", "Erro ao buscar anúncio", exception)
+                    isLoading = false
+                    error = "Não foi possível encontrar seu anúncio. Por favor, certifique-se de que você possui um anúncio cadastrado ou cadastre uma vaga primeiro."
+                }
+            )
+        } catch (e: Exception) {
+            android.util.Log.e("MyListingsScreen", "Exceção ao buscar anúncio", e)
+            isLoading = false
+            error = "Erro ao buscar anúncio: ${e.message}"
+        }
+    }
+
+    when {
+        isLoading -> {
+            Box(
+                modifier = Modifier.fillMaxSize(),
+                contentAlignment = Alignment.Center
+            ) {
+                CircularProgressIndicator()
+            }
+        }
+        
+        anuncioId != null -> {
+            OfferorHomeRoute(
+                anuncioId = anuncioId!!,
+                token = token,
+                refreshSignal = refreshSignal,
+                onEditClick = { 
+                    navController.navigate(Routes.EDIT_ANUNCIO.replace("{anuncioId}", anuncioId.toString()))
+                },
+                onError = { errorMsg ->
+                    error = errorMsg
+                }
+            )
+        }
+        
+        error != null -> {
+            Column(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(16.dp),
+                horizontalAlignment = Alignment.CenterHorizontally,
+                verticalArrangement = Arrangement.Center
+            ) {
+                Text(
+                    text = error ?: "Erro desconhecido",
+                    style = MaterialTheme.typography.bodyMedium,
+                    color = MaterialTheme.colorScheme.error,
+                    textAlign = TextAlign.Center
+                )
+                Spacer(modifier = Modifier.height(16.dp))
+                Button(onClick = onCreateListingClick) {
+                    Text("Cadastrar Vaga")
+                }
+            }
         }
     }
 }

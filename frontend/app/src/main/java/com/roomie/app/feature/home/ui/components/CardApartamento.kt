@@ -5,26 +5,14 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
-import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.outlined.Favorite
-import androidx.compose.material.icons.outlined.FavoriteBorder
-import androidx.compose.material.icons.outlined.Star
-import androidx.compose.material3.AssistChip
-import androidx.compose.material3.AssistChipDefaults
 import androidx.compose.material3.ElevatedCard
-import androidx.compose.material3.Icon
-import androidx.compose.material3.IconButton
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -32,7 +20,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -49,8 +36,6 @@ import com.roomie.app.feature.match.model.ListingStatus
 @Composable
 fun CardApartamento(
     anuncio: ListingCard,
-    favorito: Boolean,
-    aoFavoritar: () -> Unit,
     aoClicar: () -> Unit,
     modifier: Modifier = Modifier
 ) {
@@ -72,22 +57,9 @@ fun CardApartamento(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(8.dp)
             ) {
-                CabecalhoCard(
-                    anuncio = anuncio,
-                    favorito = favorito,
-                    aoFavoritar = aoFavoritar
-                )
-                Text(
-                    "${anuncio.neighborhood}, ${anuncio.city}",
-                    style = MaterialTheme.typography.bodySmall,
-                    color = MaterialTheme.colorScheme.scrim.copy(alpha = 0.9f),
-                    maxLines = 1,
-                    overflow = TextOverflow.Ellipsis
-                )
-
+                CabecalhoCard(anuncio = anuncio)
+                LinhaLocalizacao(anuncio = anuncio)
                 LinhaEspecificacoes(anuncio = anuncio)
-                ChipsComodidades(tags = anuncio.tags)
-                RodapeDisponibilidade(anuncio = anuncio)
             }
         }
     }
@@ -124,13 +96,10 @@ private fun MiniaturaApartamento(anuncio: ListingCard) {
 }
 
 @Composable
-private fun CabecalhoCard(
-    anuncio: ListingCard,
-    favorito: Boolean,
-    aoFavoritar: () -> Unit
-) {
+private fun CabecalhoCard(anuncio: ListingCard) {
     Row(
-        verticalAlignment = Alignment.Top
+        verticalAlignment = Alignment.Top,
+        horizontalArrangement = Arrangement.spacedBy(8.dp)
     ) {
         Column(Modifier.weight(1f)) {
             Text(
@@ -146,67 +115,27 @@ private fun CabecalhoCard(
                 overflow = TextOverflow.Ellipsis,
                 color = MaterialTheme.colorScheme.onSurface.copy(alpha = 0.6f)
             )
+            StatusChip(status = anuncio.status)
         }
 
-        Column(
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.spacedBy(4.dp)
-        ) {
-            SeloAvaliacao(avaliacao = anuncio.rating)
-            IconButton(
-                onClick = aoFavoritar,
-                modifier = Modifier
-                    .background(
-                        color = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.4f),
-                        shape = CircleShape
-                    )
-                    .size(36.dp)
-            ) {
-                Icon(
-                    imageVector = if (favorito) Icons.Outlined.Favorite else Icons.Outlined.FavoriteBorder,
-                    contentDescription = null,
-                    tint = if (favorito) MaterialTheme.colorScheme.primary else MaterialTheme.colorScheme.scrim
-                )
-            }
-        }
-    }
-}
-
-@Composable
-private fun SeloAvaliacao(avaliacao: Double) {
-    Surface(
-        shape = RoundedCornerShape(50),
-        tonalElevation = 1.dp,
-        color = MaterialTheme.colorScheme.primary.copy(alpha = 0.12f)
-    ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.spacedBy(4.dp),
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-        ) {
-            Icon(
-                imageVector = Icons.Outlined.Star,
-                contentDescription = null,
-                tint = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.size(16.dp)
-            )
-            Text(
-                text = "%.1f".format(avaliacao),
-                style = MaterialTheme.typography.labelMedium.copy(fontWeight = FontWeight.SemiBold),
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
     }
 }
 
 @Composable
 private fun LinhaEspecificacoes(anuncio: ListingCard) {
     Row(horizontalArrangement = Arrangement.spacedBy(12.dp)) {
-        BlocoEspecificacao(valor = "${anuncio.bedrooms}", rotulo = "quartos")
-        BlocoEspecificacao(valor = "${anuncio.bathrooms}", rotulo = "banheiros")
-        anuncio.areaInSquareMeters?.let {
-            BlocoEspecificacao(valor = "${it}m²", rotulo = "área")
-        }
+        BlocoEspecificacao(
+            valor = "R$ %.0f".format(anuncio.totalRent),
+            rotulo = "aluguel"
+        )
+        BlocoEspecificacao(
+            valor = "R$ %.0f".format(anuncio.mediaAccounts),
+            rotulo = "média contas"
+        )
+        BlocoEspecificacao(
+            valor = "${anuncio.vacanciesDisp}",
+            rotulo = "vagas disp."
+        )
     }
 }
 
@@ -226,63 +155,42 @@ private fun BlocoEspecificacao(valor: String, rotulo: String) {
     }
 }
 
-@OptIn(ExperimentalLayoutApi::class)
 @Composable
-private fun ChipsComodidades(tags: List<String>) {
-    if (tags.isEmpty()) return
-
-    val maximoVisivel = 3
-    val visiveis = tags.take(maximoVisivel)
-    val restante = tags.size - visiveis.size
-
-    FlowRow(
-        horizontalArrangement = Arrangement.spacedBy(8.dp),
-        verticalArrangement = Arrangement.spacedBy(8.dp)
-    ) {
-        visiveis.forEach { tag ->
-            AssistChip(
-                onClick = {},
-                label = { Text(tag) },
-                shape = RoundedCornerShape(50),
-                colors = AssistChipDefaults.assistChipColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
-                )
-            )
-        }
-        if (restante > 0) {
-            AssistChip(
-                onClick = {},
-                label = { Text("+$restante") },
-                shape = RoundedCornerShape(50),
-                colors = AssistChipDefaults.assistChipColors(
-                    containerColor = MaterialTheme.colorScheme.surfaceVariant.copy(alpha = 0.6f)
-                )
-            )
-        }
-    }
+private fun LinhaLocalizacao(anuncio: ListingCard) {
+    Text(
+        text = "${anuncio.neighborhood}, ${anuncio.city}",
+        style = MaterialTheme.typography.bodySmall,
+        color = MaterialTheme.colorScheme.scrim.copy(alpha = 0.9f),
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis
+    )
 }
 
 @Composable
-private fun RodapeDisponibilidade(anuncio: ListingCard) {
-    val ocupadas = anuncio.numResidents
-    val total = anuncio.numResidents + anuncio.vacanciesDisp
+private fun StatusChip(status: ListingStatus) {
+    val (texto, corFundo, corTexto) = when (status) {
+        ListingStatus.ACTIVE -> Triple(
+            "ATIVO",
+            MaterialTheme.colorScheme.primary.copy(alpha = 0.12f),
+            MaterialTheme.colorScheme.primary
+        )
+        ListingStatus.INACTIVE -> Triple(
+            "DESATIVADO",
+            MaterialTheme.colorScheme.error.copy(alpha = 0.12f),
+            MaterialTheme.colorScheme.error
+        )
+    }
 
-    Row(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalArrangement = Arrangement.SpaceBetween,
-        verticalAlignment = Alignment.CenterVertically
+    Surface(
+        shape = RoundedCornerShape(50),
+        color = corFundo,
+        tonalElevation = 0.dp
     ) {
         Text(
-            text = "$ocupadas/$total vagas",
-            style = MaterialTheme.typography.bodyMedium,
-            color = Color(0xFFFF5383),
-            fontWeight = FontWeight.SemiBold
-        )
-        Text(
-            text = "R$ %.0f/mês".format(anuncio.totalRent),
-            style = MaterialTheme.typography.titleMedium,
-            color = Color(0xFF12B76A),
-            fontWeight = FontWeight.SemiBold
+            text = texto,
+            style = MaterialTheme.typography.labelSmall.copy(fontWeight = FontWeight.SemiBold),
+            color = corTexto,
+            modifier = Modifier.padding(horizontal = 8.dp, vertical = 2.dp)
         )
     }
 }
@@ -333,8 +241,6 @@ private fun CardApartamentoPreview() {
             )
             CardApartamento(
                 anuncio = mock,
-                favorito = false,
-                aoFavoritar = {},
                 aoClicar = {}
             )
         }

@@ -14,18 +14,16 @@ import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
-import com.roomie.app.feature.profile.model.SleepRoutine
 import com.roomie.app.feature.profile.model.CleaningHabit
 import com.roomie.app.feature.profile.model.PartyFrequency
+import com.roomie.app.feature.profile.model.SleepRoutine
 import com.roomie.app.feature.profile.model.UserMock
 import com.roomie.app.feature.profile.model.UserProfile
-import com.roomie.app.feature.profile.ui.components.InfoRow
 
 @Composable
 fun LifestyleCard(

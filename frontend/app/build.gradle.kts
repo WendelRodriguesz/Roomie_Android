@@ -2,6 +2,9 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+
+    // Firebase
+    alias(libs.plugins.google.services)
 }
 
 android {
@@ -30,6 +33,7 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+        isCoreLibraryDesugaringEnabled = true
     }
     kotlinOptions { jvmTarget = "17"
         freeCompilerArgs = listOf("-XXLanguage:+PropertyParamAnnotationDefaultTargetMode")
@@ -93,4 +97,18 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.androidx.compose.ui.test.junit4)
     debugImplementation(libs.androidx.compose.ui.test.manifest)
+
+    // Firebase BOM
+    implementation(platform("com.google.firebase:firebase-bom:33.6.0"))
+
+    // Firebase Cloud Messaging (Push Notifications)
+    implementation("com.google.firebase:firebase-messaging")
+
+    // WebSocket STOMP Client (usa RxJava)
+    implementation("com.github.NaikSoftware:StompProtocolAndroid:1.6.6")
+    implementation("io.reactivex.rxjava2:rxjava:2.2.21")
+    implementation("io.reactivex.rxjava2:rxandroid:2.1.1")
+
+    // Desugaring para java.time (suporte para Android < API 26)
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
 }

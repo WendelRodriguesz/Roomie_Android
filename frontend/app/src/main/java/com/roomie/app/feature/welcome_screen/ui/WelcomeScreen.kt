@@ -2,7 +2,15 @@ package com.roomie.app.feature.welcome_screen.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -23,24 +31,23 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
-import com.roomie.app.R
 import com.roomie.app.core.data.local.AuthDataStore
+import com.roomie.app.core.data.session.AuthSession
+import com.roomie.app.core.model.ProfileRole
+import com.roomie.app.core.model.profileRoleFromApi
 import com.roomie.app.core.ui.components.GradientButton
 import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.RoomieTheme
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 import com.roomie.app.feature.login.data.AuthRepository
 import com.roomie.app.navigation.Routes
-import com.roomie.app.core.data.session.AuthSession
-import com.roomie.app.core.model.ProfileRole
-import com.roomie.app.core.model.profileRoleFromApi
 
 
 @Composable
 fun WelcomeScreen(navController: NavController) {
     val context = LocalContext.current
     val authDataStore = remember { AuthDataStore(context) }
-    val authRepository = remember { AuthRepository(authDataStore) }
+    val authRepository = remember { AuthRepository(authDataStore, context) }
 
     var isCheckingSession by remember { mutableStateOf(true) }
 
@@ -68,6 +75,10 @@ fun WelcomeScreen(navController: NavController) {
             AuthSession.token = session.token
             AuthSession.refreshToken = session.refreshToken
             AuthSession.role = mappedRole
+
+            // Enviar token do Firebase para o backend após restaurar sessão
+            val firebaseTokenManager = com.roomie.app.core.data.firebase.FirebaseTokenManager(context, authDataStore)
+            firebaseTokenManager.sendTokenToBackendSuspend()
 
             val targetRoute = if (mappedRole == ProfileRole.OFFEROR) {
                 Routes.MY_LISTINGS

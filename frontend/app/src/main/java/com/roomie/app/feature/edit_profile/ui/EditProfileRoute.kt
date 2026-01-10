@@ -4,8 +4,8 @@ import android.database.Cursor
 import android.net.Uri
 import android.provider.OpenableColumns
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.result.PickVisualMediaRequest
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.CircularProgressIndicator
@@ -26,7 +26,6 @@ import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.feature.edit_profile.presentation.EditProfileViewModel
 import com.roomie.app.feature.edit_profile.presentation.EditProfileViewModelFactory
 import com.roomie.app.feature.profile.data.ProfileRepository
-import com.roomie.app.navigation.Routes
 import kotlinx.coroutines.launch
 
 @Composable

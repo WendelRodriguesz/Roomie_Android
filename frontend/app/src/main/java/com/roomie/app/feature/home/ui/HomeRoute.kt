@@ -9,13 +9,16 @@ import com.roomie.app.feature.home.presentation.HomeViewModel
 @Composable
 fun HomeRoute(
     viewModel: HomeViewModel = viewModel(),
-    onListingClick: (String) -> Unit = {}
+    onListingClick: (Int) -> Unit = {}
 ) {
     val state by viewModel.state.collectAsState()
     HomeScreen(
         state = state,
         onEvent = viewModel::onEvent,
-        onListingClick = { onListingClick(it.id) }
+        onListingClick = { listing ->
+            val listingId = listing.id.toIntOrNull() ?: 0
+            onListingClick(listingId)
+        }
     )
 }
 

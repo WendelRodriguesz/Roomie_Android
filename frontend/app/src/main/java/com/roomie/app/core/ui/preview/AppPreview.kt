@@ -1,9 +1,10 @@
 package com.roomie.app.core.ui.preview
 
-import androidx.compose.runtime.Composable
-import androidx.compose.material3.*
-import androidx.compose.ui.Modifier
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 import com.roomie.app.navigation.AppNavHost
 import com.roomie.app.navigation.Routes

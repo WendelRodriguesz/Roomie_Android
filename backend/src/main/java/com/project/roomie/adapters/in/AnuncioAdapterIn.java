@@ -41,6 +41,11 @@ public class AnuncioAdapterIn {
         return anuncioPortIn.uploadNovaFoto(file, id_usuario);
     }
 
+    @DeleteMapping("/deletarFoto/{id_usuario}")
+    public ResponseEntity<String> deletarFoto(@RequestParam("urlFoto") String urlFoto, @PathVariable Integer id_usuario) {
+        return anuncioPortIn.deletarFoto(urlFoto, id_usuario);
+    }
+
     @PatchMapping("/atualizar/{id_anuncio}")
     public ResponseEntity<AnuncioResponseDTO> atualizar(
             @PathVariable Integer id_anuncio,

@@ -1,6 +1,7 @@
 package com.project.roomie.core.service;
 
 import com.project.roomie.core.model.UsuarioOfertante;
+import com.project.roomie.dto.response.FirebaseTokenResponseDTO;
 import com.project.roomie.dto.response.UsuarioOfertanteResponseDTO;
 import com.project.roomie.dto.update.UsuarioOfertanteUpdateDTO;
 import com.project.roomie.mapper.UsuarioOfertanteMapper;
@@ -82,5 +83,14 @@ public class UsuarioOfertanteService implements UsuarioOfertantePortIn {
 
         return usuarioOfertanteMapper.ModeltoResponseDTO(usuarioAtualizado);
 
+    }
+
+    @Override
+    public FirebaseTokenResponseDTO cadastrarFirebaseToken(String firebase_token, Integer id_usuario){
+
+        UsuarioOfertante usuarioOfertante = usuarioOfertantePortOut.findById(id_usuario);
+        usuarioOfertante.setFirebase_token(firebase_token);
+        usuarioOfertantePortOut.save(usuarioOfertante);
+        return new FirebaseTokenResponseDTO(usuarioOfertante.getFirebase_token());
     }
 }
