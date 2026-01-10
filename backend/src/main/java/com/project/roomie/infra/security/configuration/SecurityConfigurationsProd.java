@@ -84,6 +84,8 @@ public class SecurityConfigurationsProd {
                         // Chat
                         .requestMatchers(HttpMethod.GET, "/api/chat/visualizarMeusChats/{id_usuario}").hasAnyRole("OFERTANTE", "INTERESSADO")
 
+                        // Mensagem
+                        .requestMatchers(HttpMethod.GET, "/api/mensagem/visualizarMensagens/{id_chat}").hasAnyRole("OFERTANTE", "INTERESSADO")
                 )
 
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
