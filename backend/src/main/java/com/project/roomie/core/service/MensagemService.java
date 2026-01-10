@@ -1,6 +1,7 @@
 package com.project.roomie.core.service;
 
 import com.project.roomie.core.model.Mensagem;
+import com.project.roomie.dto.response.MensagemResponseDTO;
 import com.project.roomie.mapper.MensagemMapper;
 import com.project.roomie.ports.in.MensagemPortIn;
 import com.project.roomie.ports.out.MensagemPortOut;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class MensagemService implements MensagemPortIn {
@@ -28,5 +30,10 @@ public class MensagemService implements MensagemPortIn {
     public Mensagem cadastrarMensagem(Mensagem mensagem){
         mensagem.setEnviada_em(LocalDateTime.now());
         return mensagemPortOut.save(mensagem);
+    }
+
+    @Override
+    public List<MensagemResponseDTO> visualizarMensagens(Integer id_chat){
+        return mensagemMapper.ModeltoResponseDTO(mensagemPortOut.findAllById_chat(id_chat));
     }
 }

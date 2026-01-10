@@ -7,6 +7,8 @@ import com.project.roomie.ports.out.MensagemPortOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public class MensagemAdapterOut implements MensagemPortOut {
 
@@ -23,5 +25,10 @@ public class MensagemAdapterOut implements MensagemPortOut {
     @Override
     public Mensagem save(Mensagem mensagem){
         return mensagemMapper.JpaEntitytoModel(mensagemRepository.save(mensagemMapper.ModeltoJpaEntity(mensagem)));
+    }
+
+    @Override
+    public List<Mensagem> findAllById_chat(Integer id_chat){
+        return mensagemMapper.JpaEntitytoModel(mensagemRepository.findAllById_chat(id_chat));
     }
 }

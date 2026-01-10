@@ -44,14 +44,14 @@ public class SecurityConfigurationsProd {
                         // Usuário interessado
                         .requestMatchers(HttpMethod.POST, "/api/usuarioInteressado/cadastrar").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/usuarioInteressado/uploadFotoDePerfil/{id_usuario}").hasAnyRole("INTERESSADO")
-                        .requestMatchers(HttpMethod.GET, "/api/usuarioInteressado/visualizar/{id_usuario}").hasAnyRole("INTERESSADO")
+                        .requestMatchers(HttpMethod.GET, "/api/usuarioInteressado/visualizar/{id_usuario}").hasAnyRole("OFERTANTE", "INTERESSADO")
                         .requestMatchers(HttpMethod.PATCH, "/api/usuarioInteressado/atualizar/{id}").hasAnyRole("INTERESSADO")
                         .requestMatchers(HttpMethod.POST, "/api/usuarioInteressado/cadastrarFirebaseToken/{id_usuario}").hasAnyRole("INTERESSADO")
 
                         // Usuário Ofertante
                         .requestMatchers(HttpMethod.POST, "/api/usuarioOfertante/cadastrar").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/usuarioOfertante/uploadFotoDePerfil/{id_usuario}").hasAnyRole("OFERTANTE")
-                        .requestMatchers(HttpMethod.GET, "/api/usuarioOfertante/visualizar/{id_usuario}").hasAnyRole("OFERTANTE")
+                        .requestMatchers(HttpMethod.GET, "/api/usuarioOfertante/visualizar/{id_usuario}").hasAnyRole("OFERTANTE", "INTERESSADO")
                         .requestMatchers(HttpMethod.PATCH, "/api/usuarioOfertante/atualizar/{id}").hasAnyRole("OFERTANTE")
                         .requestMatchers(HttpMethod.POST, "/api/usuarioOfertante/cadastrarFirebaseToken/{id_usuario}").hasAnyRole("OFERTANTE")
 
@@ -84,6 +84,8 @@ public class SecurityConfigurationsProd {
                         // Chat
                         .requestMatchers(HttpMethod.GET, "/api/chat/visualizarMeusChats/{id_usuario}").hasAnyRole("OFERTANTE", "INTERESSADO")
 
+                        // Mensagem
+                        .requestMatchers(HttpMethod.GET, "/api/mensagem/visualizarMensagens/{id_chat}").hasAnyRole("OFERTANTE", "INTERESSADO")
                 )
 
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
