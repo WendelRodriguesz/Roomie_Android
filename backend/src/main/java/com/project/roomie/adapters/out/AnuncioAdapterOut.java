@@ -1,7 +1,6 @@
 package com.project.roomie.adapters.out;
 
 import com.project.roomie.core.model.Anuncio;
-import com.project.roomie.core.model.enums.StatusAnuncio;
 import com.project.roomie.dto.create.AnuncioFiltroDTO;
 import com.project.roomie.infra.persistence.entity.AnuncioJpaEntity;
 import com.project.roomie.infra.persistence.entity.enums.StatusAnuncioJpaEntity;

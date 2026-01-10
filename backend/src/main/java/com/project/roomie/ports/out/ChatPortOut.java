@@ -9,4 +9,5 @@ public interface ChatPortOut {
     Chat save(Chat chat);
     List<Chat> findAllById_ofertante(Integer id_ofertante);
     List<Chat> findAllById_interessado(Integer id_interessado);
+    Chat findById(Integer id_chat);
 }

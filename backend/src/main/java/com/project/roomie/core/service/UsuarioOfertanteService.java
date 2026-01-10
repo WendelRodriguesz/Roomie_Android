@@ -1,6 +1,5 @@
 package com.project.roomie.core.service;
 
-import com.project.roomie.core.model.UsuarioInteressado;
 import com.project.roomie.core.model.UsuarioOfertante;
 import com.project.roomie.dto.response.FirebaseTokenResponseDTO;
 import com.project.roomie.dto.response.UsuarioOfertanteResponseDTO;

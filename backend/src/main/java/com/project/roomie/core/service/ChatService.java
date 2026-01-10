@@ -11,6 +11,7 @@ import com.project.roomie.ports.out.UsuarioPortOut;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -53,5 +54,12 @@ public class ChatService implements ChatPortIn {
         }
 
         return chats;
+    }
+
+    @Override
+    public Chat atualizarUso(Integer id_chat){
+        Chat chat = chatPortOut.findById(id_chat);
+        chat.setUsado_em(LocalDateTime.now());
+        return chatPortOut.save(chat);
     }
 }

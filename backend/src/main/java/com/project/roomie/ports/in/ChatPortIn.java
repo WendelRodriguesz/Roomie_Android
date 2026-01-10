@@ -9,4 +9,5 @@ public interface ChatPortIn {
 
     Chat cadastrarChat(Chat chat);
     List<ChatResponseDTO> visualizarTodos(Integer id_usuario);
+    Chat atualizarUso(Integer id_chat);
 }
