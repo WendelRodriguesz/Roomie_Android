@@ -15,6 +15,18 @@ data class InteressesInteressadoRequest(
     val consome_bebidas_alcoolicas: Boolean,
 )
 
+data class InteressesInteressadoUpdateRequest(
+    val frequencia_festas: PartyFrequency,
+    val habitos_limpeza: CleaningHabit,
+    val aceita_pets: Boolean,
+    val horario_sono: SleepRoutine,
+    val orcamentoMin: Float,
+    val orcamentoMax: Float,
+    val aceita_dividir_quarto: Boolean,
+    val fumante: Boolean,
+    val consome_bebidas_alcoolicas: Boolean,
+)
+
 data class InteressesInteressadoDto(
     val id: Long?,
     val frequencia_festas: PartyFrequency?,

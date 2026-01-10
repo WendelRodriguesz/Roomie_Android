@@ -213,7 +213,13 @@ fun AppNavHost(startDestination: String) {
                     role = currentRole,
                     refreshSignal = profileRefreshSignal,
                     onEditClick = { navController.navigate(Routes.EDIT_PROFILE) },
-                    onEditPreferencesClick = { navController.navigate(Routes.EDIT_PREFERENCES) },
+                    onEditPreferencesClick = { hasInterests ->
+                        if (hasInterests) {
+                            navController.navigate(Routes.EDIT_PREFERENCES)
+                        } else {
+                            navController.navigate(Routes.PREFERENCES_REGISTRATION)
+                        }
+                    },
                     onLogoutClick = {
                         scope.launch {
                             authDataStore.clearUserSession()
