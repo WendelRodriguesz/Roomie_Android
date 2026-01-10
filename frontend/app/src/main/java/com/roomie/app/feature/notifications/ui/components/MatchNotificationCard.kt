@@ -33,6 +33,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
@@ -44,9 +48,14 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.compose.foundation.layout.offset
+import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.material3.HorizontalDivider
 import coil3.compose.AsyncImage
 import com.roomie.app.feature.notifications.data.model.Match
 import kotlin.math.abs
+
+private operator fun <T> Comparable<T>.compareTo(other: T): Int = this.compareTo(other)
 
 @Composable
 fun MatchNotificationCard(
@@ -201,7 +210,7 @@ fun MatchNotificationCard(
                 }
                 
                 if (isExpanded) {
-                    Divider()
+                    HorizontalDivider()
                     
                     Column(
                         verticalArrangement = Arrangement.spacedBy(16.dp)
@@ -252,7 +261,7 @@ fun MatchNotificationCard(
                 }
                 
                 if (isPending && isExpanded) {
-                    Divider()
+                    HorizontalDivider()
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.spacedBy(12.dp)
