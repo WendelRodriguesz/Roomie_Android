@@ -53,7 +53,9 @@ public class AnuncioService implements AnuncioPortIn {
 
         UsuarioOfertante usuarioOfertante = usuarioOfertantePortOut.findById(id_usuario);
         usuarioOfertante.setAnuncio(novo_anuncio);
-        usuarioOfertante = usuarioOfertantePortOut.save(usuarioOfertante);
+        usuarioOfertantePortOut.save(usuarioOfertante);
+
+        novo_anuncio.setId_usuario_ofertante(id_usuario);
 
         return novo_anuncio;
     }

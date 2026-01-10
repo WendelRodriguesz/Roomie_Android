@@ -31,4 +31,5 @@ public class AnuncioResponseDTO {
     private List<String> fotos;
     private List<Comodo> comodos;
     private StatusAnuncio statusAnuncio;
+    private Integer id_usuario_ofertante;
 }
