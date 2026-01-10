@@ -133,6 +133,7 @@ class ChatConversationViewModel(
     }
     
     private fun subscribeToChatTopic() {
+        Log.d("ChatViewModel", "Subscribing to chat topic for chatId: $chatId")
         messageSubscription?.let {
             if (!it.isDisposed) {
                 it.dispose()
