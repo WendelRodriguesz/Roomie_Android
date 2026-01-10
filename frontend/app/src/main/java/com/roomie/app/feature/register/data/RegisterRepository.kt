@@ -2,6 +2,7 @@ package com.roomie.app.feature.register.data
 
 import com.roomie.app.core.data.api.RetrofitClient
 import com.roomie.app.core.model.ProfileRole
+import com.roomie.app.core.utils.ErrorHandler
 import com.roomie.app.feature.register.data.remote.dto.RegisterRequest
 
 class RegisterRepository {
@@ -20,12 +21,15 @@ class RegisterRepository {
             if (response.isSuccessful) {
                 Result.success(Unit)
             } else {
-                val errorMessage =
-                    response.errorBody()?.string() ?: "Erro ao cadastrar usuário. Tente novamente."
+                val errorMessage = ErrorHandler.processHttpError(
+                    response,
+                    "Erro ao cadastrar usuário. Tente novamente."
+                )
                 Result.failure(Exception(errorMessage))
             }
         } catch (e: Exception) {
-            Result.failure(e)
+            val errorMessage = ErrorHandler.processNetworkException(e)
+            Result.failure(Exception(errorMessage))
         }
     }
 }

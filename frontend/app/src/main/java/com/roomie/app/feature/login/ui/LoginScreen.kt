@@ -37,6 +37,7 @@ import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.roomie.app.core.data.session.AuthSession
 import com.roomie.app.core.model.ProfileRole
+import com.roomie.app.core.ui.components.ErrorCard
 import com.roomie.app.core.ui.components.GradientButton
 import com.roomie.app.core.ui.components.RoomieTextField
 import com.roomie.app.core.ui.preview.RoomiePreview
@@ -116,29 +117,38 @@ fun LoginScreen(navController: NavController) {
             color = MaterialTheme.colorScheme.onSurface,
             textAlign = TextAlign.Center
         )
-
+        
         Spacer(Modifier.height(28.dp))
-
+        
         RoomieTextField(
             value = email,
             onValueChange = { email = it },
             placeholder = "e-mail",
             modifier = Modifier.fillMaxWidth()
-        )
-
-        Spacer(Modifier.height(12.dp))
-
-        RoomieTextField(
-            value = senha,
-            onValueChange = { senha = it },
-            placeholder = "senha",
-            modifier = Modifier.fillMaxWidth(),
-            isPassword = true
-        )
-
-        Spacer(Modifier.height(6.dp))
-
-        Row(
+            )
+            
+            Spacer(Modifier.height(12.dp))
+            
+            RoomieTextField(
+                value = senha,
+                onValueChange = { senha = it },
+                placeholder = "senha",
+                modifier = Modifier.fillMaxWidth(),
+                isPassword = true
+                )
+                
+                Spacer(Modifier.height(6.dp))
+                
+            if (uiState.isLoading) {
+                Spacer(Modifier.height(16.dp))
+                CircularProgressIndicator(
+                    modifier = Modifier.size(24.dp),
+                    color = MaterialTheme.colorScheme.primary
+                )
+            }
+            
+            Spacer(Modifier.height(28.dp))
+                Row(
             modifier = Modifier
                 .fillMaxWidth()
                 .wrapContentWidth(Alignment.End),
@@ -156,14 +166,9 @@ fun LoginScreen(navController: NavController) {
         Spacer(Modifier.height(28.dp))
 
         uiState.errorMessage?.let { error ->
-            Text(
-                text = error,
-                color = MaterialTheme.colorScheme.error,
-                fontSize = 12.sp,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(bottom = 8.dp),
-                textAlign = TextAlign.Center
+            ErrorCard(
+                message = error,
+                modifier = Modifier.padding(bottom = 16.dp)
             )
         }
 
@@ -180,13 +185,6 @@ fun LoginScreen(navController: NavController) {
             }
         )
 
-        if (uiState.isLoading) {
-            Spacer(Modifier.height(16.dp))
-            CircularProgressIndicator(
-                modifier = Modifier.size(24.dp),
-                color = MaterialTheme.colorScheme.primary
-            )
-        }
 
         Spacer(Modifier.height(10.dp))
 
