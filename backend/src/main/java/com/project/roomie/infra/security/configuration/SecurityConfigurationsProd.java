@@ -34,6 +34,9 @@ public class SecurityConfigurationsProd {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
 
+                        // WebSocket
+                        .requestMatchers("/ws-chat/**").permitAll()
+
                         // Authorization
                         .requestMatchers(HttpMethod.POST, "/api/auth/logar").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/refresh").permitAll()
