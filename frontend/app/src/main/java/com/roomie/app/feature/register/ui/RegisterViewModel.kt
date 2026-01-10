@@ -42,7 +42,7 @@ class RegisterViewModel(
             senha = senha,
             dataNascimento = dataNascimento,
             cidade = cidade,
-            genero = genero?.name ?: ""
+            genero = genero?.apiValue ?: ""
         )
     }
 

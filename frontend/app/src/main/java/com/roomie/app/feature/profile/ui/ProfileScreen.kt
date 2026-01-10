@@ -34,6 +34,7 @@ import com.roomie.app.feature.profile.ui.components.SettingsCard
 @Composable
 fun ProfileScreen(
     profile: UserProfile,
+    hasInterests: Boolean = true,
     onEditClick: () -> Unit = {},
     onEditPreferencesClick: () -> Unit = {},
     onLogoutClick: () -> Unit = {},
@@ -67,14 +68,8 @@ fun ProfileScreen(
             LifestyleCard(
                 profile = profile,
                 role = profile.role,
+                hasInterests = hasInterests,
                 onEditPreferencesClick = onEditPreferencesClick
-            )
-
-            MatchCard(
-                profile = profile,
-                onMatchesClick = onMatchesClick,
-                onMyListingsClick = onMyListingsClick,
-                onLikedListingsClick = onLikedListingsClick
             )
 
             SettingsCard(profile, onLogoutClick)

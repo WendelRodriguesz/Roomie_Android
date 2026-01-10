@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarHost
@@ -27,6 +28,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.roomie.app.core.model.ProfileRole
+import com.roomie.app.core.ui.components.ErrorCard
 import com.roomie.app.feature.register.components.ObjectiveButton
 import com.roomie.app.navigation.Routes
 
@@ -52,14 +54,6 @@ fun RegisterRoleScreen(
         }
     }
 
-    LaunchedEffect(uiState.errorMessage) {
-        if (uiState.errorMessage != null) {
-            snackbarHostState.showSnackbar(
-                "Algo deu errado. Tente novamente!"
-            )
-        }
-    }
-
     Box(
         modifier = Modifier
             .fillMaxSize()
@@ -82,10 +76,28 @@ fun RegisterRoleScreen(
             Spacer(modifier = Modifier.height(48.dp))
 
             if (uiState.isLoading) {
-                CircularProgressIndicator(
-                    modifier = Modifier.padding(16.dp)
-                )
+                Column(
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.spacedBy(16.dp)
+                ) {
+                    CircularProgressIndicator(
+                        modifier = Modifier.size(48.dp),
+                        color = MaterialTheme.colorScheme.primary
+                    )
+                    Text(
+                        text = "Criando sua conta...",
+                        style = MaterialTheme.typography.bodyMedium,
+                        color = MaterialTheme.colorScheme.onSurfaceVariant
+                    )
+                }
             } else {
+                uiState.errorMessage?.let { error ->
+                    ErrorCard(
+                        message = error,
+                        modifier = Modifier.padding(bottom = 16.dp)
+                    )
+                }
+                
                 ObjectiveButton(
                     background = Color(0xFF0078FF),
                     text = "Tenho um lugar e busco colega de quarto",
@@ -102,6 +114,7 @@ fun RegisterRoleScreen(
                     text = "Estou procurando um lugar pra morar",
                     buttonTextSize = 15,
                     onClick = {
+                        viewModel.clearError()
                         viewModel.completeRegistration(ProfileRole.SEEKER)
                     })
             }

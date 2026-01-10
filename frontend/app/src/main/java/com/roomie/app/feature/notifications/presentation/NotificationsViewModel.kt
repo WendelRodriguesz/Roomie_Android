@@ -87,8 +87,78 @@ class NotificationsViewModel(
         }
     }
 
+    private fun acceptMatch(matchId: Long) {
+        viewModelScope.launch {
+            val currentState = _state.value
+            val matchIndex = currentState.matches.indexOfFirst { it.id == matchId }
+            if (matchIndex == -1) return@launch
+
+            val updatedMatches = currentState.matches.toMutableList()
+            updatedMatches[matchIndex] = updatedMatches[matchIndex].copy(status = "ACEITO")
+            _state.value = currentState.copy(matches = updatedMatches)
+
+            val result = repository.aceitarMatch(matchId)
+            result.fold(
+                onSuccess = {
+                    loadInitialData()
+                },
+                onFailure = { exception ->
+                    _state.value = currentState.copy(
+                        error = exception.message ?: "Erro ao aceitar match"
+                    )
+                    loadInitialData()
+                }
+            )
+        }
+    }
+
+    private fun rejectMatch(matchId: Long) {
+        viewModelScope.launch {
+            val currentState = _state.value
+            val matchIndex = currentState.matches.indexOfFirst { it.id == matchId }
+            if (matchIndex == -1) return@launch
+
+            val updatedMatches = currentState.matches.toMutableList()
+            updatedMatches[matchIndex] = updatedMatches[matchIndex].copy(status = "RECUSADO")
+            _state.value = currentState.copy(matches = updatedMatches)
+
+            val result = repository.recusarMatch(matchId)
+            result.fold(
+                onSuccess = {
+                    loadInitialData()
+                },
+                onFailure = { exception ->
+                    _state.value = currentState.copy(
+                        error = exception.message ?: "Erro ao recusar match"
+                    )
+                    loadInitialData()
+                }
+            )
+        }
+    }
+
     fun onEvent(e: NotificationsEvent) {
         when (e) {
+            is NotificationsEvent.AcceptMatch -> {
+                viewModelScope.launch {
+                    val result = repository.aceitarMatch(e.matchId)
+                    if (result.isSuccess) {
+                        loadInitialData()
+                    } else {
+                        _state.value = _state.value.copy(error = result.exceptionOrNull()?.message)
+                    }
+                }
+            }
+            is NotificationsEvent.RejectMatch -> {
+                viewModelScope.launch {
+                    val result = repository.recusarMatch(e.matchId)
+                    if (result.isSuccess) {
+                        loadInitialData()
+                    } else {
+                        _state.value = _state.value.copy(error = result.exceptionOrNull()?.message)
+                    }
+                }
+            }
             NotificationsEvent.LoadInitial -> {
                 loadInitialData()
             }
@@ -100,12 +170,6 @@ class NotificationsViewModel(
                 _state.value = _state.value.copy(
                     expandedMatchId = if (currentExpanded == e.matchId) null else e.matchId
                 )
-            }
-            is NotificationsEvent.AcceptMatch -> {
-                // TODO: Implementar aceitar match
-            }
-            is NotificationsEvent.RejectMatch -> {
-                // TODO: Implementar recusar match
             }
             NotificationsEvent.Refresh -> {
                 loadInitialData()

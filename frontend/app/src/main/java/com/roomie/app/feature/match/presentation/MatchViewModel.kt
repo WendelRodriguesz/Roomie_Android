@@ -98,12 +98,10 @@ class MatchViewModel(
                     
                     if (userId != null && offerorUserId != null) {
                         viewModelScope.launch {
-                            // Enviar like
                             val result = repository.enviarLike(userId, offerorUserId)
                             
                             result.fold(
                                 onSuccess = {
-                                    // Remover o item atual da lista
                                     val updatedItems = s.items.filter { it.id != currentItem.id }
                                     val newIndex = if (s.index >= updatedItems.size) {
                                         (updatedItems.size - 1).coerceAtLeast(0)
@@ -117,7 +115,6 @@ class MatchViewModel(
                                         showMatchSuccess = true
                                     )
                                     
-                                    // Verificar se precisa carregar mais após remover
                                     if (newIndex == updatedItems.lastIndex && !s.isLastPage) {
                                         loadMoreIfNeeded()
                                     }
@@ -138,7 +135,6 @@ class MatchViewModel(
             MatchEvent.Save -> {
                 val newIndex = (s.index + 1).coerceAtMost(s.items.lastIndex)
                 _state.value = s.copy(index = newIndex)
-                // Verificar se precisa carregar mais após avançar
                 if (newIndex == s.items.lastIndex) {
                     loadMoreIfNeeded()
                 }
@@ -146,7 +142,6 @@ class MatchViewModel(
             MatchEvent.Next -> {
                 val newIndex = (s.index + 1).coerceAtMost(s.items.lastIndex)
                 _state.value = s.copy(index = newIndex)
-                // Verificar se precisa carregar mais após avançar
                 if (newIndex == s.items.lastIndex) {
                     loadMoreIfNeeded()
                 }

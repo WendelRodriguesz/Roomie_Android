@@ -4,6 +4,7 @@ import com.roomie.app.core.data.api.ProfileApiService
 import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.feature.preference_registration.model.UserPreferences
 import com.roomie.app.feature.profile.data.remote.dto.InteressesInteressadoRequest
+import com.roomie.app.feature.profile.data.remote.dto.InteressesInteressadoUpdateRequest
 import com.roomie.app.feature.profile.data.remote.dto.InteressesOfertanteRequest
 import com.roomie.app.feature.profile.model.UserProfile
 import com.roomie.app.feature.profile.model.toBasicUpdateRequest
@@ -123,20 +124,33 @@ class ProfileRepository(
             val auth = "Bearer $token"
 
             val response = if (role == ProfileRole.SEEKER) {
-                val body = InteressesInteressadoRequest(
-                    frequencia_festas = prefs.partyFrequency,
-                    habitos_limpeza = prefs.cleaningHabit,
-                    aceita_pets = prefs.acceptsPets,
-                    horario_sono = prefs.sleepRoutine,
-                    orcamento_min = (prefs.budget.minBudget ?: 0).toFloat(),
-                    orcamento_max = (prefs.budget.maxBudget ?: 0).toFloat(),
-                    aceita_dividir_quarto = prefs.acceptsRoomSharing,
-                    fumante = prefs.isSmoker,
-                    consome_bebidas_alcoolicas = prefs.drinksAlcohol,
-                )
-
-                if (hasExisting) api.updateInteressesInteressado(interessesId, auth, body)
-                else api.createInteressesInteressado(interessesId, auth, body)
+                if (hasExisting) {
+                    val updateBody = InteressesInteressadoUpdateRequest(
+                        frequencia_festas = prefs.partyFrequency,
+                        habitos_limpeza = prefs.cleaningHabit,
+                        aceita_pets = prefs.acceptsPets,
+                        horario_sono = prefs.sleepRoutine,
+                        orcamentoMin = (prefs.budget.minBudget ?: 0).toFloat(),
+                        orcamentoMax = (prefs.budget.maxBudget ?: 0).toFloat(),
+                        aceita_dividir_quarto = prefs.acceptsRoomSharing,
+                        fumante = prefs.isSmoker,
+                        consome_bebidas_alcoolicas = prefs.drinksAlcohol,
+                    )
+                    api.updateInteressesInteressado(interessesId, auth, updateBody)
+                } else {
+                    val createBody = InteressesInteressadoRequest(
+                        frequencia_festas = prefs.partyFrequency,
+                        habitos_limpeza = prefs.cleaningHabit,
+                        aceita_pets = prefs.acceptsPets,
+                        horario_sono = prefs.sleepRoutine,
+                        orcamento_min = (prefs.budget.minBudget ?: 0).toFloat(),
+                        orcamento_max = (prefs.budget.maxBudget ?: 0).toFloat(),
+                        aceita_dividir_quarto = prefs.acceptsRoomSharing,
+                        fumante = prefs.isSmoker,
+                        consome_bebidas_alcoolicas = prefs.drinksAlcohol,
+                    )
+                    api.createInteressesInteressado(interessesId, auth, createBody)
+                }
 
             } else {
                 val body = InteressesOfertanteRequest(

@@ -48,7 +48,6 @@ fun ChatListItemCard(
             horizontalArrangement = Arrangement.spacedBy(12.dp),
             verticalAlignment = Alignment.CenterVertically
         ) {
-            // Foto de perfil
             Box(
                 modifier = Modifier.size(64.dp)
             ) {
@@ -89,7 +88,6 @@ fun ChatListItemCard(
                 }
             }
 
-            // Informações do usuário
             Column(
                 modifier = Modifier.weight(1f),
                 verticalArrangement = Arrangement.spacedBy(6.dp)
@@ -167,7 +165,6 @@ fun ChatListItemCard(
                 }
             }
 
-            // Botão de detalhes
             Surface(
                 modifier = Modifier
                     .size(36.dp)

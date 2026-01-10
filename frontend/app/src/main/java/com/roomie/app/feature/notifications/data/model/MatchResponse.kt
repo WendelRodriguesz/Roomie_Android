@@ -45,7 +45,9 @@ data class InteressesInteressado(
     @SerializedName("horario_sono") val horarioSono: String,
     @SerializedName("orcamento_min") val orcamentoMin: Double?,
     @SerializedName("orcamento_max") val orcamentoMax: Double?,
-    @SerializedName("aceita_dividir_quarto") val aceitaDividirQuarto: Boolean
+    @SerializedName("aceita_dividir_quarto") val aceitaDividirQuarto: Boolean,
+    @SerializedName("fumante") val fumante: Boolean? = null,
+    @SerializedName("consome_bebidas_alcoolicas") val consomeBebidasAlcoolicas: Boolean? = null
 )
 
 data class UsuarioOfertanteMatch(

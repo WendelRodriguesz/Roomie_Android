@@ -2,6 +2,7 @@ package com.roomie.app.core.data.api
 
 import com.roomie.app.feature.profile.data.remote.dto.AtualizarUsuarioBasicoRequest
 import com.roomie.app.feature.profile.data.remote.dto.InteressesInteressadoRequest
+import com.roomie.app.feature.profile.data.remote.dto.InteressesInteressadoUpdateRequest
 import com.roomie.app.feature.profile.data.remote.dto.InteressesOfertanteRequest
 import com.roomie.app.feature.profile.data.remote.dto.UsuarioInteressadoDto
 import com.roomie.app.feature.profile.data.remote.dto.UsuarioOfertanteDto
@@ -52,7 +53,7 @@ interface ProfileApiService {
     suspend fun updateInteressesInteressado(
         @Path("id_interesses") idInteresses: Long,
         @Header("Authorization") authHeader: String,
-        @Body body: InteressesInteressadoRequest,
+        @Body body: InteressesInteressadoUpdateRequest,
     ): Response<Unit>
 
     // Usuario Ofertante

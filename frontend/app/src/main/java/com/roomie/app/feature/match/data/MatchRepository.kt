@@ -117,5 +117,19 @@ class MatchRepository(
             Result.failure(e)
         }
     }
+    
+    suspend fun aceitarMatch(idMatch: Long): Result<Unit> {
+        val token = AuthSession.token ?: return Result.failure(Exception("Token não encontrado"))
+        val response = apiService.aceitarMatch(idMatch, "Bearer $token")
+        return if (response.isSuccessful) Result.success(Unit)
+        else Result.failure(Exception(response.errorBody()?.string() ?: "Erro ao aceitar match"))
+    }
+
+    suspend fun recusarMatch(idMatch: Long): Result<Unit> {
+        val token = AuthSession.token ?: return Result.failure(Exception("Token não encontrado"))
+        val response = apiService.recusarMatch(idMatch, "Bearer $token")
+        return if (response.isSuccessful) Result.success(Unit)
+        else Result.failure(Exception(response.errorBody()?.string() ?: "Erro ao recusar match"))
+    }
 }
 

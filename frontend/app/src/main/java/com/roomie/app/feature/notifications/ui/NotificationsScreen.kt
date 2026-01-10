@@ -43,7 +43,6 @@ fun NotificationsScreen(
     val state by viewModel.state.collectAsState()
     val listState = rememberLazyListState()
 
-    // Paginação dinâmica - carrega mais quando chega perto do fim
     LaunchedEffect(listState) {
         snapshotFlow { listState.layoutInfo }
             .collect { layoutInfo ->

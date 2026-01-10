@@ -99,7 +99,6 @@ fun MatchScreen(
                 .padding(horizontal = 16.dp, vertical = 12.dp),
             verticalArrangement = Arrangement.SpaceBetween
         ) {
-            // Card grande central
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -160,14 +159,12 @@ fun MatchScreen(
                 }
             }
 
-            // Ações
             Box(
                 modifier = Modifier
                     .fillMaxWidth()
                     .padding(top = 16.dp, bottom = 34.dp),
                 contentAlignment = Alignment.Center
             ) {
-                // Botão de like
                 FloatingActionButton(
                     onClick = { onEvent(MatchEvent.Like) },
                     modifier = Modifier.size(72.dp),
