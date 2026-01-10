@@ -84,7 +84,7 @@ class StompWebSocketManager private constructor() {
                             isConnected = true
                             isConnecting = false
                             _connectionState.value = ConnectionState.Connected
-                            Log.d("StompWebSocket", "Connected to WebSocket")
+                            Log.d("StompWebSocket", "Connected to WebSocket - ready for subscriptions")
                         }
                         LifecycleEvent.Type.CLOSED -> {
                             isConnected = false
@@ -120,7 +120,6 @@ class StompWebSocketManager private constructor() {
             return null
         }
         
-        // Se já existe uma subscrição ativa para este chat, desinscrever primeiro
         activeSubscriptions[chatId]?.let { oldSub ->
             try {
                 if (!oldSub.isDisposed) {
@@ -138,40 +137,54 @@ class StompWebSocketManager private constructor() {
             val topicSub = stompClient?.topic(destination)
                 ?.subscribeOn(Schedulers.io())
                 ?.observeOn(AndroidSchedulers.mainThread())
-                ?.subscribe { stompMessage: StompMessage ->
-                    try {
-                        val payload = stompMessage.payload
-                        Log.d("StompWebSocket", "Received message: $payload")
-                        val mensagemDto = gson.fromJson(payload, MensagemDto::class.java)
-                        
-                        val userId = AuthSession.userId
-                        val mensagem = Mensagem(
-                            id = mensagemDto.id,
-                            idChat = mensagemDto.id_chat,
-                            idRemetente = mensagemDto.id_remetente,
-                            idDestinatario = mensagemDto.id_destinatario,
-                            conteudo = mensagemDto.conteudo,
-                            enviadaEm = mensagemDto.enviada_em,
-                            isMine = mensagemDto.id_remetente == userId
-                        )
-                        
-                        Log.d("StompWebSocket", "Parsed message: id=${mensagem.id}, isMine=${mensagem.isMine}")
-                        onMessageReceived(mensagem)
-                    } catch (e: JsonSyntaxException) {
-                        Log.e("StompWebSocket", "Error parsing message: ${e.message}", e)
-                    } catch (e: Exception) {
-                        Log.e("StompWebSocket", "Error processing message: ${e.message}", e)
+                ?.subscribe(
+                    { stompMessage: StompMessage ->
+                        try {
+                            val payload = stompMessage.payload
+                            Log.d("StompWebSocket", "Received message on $destination: $payload")
+                            val mensagemDto = gson.fromJson(payload, MensagemDto::class.java)
+                            
+                            val userId = AuthSession.userId
+                            val isMine = userId != null && mensagemDto.id_remetente == userId
+                            
+                            val mensagem = Mensagem(
+                                id = mensagemDto.id,
+                                idChat = mensagemDto.id_chat,
+                                idRemetente = mensagemDto.id_remetente,
+                                idDestinatario = mensagemDto.id_destinatario,
+                                conteudo = mensagemDto.conteudo,
+                                enviadaEm = mensagemDto.enviada_em,
+                                isMine = isMine
+                            )
+                            
+                            Log.d("StompWebSocket", "Calling onMessageReceived: id=${mensagem.id}, remetente=${mensagem.idRemetente}, userId=$userId, isMine=${mensagem.isMine}, conteudo=${mensagem.conteudo.take(50)}")
+                            onMessageReceived(mensagem)
+                        } catch (e: JsonSyntaxException) {
+                            Log.e("StompWebSocket", "Error parsing message JSON: ${e.message}", e)
+                            Log.e("StompWebSocket", "Payload was: ${stompMessage.payload}")
+                        } catch (e: Exception) {
+                            Log.e("StompWebSocket", "Error processing message: ${e.message}", e)
+                            e.printStackTrace()
+                        }
+                    },
+                    { error ->
+                        Log.e("StompWebSocket", "Error in subscription for $destination: ${error.message}", error)
+                        error.printStackTrace()
                     }
-                }
+                )
 
             topicSub?.let { 
                 activeSubscriptions[chatId] = it
                 disposables.add(it)
+                Log.d("StompWebSocket", "Successfully subscribed to $destination")
+            } ?: run {
+                Log.e("StompWebSocket", "Failed to create subscription to $destination")
             }
-            Log.d("StompWebSocket", "Subscribed to $destination")
+            
             topicSub
         } catch (e: Exception) {
             Log.e("StompWebSocket", "Error subscribing to $destination: ${e.message}", e)
+            e.printStackTrace()
             null
         }
     }

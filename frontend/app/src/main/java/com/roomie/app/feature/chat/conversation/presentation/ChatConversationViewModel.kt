@@ -92,12 +92,10 @@ class ChatConversationViewModel(
     }
 
     private fun connectWebSocket() {
-
         connectionJob?.cancel()
         
         connectionJob = viewModelScope.launch {
             try {
-
                 webSocketManager.ensureConnection()
 
                 _state.update { 
@@ -105,6 +103,7 @@ class ChatConversationViewModel(
                 }
 
                 if (webSocketManager.isConnected()) {
+                    kotlinx.coroutines.delay(300)
                     subscribeToChatTopic()
                 } else {
                     webSocketManager.connectionState
@@ -113,6 +112,7 @@ class ChatConversationViewModel(
                             
                             when (connectionState) {
                                 is StompWebSocketManager.ConnectionState.Connected -> {
+                                    kotlinx.coroutines.delay(300)
                                     subscribeToChatTopic()
                                 }
                                 is StompWebSocketManager.ConnectionState.Error -> {
@@ -140,39 +140,57 @@ class ChatConversationViewModel(
         }
         
         messageSubscription = webSocketManager.subscribeToChat(chatId) { mensagem ->
+            Log.d("ChatViewModel", "Message received in callback: id=${mensagem.id}, isMine=${mensagem.isMine}, conteudo=${mensagem.conteudo.take(50)}")
             viewModelScope.launch {
-                _state.update { currentState ->
-                    val mensagensAtualizadas = currentState.mensagens.toMutableList()
+                try {
+                    _state.update { currentState ->
+                        val mensagensAtualizadas = currentState.mensagens.toMutableList()
 
-                    val existingById = mensagensAtualizadas.indexOfFirst { it.id == mensagem.id }
-                    
-                    if (existingById >= 0) {
-                        mensagensAtualizadas[existingById] = mensagem
-                    } else if (mensagem.isMine) {
-                        val optimisticIndex = mensagensAtualizadas.indexOfFirst { 
-                            it.id < 0 && it.isMine && it.conteudo == mensagem.conteudo
-                        }
+                        val existingById = mensagensAtualizadas.indexOfFirst { it.id == mensagem.id }
                         
-                        if (optimisticIndex >= 0) {
-                            mensagensAtualizadas[optimisticIndex] = mensagem
+                        if (existingById >= 0) {
+                            Log.d("ChatViewModel", "Replacing existing message at index $existingById")
+                            mensagensAtualizadas[existingById] = mensagem
+                        } else if (mensagem.isMine) {
+                            val optimisticIndex = mensagensAtualizadas.indexOfFirst { 
+                                it.id < 0 && it.isMine && it.conteudo == mensagem.conteudo
+                            }
+                            
+                            if (optimisticIndex >= 0) {
+                                Log.d("ChatViewModel", "Replacing optimistic message at index $optimisticIndex")
+                                mensagensAtualizadas[optimisticIndex] = mensagem
+                            } else {
+                                Log.d("ChatViewModel", "Adding new message (mine) to list, current size: ${mensagensAtualizadas.size}")
+                                mensagensAtualizadas.add(mensagem)
+                            }
                         } else {
+                            Log.d("ChatViewModel", "Adding new message (other user) to list, current size: ${mensagensAtualizadas.size}")
                             mensagensAtualizadas.add(mensagem)
                         }
-                    } else {
-                        mensagensAtualizadas.add(mensagem)
-                    }
 
-                    val mensagensOrdenadas = mensagensAtualizadas.sortedWith(
-                        compareBy(
-                            { parseDateTime(it.enviadaEm) },
-                            { it.id }
+                        val mensagensOrdenadas = mensagensAtualizadas.sortedWith(
+                            compareBy(
+                                { parseDateTime(it.enviadaEm) },
+                                { it.id }
+                            )
                         )
-                    )
-                    currentState.copy(
-                        mensagens = mensagensOrdenadas
-                    )
+                        
+                        Log.d("ChatViewModel", "Updated messages list size: ${mensagensOrdenadas.size}")
+                        currentState.copy(
+                            mensagens = mensagensOrdenadas
+                        )
+                    }
+                } catch (e: Exception) {
+                    Log.e("ChatViewModel", "Error processing received message: ${e.message}", e)
+                    e.printStackTrace()
                 }
             }
+        }
+        
+        if (messageSubscription == null) {
+            Log.e("ChatViewModel", "Failed to subscribe to chat $chatId")
+        } else {
+            Log.d("ChatViewModel", "Successfully subscribed to chat $chatId")
         }
     }
 
