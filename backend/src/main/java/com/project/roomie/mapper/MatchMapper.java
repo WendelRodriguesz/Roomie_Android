@@ -5,7 +5,6 @@ import com.project.roomie.dto.response.MatchResponseDTO;
 import com.project.roomie.infra.persistence.entity.MatchJpaEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
-import org.springframework.data.domain.Page;
 
 import java.util.List;
 

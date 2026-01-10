@@ -34,6 +34,9 @@ public class SecurityConfigurationsProd {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(authorize -> authorize
 
+                        // WebSocket
+                        .requestMatchers("/ws-chat/**").permitAll()
+
                         // Authorization
                         .requestMatchers(HttpMethod.POST, "/api/auth/logar").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/refresh").permitAll()
@@ -77,6 +80,9 @@ public class SecurityConfigurationsProd {
                         .requestMatchers(HttpMethod.POST, "/api/match/aceitar/{id_match}").hasAnyRole("OFERTANTE")
                         .requestMatchers(HttpMethod.POST, "/api/match/recusar/{id_match}").hasAnyRole("OFERTANTE")
                         .requestMatchers(HttpMethod.GET, "/api/match/visualizarMeusLikes").hasAnyRole("OFERTANTE")
+
+                        // Chat
+                        .requestMatchers(HttpMethod.GET, "/api/chat/visualizarMeusChats/{id_usuario}").hasAnyRole("OFERTANTE", "INTERESSADO")
 
                 )
 
