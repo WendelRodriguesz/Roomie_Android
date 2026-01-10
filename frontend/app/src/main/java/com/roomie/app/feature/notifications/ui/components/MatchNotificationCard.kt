@@ -244,12 +244,18 @@ fun MatchNotificationCard(
                         InfoSection(
                             title = "Interesses e Preferências",
                             items = listOf(
-                                "Frequência de festas" to interessado.interesses.frequenciaFestas,
-                                "Hábitos de limpeza" to interessado.interesses.habitosLimpeza,
-                                "Horário de sono" to interessado.interesses.horarioSono,
+                                "Gosta de ir a festas" to formatPartyFrequency(interessado.interesses.frequenciaFestas),
+                                "Frequência de limpeza" to formatCleaningHabit(interessado.interesses.habitosLimpeza),
+                                "Rotina de sono" to formatSleepRoutine(interessado.interesses.horarioSono),
                                 "Aceita pets" to if (interessado.interesses.aceitaPets) "Sim" else "Não",
                                 "Aceita dividir quarto" to if (interessado.interesses.aceitaDividirQuarto) "Sim" else "Não"
                             ) + listOfNotNull(
+                                interessado.interesses.fumante?.let {
+                                    "Fumante" to if (it) "Sim" else "Não"
+                                },
+                                interessado.interesses.consomeBebidasAlcoolicas?.let {
+                                    "Consome bebidas alcoólicas" to if (it) "Sim" else "Não"
+                                },
                                 interessado.interesses.orcamentoMin?.let { min ->
                                     interessado.interesses.orcamentoMax?.let { max ->
                                         "Orçamento" to "R$ ${min.toInt()} - R$ ${max.toInt()}/mês"
@@ -333,6 +339,35 @@ fun InfoSection(
                 )
             }
         }
+    }
+}
+
+private fun formatPartyFrequency(value: String): String {
+    return when (value.uppercase()) {
+        "NUNCA" -> "Nunca"
+        "AS_VEZES", "AS VEZES" -> "Às vezes"
+        "FREQUENTE", "FREQUENTEMENTE" -> "Frequente"
+        else -> value
+    }
+}
+
+private fun formatCleaningHabit(value: String): String {
+    return when (value.uppercase()) {
+        "DIARIO", "DIÁRIO" -> "Diário"
+        "SEMANAL" -> "Semanal"
+        "QUINZENAL" -> "Quinzenal"
+        "OCASIONAL" -> "Ocasional"
+        else -> value
+    }
+}
+
+private fun formatSleepRoutine(value: String): String {
+    return when (value.uppercase()) {
+        "MANHA", "MANHÃ", "MATUTINO" -> "Matutino"
+        "NOITE", "NOTURNO" -> "Noturno"
+        "VESPERTINO", "TARDE" -> "Vespertino"
+        "FLEXIVEL", "FLEXÍVEL" -> "Flexível"
+        else -> value
     }
 }
 
