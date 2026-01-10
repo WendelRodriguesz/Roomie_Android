@@ -24,15 +24,15 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.core.ui.components.BudgetCard
-import com.roomie.app.feature.preference_registration.components.SectionCard
 import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
+import com.roomie.app.feature.edit_profile.ui.components.PreferenceSwitch
 import com.roomie.app.feature.preference_registration.components.PreferenceRegistrationLifestyleCard
+import com.roomie.app.feature.preference_registration.components.SectionCard
 import com.roomie.app.feature.preference_registration.model.UserPreferences
 import com.roomie.app.feature.profile.model.Budget
-import com.roomie.app.core.model.ProfileRole
-import com.roomie.app.feature.edit_profile.ui.components.PreferenceSwitch
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

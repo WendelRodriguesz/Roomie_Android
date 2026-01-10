@@ -1,7 +1,7 @@
 package com.roomie.app.feature.profile.data.remote.dto
+import com.roomie.app.feature.profile.model.CleaningHabit
 import com.roomie.app.feature.profile.model.PartyFrequency
 import com.roomie.app.feature.profile.model.SleepRoutine
-import com.roomie.app.feature.profile.model.CleaningHabit
 
 data class InteressesInteressadoRequest(
     val frequencia_festas: PartyFrequency,

@@ -2,8 +2,6 @@ package com.roomie.app.feature.vaga.presentation
 
 import android.net.Uri
 import com.roomie.app.feature.vaga.model.ListingFormData
-import com.roomie.app.feature.vaga.model.TipoComodo
-import com.roomie.app.feature.vaga.model.TipoImovel
 
 data class CreateListingState(
     val formData: ListingFormData = ListingFormData(),

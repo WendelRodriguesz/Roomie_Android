@@ -1,6 +1,5 @@
 package com.roomie.app.core.ui.components
 
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.outlined.ChatBubbleOutline
@@ -19,9 +18,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.rememberVectorPainter
 import androidx.compose.ui.unit.dp
 import com.roomie.app.core.ui.preview.RoomiePreview
+import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 import com.roomie.app.navigation.BottomDest
 import com.roomie.app.navigation.Routes
-import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 
 @Composable
 fun BottomBar(

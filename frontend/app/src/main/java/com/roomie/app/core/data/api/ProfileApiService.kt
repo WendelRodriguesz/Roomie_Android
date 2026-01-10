@@ -1,20 +1,20 @@
 package com.roomie.app.core.data.api
 
-import retrofit2.Response
-import retrofit2.http.GET
-import retrofit2.http.Header
-import retrofit2.http.PATCH
-import retrofit2.http.Body
-import retrofit2.http.Path
-import okhttp3.MultipartBody
-import retrofit2.http.Multipart
-import retrofit2.http.POST
-import retrofit2.http.Part
 import com.roomie.app.feature.profile.data.remote.dto.AtualizarUsuarioBasicoRequest
-import com.roomie.app.feature.profile.data.remote.dto.UsuarioOfertanteDto
-import com.roomie.app.feature.profile.data.remote.dto.UsuarioInteressadoDto
 import com.roomie.app.feature.profile.data.remote.dto.InteressesInteressadoRequest
 import com.roomie.app.feature.profile.data.remote.dto.InteressesOfertanteRequest
+import com.roomie.app.feature.profile.data.remote.dto.UsuarioInteressadoDto
+import com.roomie.app.feature.profile.data.remote.dto.UsuarioOfertanteDto
+import okhttp3.MultipartBody
+import retrofit2.Response
+import retrofit2.http.Body
+import retrofit2.http.GET
+import retrofit2.http.Header
+import retrofit2.http.Multipart
+import retrofit2.http.PATCH
+import retrofit2.http.POST
+import retrofit2.http.Part
+import retrofit2.http.Path
 
 interface ProfileApiService {
     

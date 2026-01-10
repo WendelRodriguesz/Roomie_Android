@@ -1,6 +1,5 @@
 package com.roomie.app.core.data.firebase
 
-import android.content.Context
 import android.util.Log
 import com.google.firebase.messaging.FirebaseMessaging
 import com.google.firebase.messaging.FirebaseMessagingService

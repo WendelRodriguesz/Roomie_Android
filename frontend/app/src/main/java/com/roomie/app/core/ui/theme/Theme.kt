@@ -1,7 +1,5 @@
 package com.roomie.app.core.ui.theme
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateOf
 import android.os.Build
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -13,6 +11,7 @@ import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
