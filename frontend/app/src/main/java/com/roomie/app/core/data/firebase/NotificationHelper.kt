@@ -19,9 +19,6 @@ class NotificationHelper(private val context: Context) {
         private const val CHANNEL_DESCRIPTION = "Receba notificações sobre matches e atualizações"
         private const val NOTIFICATION_ID_BASE = 1000
 
-        /**
-         * Cria o canal de notificações (necessário para Android 8.0+)
-         */
         fun createNotificationChannel(context: Context) {
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                 val channel = NotificationChannel(
@@ -40,16 +37,9 @@ class NotificationHelper(private val context: Context) {
         }
     }
 
-    /**
-     * Exibe uma notificação na barra de notificações
-     * @param mensagem A mensagem a ser exibida
-     * @param notificationId ID único para a notificação (opcional, será gerado automaticamente se não fornecido)
-     */
     fun showNotification(mensagem: String, notificationId: Int? = null) {
-        // Garantir que o canal existe
         createNotificationChannel(context)
 
-        // Intent para abrir o app quando a notificação for clicada
         val intent = Intent(context, MainActivity::class.java).apply {
             flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         }
@@ -61,19 +51,17 @@ class NotificationHelper(private val context: Context) {
             PendingIntent.FLAG_IMMUTABLE or PendingIntent.FLAG_UPDATE_CURRENT
         )
 
-        // Criar a notificação
         val notification = NotificationCompat.Builder(context, CHANNEL_ID)
-            .setSmallIcon(android.R.drawable.ic_dialog_info) // Você pode substituir por um ícone personalizado
-            .setContentTitle(context.getString(R.string.app_name)) // Título da notificação
-            .setContentText(mensagem) // Mensagem recebida
-            .setStyle(NotificationCompat.BigTextStyle().bigText(mensagem)) // Expandir texto longo
+            .setSmallIcon(android.R.drawable.ic_dialog_info) 
+            .setContentTitle(context.getString(R.string.app_name))
+            .setContentText(mensagem)
+            .setStyle(NotificationCompat.BigTextStyle().bigText(mensagem)) 
             .setPriority(NotificationCompat.PRIORITY_DEFAULT)
             .setContentIntent(pendingIntent)
-            .setAutoCancel(true) // Remove a notificação quando clicada
+            .setAutoCancel(true)
             .setDefaults(NotificationCompat.DEFAULT_SOUND or NotificationCompat.DEFAULT_VIBRATE)
             .build()
 
-        // Exibir a notificação
         val notificationManager = NotificationManagerCompat.from(context)
         
         try {

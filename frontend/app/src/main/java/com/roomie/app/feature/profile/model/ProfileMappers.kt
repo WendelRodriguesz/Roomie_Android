@@ -72,7 +72,7 @@ private fun Any?.toGenderOption(): GenderOption? {
             "NAO_BINARIO", "NÃO_BINÁRIO", "NÃO BINÁRIO" -> GenderOption.PREFIRO_NAO_INFORMAR
             "PREFIRO_NAO_DIZER", "PREFIRO NÃO DIZER",
             "PREFIRO_NAO_INFORMAR", "PREFIRO NÃO INFORMAR" -> GenderOption.PREFIRO_NAO_INFORMAR
-            else -> null
+            else -> GenderOption.PREFIRO_NAO_INFORMAR
         }
         else -> null
     }
@@ -147,7 +147,7 @@ fun UsuarioInteressadoDto.toUserProfile(): UserProfile {
 }
 
 /**
- * OFERTANTE (placeholder: orçamento não existe no back pro ofertante, então fica null/null)
+ * OFERTANTE
  */
 fun UsuarioOfertanteDto.toUserProfile(): UserProfile {
     val genderOption = genero.toGenderOption()
@@ -238,33 +238,33 @@ fun UserProfile.toUserPreferences(drinksAlcohol: Boolean = false): UserPreferenc
 
 fun InteressesInteressadoDto?.toUserPreferences(): UserPreferences? {
     if (this == null) return null
-    
+
     return UserPreferences(
-        partyFrequency = frequencia_festas.toPartyFrequency(),
-        cleaningHabit = habitos_limpeza.toCleaningHabit(),
-        acceptsPets = aceita_pets ?: false,
-        sleepRoutine = horario_sono.toSleepRoutine(),
-        acceptsRoomSharing = aceita_dividir_quarto ?: false,
+        partyFrequency = this.frequencia_festas?.toPartyFrequency() ?: PartyFrequency.AS_VEZES,
+        cleaningHabit = this.habitos_limpeza?.toCleaningHabit() ?: CleaningHabit.OCASIONAL,
+        acceptsPets = this.aceita_pets ?: false,
+        sleepRoutine = this.horario_sono?.toSleepRoutine() ?: SleepRoutine.FLEXIVEL,
+        acceptsRoomSharing = this.aceita_dividir_quarto ?: false,
         budget = Budget(
-            minBudget = orcamento_min?.toInt(),
-            maxBudget = orcamento_max?.toInt()
+            minBudget = this.orcamento_min?.toInt(),
+            maxBudget = this.orcamento_max?.toInt()
         ),
-        isSmoker = fumante ?: false,
-        drinksAlcohol = consome_bebidas_alcoolicas ?: false
+        isSmoker = this.fumante ?: false,
+        drinksAlcohol = this.consome_bebidas_alcoolicas ?: false
     )
 }
 
 fun InteressesOfertanteDto?.toUserPreferences(): UserPreferences? {
     if (this == null) return null
-    
+
     return UserPreferences(
-        partyFrequency = frequencia_festas.toPartyFrequency(),
-        cleaningHabit = habitos_limpeza.toCleaningHabit(),
-        acceptsPets = aceita_pets ?: false,
-        sleepRoutine = horario_sono.toSleepRoutine(),
-        acceptsRoomSharing = aceita_dividir_quarto ?: false,
-        budget = Budget(minBudget = null, maxBudget = null), // Ofertante não tem orçamento
-        isSmoker = false, // Ofertante não tem esses campos
-        drinksAlcohol = false // Ofertante não tem esses campos
+        partyFrequency = this.frequencia_festas?.toPartyFrequency() ?: PartyFrequency.AS_VEZES,
+        cleaningHabit = this.habitos_limpeza?.toCleaningHabit() ?: CleaningHabit.OCASIONAL,
+        acceptsPets = this.aceita_pets ?: false,
+        sleepRoutine = this.horario_sono?.toSleepRoutine() ?: SleepRoutine.FLEXIVEL,
+        acceptsRoomSharing = this.aceita_dividir_quarto ?: false,
+        budget = Budget(minBudget = null, maxBudget = null),
+        isSmoker = false,
+        drinksAlcohol = false 
     )
 }
