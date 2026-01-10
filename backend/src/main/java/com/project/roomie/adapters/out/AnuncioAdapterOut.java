@@ -36,12 +36,18 @@ public class AnuncioAdapterOut implements AnuncioPortOut {
         AnuncioJpaEntity salvo =
                 anuncioRepository.save(entity);
 
-        return anuncioMapper.JpaEntitytoModel(salvo);
+        Anuncio anuncioSalvo = anuncioMapper.JpaEntitytoModel(salvo);
+        
+        if (anuncio.getId_usuario_ofertante() != null) {
+            anuncioSalvo.setId_usuario_ofertante(anuncio.getId_usuario_ofertante());
+        }
+
+        return anuncioSalvo;
     }
 
     @Override
     public Anuncio findById(Integer id){
-        AnuncioJpaEntity AnuncioJpaEntity = anuncioRepository.findById(id)
+        AnuncioJpaEntity AnuncioJpaEntity = anuncioRepository.findByIdWithOfertante(id)
                 .orElseThrow(() -> new RuntimeException("Anúncio não encontrado"));
 
         return anuncioMapper.JpaEntitytoModel(AnuncioJpaEntity);

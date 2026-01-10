@@ -23,6 +23,7 @@ public class Anuncio {
     private List<String> fotos;
     private List<Comodo> comodos;
     private StatusAnuncio statusAnuncio;
+    private Integer id_usuario_ofertante;
 
     public Anuncio() {
     }
@@ -174,4 +175,12 @@ public class Anuncio {
     public StatusAnuncio getStatusAnuncio() {return statusAnuncio;}
 
     public void setStatusAnuncio(StatusAnuncio statusAnuncio) { this.statusAnuncio = statusAnuncio; }
+
+    public Integer getId_usuario_ofertante() {
+        return id_usuario_ofertante;
+    }
+
+    public void setId_usuario_ofertante(Integer id_usuario_ofertante) {
+        this.id_usuario_ofertante = id_usuario_ofertante;
+    }
 }
