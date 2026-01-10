@@ -35,4 +35,5 @@ object RetrofitClient {
     val anuncioApiService: AnuncioApiService = retrofit.create(AnuncioApiService::class.java)
     val firebaseTokenApiService: FirebaseTokenApiService = retrofit.create(FirebaseTokenApiService::class.java)
     val homeApiService: HomeApiService = retrofit.create(HomeApiService::class.java)
+    val chatApiService: ChatApiService = retrofit.create(ChatApiService::class.java)
 }

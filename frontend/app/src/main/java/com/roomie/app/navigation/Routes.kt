@@ -20,6 +20,7 @@ object Routes {
     const val PREFERENCES_REGISTRATION = "preference_registration"
     const val PREFERENCE_INTRO = "preference_intro"
     const val LISTING_DETAIL = "listing_detail/{listing_id}"
+    const val CHAT_USER_DETAIL = "chat_user_detail/{userId}/{isOfertante}"
 
     val BOTTOM_BAR_ROUTES = listOf(HOME, CHAT, MATCH, NOTIFICATIONS, PROFILE, MY_LISTINGS)
 }

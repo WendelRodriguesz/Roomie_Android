@@ -17,7 +17,8 @@ import com.roomie.app.core.data.session.AuthSession
 import com.roomie.app.core.ui.components.BottomBar
 import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
-import com.roomie.app.feature.chat.ui.ChatScreen
+import com.roomie.app.feature.chat.ui.ChatRoute
+import com.roomie.app.feature.chat.ui.ChatUserDetailRoute
 import com.roomie.app.feature.edit_profile.ui.EditProfileRoute
 import com.roomie.app.feature.home.ui.HomeRoute
 import com.roomie.app.feature.home.ui.ListingDetailRoute
@@ -121,7 +122,33 @@ fun AppNavHost(startDestination: String) {
                     onNavigateBack = { navController.popBackStack() }
                 )
             }
-            composable(Routes.CHAT) { ChatScreen() }
+            composable(Routes.CHAT) {
+                ChatRoute(
+                    onChatClick = { chatId ->
+                        // TODO: Implementar navegação para o chat em si quando implementado
+                    },
+                    onViewUserDetails = { userId, isOfertante ->
+                        val isOfertanteStr = if (isOfertante) "true" else "false"
+                        navController.navigate("chat_user_detail/$userId/$isOfertanteStr")
+                    }
+                )
+            }
+            composable(
+                route = Routes.CHAT_USER_DETAIL,
+                arguments = listOf(
+                    navArgument("userId") { type = NavType.LongType },
+                    navArgument("isOfertante") { type = NavType.StringType }
+                )
+            ) { backStackEntry ->
+                val userId = backStackEntry.arguments?.getLong("userId") ?: 0L
+                val isOfertanteStr = backStackEntry.arguments?.getString("isOfertante") ?: "false"
+                val isOfertante = isOfertanteStr.toBoolean()
+                ChatUserDetailRoute(
+                    userId = userId,
+                    isOfertante = isOfertante,
+                    onNavigateBack = { navController.popBackStack() }
+                )
+            }
             composable(Routes.MATCH) { MatchRoute() }
             composable(Routes.NOTIFICATIONS) { NotificationsScreen() }
 
