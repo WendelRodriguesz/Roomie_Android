@@ -1,5 +1,7 @@
 package com.roomie.app.feature.home.data.remote.dto
 
+import com.google.gson.annotations.SerializedName
+
 data class AnuncioResponseDto(
     val id: Int,
     val titulo: String,
@@ -15,6 +17,8 @@ data class AnuncioResponseDto(
     val tipo_imovel: String,
     val fotos: List<String>,
     val comodos: List<String>,
-    val statusAnuncio: String? = null
+    val statusAnuncio: String? = null,
+    @SerializedName("id_usuario_ofertante")
+    val id_usuario_ofertante: Int? = null
 )
 
