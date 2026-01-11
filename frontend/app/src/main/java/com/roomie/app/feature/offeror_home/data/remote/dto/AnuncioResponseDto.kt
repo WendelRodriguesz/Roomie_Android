@@ -16,7 +16,8 @@ data class AnuncioResponseDto(
     val fotos: List<String>,
     val comodos: List<String>,
     val statusAnuncio: String? = null,
-    val status_anuncio: String? = null
+    val status_anuncio: String? = null,
+    val id_usuario_ofertante: Long? = null
 ) {
     val status: String
         get() = statusAnuncio ?: status_anuncio ?: "ATIVO"

@@ -24,7 +24,8 @@ fun AnuncioResponseDto.toAnuncio(): Anuncio {
         tipoImovel = tipo_imovel,
         fotos = fotos ?: emptyList(),
         comodos = comodos ?: emptyList(),
-        status = status
+        status = status,
+        idUsuarioOfertante = id_usuario_ofertante
     )
 }
 

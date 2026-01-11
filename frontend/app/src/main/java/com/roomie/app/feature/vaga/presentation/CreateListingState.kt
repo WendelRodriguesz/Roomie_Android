@@ -8,7 +8,9 @@ data class CreateListingState(
     val selectedImages: List<Uri> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val validationError: String? = null
+    val validationError: String? = null,
+    val createdAnuncioId: Long? = null,
+    val isSubmitted: Boolean = false
 ) {
     val isValid: Boolean
         get() = formData.titulo.isNotBlank() &&

@@ -19,7 +19,8 @@ data class Anuncio(
     val tipoImovel: String,
     val fotos: List<String>,
     val comodos: List<String>,
-    val status: StatusAnuncio
+    val status: StatusAnuncio,
+    val idUsuarioOfertante: Long? = null
 ) {
     val enderecoCompleto: String
         get() = "$rua, $numero - $bairro, $cidade - $estado"

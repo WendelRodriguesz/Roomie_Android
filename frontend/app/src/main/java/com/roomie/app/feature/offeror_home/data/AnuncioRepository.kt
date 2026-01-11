@@ -2,6 +2,7 @@ package com.roomie.app.feature.offeror_home.data
 
 import com.roomie.app.core.data.api.AnuncioApiService
 import com.roomie.app.feature.offeror_home.data.remote.dto.AtualizarAnuncioRequest
+import com.roomie.app.feature.offeror_home.data.remote.dto.CadastrarAnuncioRequest
 import com.roomie.app.feature.offeror_home.model.Anuncio
 import com.roomie.app.feature.offeror_home.model.toAnuncio
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -42,6 +43,42 @@ class AnuncioRepository(
             }
         } catch (e: Exception) {
             android.util.Log.e("AnuncioRepository", "Exceção ao visualizar anúncio", e)
+            Result.failure(e)
+        }
+    }
+
+    suspend fun cadastrarAnuncio(
+        userId: Long,
+        token: String,
+        request: CadastrarAnuncioRequest
+    ): Result<Anuncio> {
+        return try {
+            val authHeader = "Bearer $token"
+            val response = apiService.cadastrarAnuncio(userId, authHeader, request)
+            
+            if (response.isSuccessful && response.body() != null) {
+                val dto = response.body()!!
+                val anuncio = dto.toAnuncio()
+                Result.success(anuncio)
+            } else {
+                val errorBody = response.errorBody()?.string()
+                val httpCode = response.code()
+                
+                android.util.Log.e("AnuncioRepository", "Erro ao cadastrar anúncio: código $httpCode")
+                
+                val errorMessage = when (httpCode) {
+                    400 -> "Dados inválidos. Verifique se todos os campos estão preenchidos corretamente.${if (errorBody != null) "\n$errorBody" else ""}"
+                    401 -> "Não autorizado (401). Faça login novamente."
+                    403 -> "Acesso negado (403). Você não tem permissão para cadastrar anúncio."
+                    500 -> "Erro interno do servidor (500). Tente novamente mais tarde."
+                    else -> errorBody?.takeIf { it.isNotBlank() }
+                        ?: "Erro ao cadastrar anúncio (código: $httpCode)"
+                }
+                
+                Result.failure(Exception(errorMessage))
+            }
+        } catch (e: Exception) {
+            android.util.Log.e("AnuncioRepository", "Exceção ao cadastrar anúncio", e)
             Result.failure(e)
         }
     }

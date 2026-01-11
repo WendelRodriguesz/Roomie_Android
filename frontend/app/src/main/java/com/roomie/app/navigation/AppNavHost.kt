@@ -41,6 +41,7 @@ import com.roomie.app.feature.register.ui.RegisterRoleScreen
 import com.roomie.app.feature.register.ui.RegisterRoute
 import com.roomie.app.feature.vaga.ui.CreateListingRoute
 import com.roomie.app.feature.vaga.ui.MyListingsScreen
+import com.roomie.app.feature.vaga.ui.UploadImagesRoute
 import com.roomie.app.feature.welcome_screen.ui.WelcomeScreen
 import kotlinx.coroutines.launch
 import java.net.URLDecoder
@@ -287,7 +288,26 @@ fun AppNavHost(startDestination: String) {
 
             composable(Routes.ADD_VAGA) {
                 CreateListingRoute(
-                    onNavigateBack = { navController.popBackStack() }
+                    onNavigateBack = { navController.popBackStack() },
+                    onNavigateToUploadImages = { anuncioId ->
+                        navController.navigate("upload_images/$anuncioId")
+                    }
+                )
+            }
+
+            composable(
+                route = Routes.UPLOAD_IMAGES,
+                arguments = listOf(
+                    navArgument("anuncioId") { type = NavType.LongType }
+                )
+            ) { backStackEntry ->
+                val anuncioId = backStackEntry.arguments?.getLong("anuncioId") ?: 0L
+                UploadImagesRoute(
+                    anuncioId = anuncioId,
+                    onSkip = { navController.popBackStack() },
+                    onNavigateToHome = { 
+                        navController.popBackStack(Routes.MY_LISTINGS, inclusive = false)
+                    }
                 )
             }
 

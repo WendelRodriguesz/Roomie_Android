@@ -16,6 +16,7 @@ object Routes {
     const val EDIT_PROFILE = "edit_profile"
     const val EDIT_PREFERENCES = "edit_preferences"
     const val ADD_VAGA = "addvaga"
+    const val UPLOAD_IMAGES = "upload_images/{anuncioId}"
     const val EDIT_ANUNCIO = "edit_anuncio/{anuncioId}"
     const val PREFERENCES_REGISTRATION = "preference_registration"
     const val PREFERENCE_INTRO = "preference_intro"
