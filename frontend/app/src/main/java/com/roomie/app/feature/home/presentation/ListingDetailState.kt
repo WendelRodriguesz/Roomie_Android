@@ -5,6 +5,9 @@ import com.roomie.app.feature.home.model.ListingDetail
 data class ListingDetailState(
     val isLoading: Boolean = false,
     val listing: ListingDetail? = null,
-    val error: String? = null
+    val error: String? = null,
+    val isSendingInterest: Boolean = false,
+    val interestSent: Boolean = false,
+    val interestError: String? = null
 )
 
