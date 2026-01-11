@@ -1,11 +1,18 @@
 package com.roomie.app.feature.vaga.presentation
 
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
+import com.roomie.app.core.data.session.AuthSession
+import com.roomie.app.feature.offeror_home.data.AnuncioRepository
+import com.roomie.app.feature.offeror_home.data.remote.dto.CadastrarAnuncioRequest
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 
-class CreateListingViewModel : ViewModel() {
+class CreateListingViewModel(
+    private val anuncioRepository: AnuncioRepository = AnuncioRepository(com.roomie.app.core.data.api.RetrofitClient.anuncioApiService)
+) : ViewModel() {
     private val _state = MutableStateFlow(CreateListingState())
     val state: StateFlow<CreateListingState> = _state.asStateFlow()
 
@@ -101,7 +108,59 @@ class CreateListingViewModel : ViewModel() {
             }
             is CreateListingEvent.Submit -> {
                 if (currentState.isValid) {
-                    _state.value = CreateListingState()
+                    val userId = AuthSession.userId
+                    val token = AuthSession.token
+                    
+                    if (userId == null || token.isNullOrBlank()) {
+                        _state.value = currentState.copy(
+                            errorMessage = "Usuário não autenticado"
+                        )
+                        return
+                    }
+                    
+                    _state.value = currentState.copy(isLoading = true, errorMessage = null)
+                    
+                    viewModelScope.launch {
+                        try {
+                            val request = CadastrarAnuncioRequest(
+                                titulo = currentState.formData.titulo,
+                                descricao = currentState.formData.descricao,
+                                rua = currentState.formData.rua,
+                                numero = currentState.formData.numero,
+                                bairro = currentState.formData.bairro,
+                                cidade = currentState.formData.cidade,
+                                estado = currentState.formData.estado,
+                                valorAluguel = currentState.formData.valorAluguel!!,
+                                valorContas = currentState.formData.valorContas!!,
+                                vagasDisponiveis = currentState.formData.vagasDisponiveis,
+                                tipo_imovel = currentState.formData.tipoImovel!!.apiValue,
+                                comodos = currentState.formData.comodos.map { it.apiValue }
+                            )
+                            
+                            val result = anuncioRepository.cadastrarAnuncio(userId, token, request)
+                            
+                            result.fold(
+                                onSuccess = { anuncio ->
+                                    _state.value = currentState.copy(
+                                        isLoading = false,
+                                        createdAnuncioId = anuncio.id,
+                                        isSubmitted = true
+                                    )
+                                },
+                                onFailure = { exception ->
+                                    _state.value = currentState.copy(
+                                        isLoading = false,
+                                        errorMessage = exception.message ?: "Erro ao cadastrar anúncio"
+                                    )
+                                }
+                            )
+                        } catch (e: Exception) {
+                            _state.value = currentState.copy(
+                                isLoading = false,
+                                errorMessage = "Erro ao cadastrar anúncio: ${e.message}"
+                            )
+                        }
+                    }
                 } else {
                     _state.value = currentState.copy(
                         validationError = "Por favor, preencha todos os campos obrigatórios"
