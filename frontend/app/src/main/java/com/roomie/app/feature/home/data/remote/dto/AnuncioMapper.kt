@@ -53,7 +53,8 @@ fun AnuncioResponseDto.toListingDetail(): ListingDetail {
         tipoImovel = tipo_imovel,
         fotos = fotos,
         comodos = comodos,
-        statusAnuncio = statusAnuncio
+        statusAnuncio = statusAnuncio,
+        idOfertante = id_usuario_ofertante
     )
 }
 
