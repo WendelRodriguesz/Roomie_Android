@@ -2,25 +2,51 @@ package com.roomie.app.feature.home.ui
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.FlowRow
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.LocationOn
 import androidx.compose.material.icons.filled.People
-import androidx.compose.material3.*
+import androidx.compose.material.icons.outlined.Favorite
+import androidx.compose.material3.Button
+import androidx.compose.material3.Card
+import androidx.compose.material3.CardDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
+import androidx.compose.material3.IconButton
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
@@ -52,7 +78,7 @@ fun ListingDetailScreen(
                 title = { Text("Detalhes do Anúncio") },
                 navigationIcon = {
                     IconButton(onClick = onNavigateBack) {
-                        Icon(Icons.Filled.ArrowBack, contentDescription = "Voltar")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Voltar")
                     }
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
@@ -101,6 +127,11 @@ fun ListingDetailScreen(
             state.listing != null -> {
                 ListingDetailContent(
                     listing = state.listing,
+                    isSendingInterest = state.isSendingInterest,
+                    interestSent = state.interestSent,
+                    interestError = state.interestError,
+                    onShowInterest = { onEvent(ListingDetailEvent.ShowInterest) },
+                    onClearInterestStatus = { onEvent(ListingDetailEvent.ClearInterestStatus) },
                     modifier = Modifier.padding(innerPadding)
                 )
             }
@@ -111,14 +142,36 @@ fun ListingDetailScreen(
 @Composable
 private fun ListingDetailContent(
     listing: ListingDetail,
+    isSendingInterest: Boolean,
+    interestSent: Boolean,
+    interestError: String?,
+    onShowInterest: () -> Unit,
+    onClearInterestStatus: () -> Unit,
     modifier: Modifier = Modifier
 ) {
-    Column(
-        modifier = modifier
-            .fillMaxSize()
-            .background(MaterialTheme.colorScheme.background)
-            .verticalScroll(rememberScrollState())
-    ) {
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(interestSent) {
+        if (interestSent) {
+            snackbarHostState.showSnackbar("Interesse enviado com sucesso!")
+            onClearInterestStatus()
+        }
+    }
+
+    LaunchedEffect(interestError) {
+        interestError?.let {
+            snackbarHostState.showSnackbar(it)
+            onClearInterestStatus()
+        }
+    }
+
+    Box(modifier = modifier.fillMaxSize()) {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(MaterialTheme.colorScheme.background)
+                .verticalScroll(rememberScrollState())
+        ) {
         ImageGallery(listing = listing)
         
         Column(
@@ -213,7 +266,42 @@ private fun ListingDetailContent(
                     }
                 }
             }
+
+            if (listing.idOfertante != null) {
+                Button(
+                    onClick = onShowInterest,
+                    enabled = !isSendingInterest && !interestSent,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .height(56.dp),
+                    shape = RoundedCornerShape(12.dp)
+                ) {
+                    if (isSendingInterest) {
+                        CircularProgressIndicator(
+                            modifier = Modifier.size(24.dp),
+                            color = MaterialTheme.colorScheme.onPrimary
+                        )
+                    } else {
+                        Icon(
+                            imageVector = Icons.Outlined.Favorite,
+                            contentDescription = null,
+                            modifier = Modifier.size(24.dp)
+                        )
+                        Spacer(modifier = Modifier.width(8.dp))
+                        Text(
+                            text = if (interestSent) "Interesse Enviado" else "Interesse em Vaga",
+                            style = MaterialTheme.typography.labelLarge
+                        )
+                    }
+                }
+            }
         }
+    }
+
+        SnackbarHost(
+            hostState = snackbarHostState,
+            modifier = Modifier.align(Alignment.BottomCenter).padding(16.dp)
+        )
     }
 }
 
@@ -475,9 +563,17 @@ private fun ListingDetailScreenPreview() {
                 tipoImovel = "APARTAMENTO",
                 fotos = emptyList(),
                 comodos = listOf("SALA_DE_ESTAR", "COZINHA", "BANHEIRO", "QUARTO"),
-                statusAnuncio = "ATIVO"
+                statusAnuncio = "ATIVO",
+                idOfertante = 1
             )
-            ListingDetailContent(listing = mockListing)
+            ListingDetailContent(
+                listing = mockListing,
+                isSendingInterest = false,
+                interestSent = false,
+                interestError = null,
+                onShowInterest = {},
+                onClearInterestStatus = {}
+            )
         }
     }
 }

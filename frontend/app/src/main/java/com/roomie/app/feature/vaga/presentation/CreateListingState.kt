@@ -2,15 +2,15 @@ package com.roomie.app.feature.vaga.presentation
 
 import android.net.Uri
 import com.roomie.app.feature.vaga.model.ListingFormData
-import com.roomie.app.feature.vaga.model.TipoComodo
-import com.roomie.app.feature.vaga.model.TipoImovel
 
 data class CreateListingState(
     val formData: ListingFormData = ListingFormData(),
     val selectedImages: List<Uri> = emptyList(),
     val isLoading: Boolean = false,
     val errorMessage: String? = null,
-    val validationError: String? = null
+    val validationError: String? = null,
+    val createdAnuncioId: Long? = null,
+    val isSubmitted: Boolean = false
 ) {
     val isValid: Boolean
         get() = formData.titulo.isNotBlank() &&

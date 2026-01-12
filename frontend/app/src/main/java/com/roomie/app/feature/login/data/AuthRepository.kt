@@ -5,6 +5,7 @@ import com.roomie.app.core.data.api.RetrofitClient
 import com.roomie.app.core.data.firebase.FirebaseTokenManager
 import com.roomie.app.core.data.local.AuthDataStore
 import com.roomie.app.core.data.model.UserSession
+import com.roomie.app.core.utils.ErrorHandler
 import com.roomie.app.feature.login.data.model.LoginRequest
 import com.roomie.app.feature.login.data.model.LoginResponse
 import com.roomie.app.feature.login.data.model.RefreshRequest
@@ -41,12 +42,15 @@ class AuthRepository(
                 
                 Result.success(loginResponse)
             } else {
-                val errorMessage = response.errorBody()?.string() 
-                    ?: "Erro ao fazer login. Tente novamente."
+                val errorMessage = ErrorHandler.processHttpError(
+                    response,
+                    "Erro ao fazer login. Tente novamente."
+                )
                 Result.failure(Exception(errorMessage))
             }
         } catch (e: Exception) {
-            Result.failure(e)
+            val errorMessage = ErrorHandler.processNetworkException(e)
+            Result.failure(Exception(errorMessage))
         }
     }
 

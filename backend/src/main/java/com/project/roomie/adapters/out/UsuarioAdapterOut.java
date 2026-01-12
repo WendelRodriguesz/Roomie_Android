@@ -1,6 +1,7 @@
 package com.project.roomie.adapters.out;
 
 import com.project.roomie.core.model.Usuario;
+import com.project.roomie.infra.persistence.entity.UsuarioJpaEntity;
 import com.project.roomie.infra.persistence.repository.UsuarioRepository;
 import com.project.roomie.mapper.UsuarioMapper;
 import com.project.roomie.ports.out.UsuarioPortOut;
@@ -23,5 +24,13 @@ public class UsuarioAdapterOut implements UsuarioPortOut {
     @Override
     public Usuario findByEmail(String email){
         return usuarioMapper.JpaEntitytoModel(usuarioRepository.findByEmail(email));
+    }
+
+    @Override
+    public Usuario findById(Integer id){
+        UsuarioJpaEntity usuarioJpaEntity = usuarioRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Usuário não encontrado"));
+
+        return usuarioMapper.JpaEntitytoModel(usuarioJpaEntity);
     }
 }

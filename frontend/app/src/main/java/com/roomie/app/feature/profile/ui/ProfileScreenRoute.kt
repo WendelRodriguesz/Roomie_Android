@@ -22,13 +22,14 @@ fun ProfileScreenRoute(
     role: ProfileRole,
     refreshSignal: Long = 0L,
     onEditClick: () -> Unit = {},
-    onEditPreferencesClick: () -> Unit = {},
+    onEditPreferencesClick: (hasInterests: Boolean) -> Unit = {},
     onLogoutClick: () -> Unit = {},
 ) {
     val repository = remember { ProfileRepository(RetrofitClient.profileApiService) }
+    val api = remember { RetrofitClient.profileApiService }
 
     val vm: ProfileViewModel = viewModel(
-        factory = ProfileViewModelFactory(repository)
+        factory = ProfileViewModelFactory(repository, api)
     )
 
     val uiState = vm.uiState
@@ -54,8 +55,11 @@ fun ProfileScreenRoute(
         uiState.profile != null -> {
             ProfileScreen(
                 profile = uiState.profile,
+                hasInterests = uiState.hasInterests,
                 onEditClick = onEditClick,
-                onEditPreferencesClick = onEditPreferencesClick,
+                onEditPreferencesClick = {
+                    onEditPreferencesClick(uiState.hasInterests)
+                },
                 onLogoutClick = onLogoutClick,
             )
         }

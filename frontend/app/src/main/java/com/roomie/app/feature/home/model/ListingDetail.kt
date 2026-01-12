@@ -15,6 +15,7 @@ data class ListingDetail(
     val tipoImovel: String,
     val fotos: List<String>,
     val comodos: List<String>,
-    val statusAnuncio: String?
+    val statusAnuncio: String?,
+    val idOfertante: Int? = null
 )
 

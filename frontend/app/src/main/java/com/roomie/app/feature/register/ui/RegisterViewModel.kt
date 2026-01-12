@@ -3,8 +3,8 @@ package com.roomie.app.feature.register.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
-import com.roomie.app.feature.profile.model.GenderOption
 import com.roomie.app.core.model.ProfileRole
+import com.roomie.app.feature.profile.model.GenderOption
 import com.roomie.app.feature.register.data.RegisterRepository
 import com.roomie.app.feature.register.data.remote.dto.RegisterRequest
 import com.roomie.app.feature.register.model.RegisterFormState
@@ -42,7 +42,7 @@ class RegisterViewModel(
             senha = senha,
             dataNascimento = dataNascimento,
             cidade = cidade,
-            genero = genero?.name ?: ""
+            genero = genero?.apiValue ?: ""
         )
     }
 

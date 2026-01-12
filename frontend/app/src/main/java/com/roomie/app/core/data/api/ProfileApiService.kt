@@ -1,20 +1,21 @@
 package com.roomie.app.core.data.api
 
+import com.roomie.app.feature.profile.data.remote.dto.AtualizarUsuarioBasicoRequest
+import com.roomie.app.feature.profile.data.remote.dto.InteressesInteressadoRequest
+import com.roomie.app.feature.profile.data.remote.dto.InteressesInteressadoUpdateRequest
+import com.roomie.app.feature.profile.data.remote.dto.InteressesOfertanteRequest
+import com.roomie.app.feature.profile.data.remote.dto.UsuarioInteressadoDto
+import com.roomie.app.feature.profile.data.remote.dto.UsuarioOfertanteDto
+import okhttp3.MultipartBody
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.PATCH
-import retrofit2.http.Body
-import retrofit2.http.Path
-import okhttp3.MultipartBody
 import retrofit2.http.Multipart
+import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Part
-import com.roomie.app.feature.profile.data.remote.dto.AtualizarUsuarioBasicoRequest
-import com.roomie.app.feature.profile.data.remote.dto.UsuarioOfertanteDto
-import com.roomie.app.feature.profile.data.remote.dto.UsuarioInteressadoDto
-import com.roomie.app.feature.profile.data.remote.dto.InteressesInteressadoRequest
-import com.roomie.app.feature.profile.data.remote.dto.InteressesOfertanteRequest
+import retrofit2.http.Path
 
 interface ProfileApiService {
     
@@ -52,7 +53,7 @@ interface ProfileApiService {
     suspend fun updateInteressesInteressado(
         @Path("id_interesses") idInteresses: Long,
         @Header("Authorization") authHeader: String,
-        @Body body: InteressesInteressadoRequest,
+        @Body body: InteressesInteressadoUpdateRequest,
     ): Response<Unit>
 
     // Usuario Ofertante

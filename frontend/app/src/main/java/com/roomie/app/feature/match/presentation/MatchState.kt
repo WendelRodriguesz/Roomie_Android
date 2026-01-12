@@ -16,7 +16,6 @@ data class MatchState(
     val hasPrev: Boolean get() = index > 0
     val hasNext: Boolean get() = index < items.lastIndex
     
-    // Verifica se está no último item da página atual e se não é a última página
     val shouldLoadMore: Boolean get() = 
         index == items.lastIndex && !isLastPage && !isLoadingMore
 }

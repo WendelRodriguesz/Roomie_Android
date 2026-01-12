@@ -20,7 +20,6 @@ import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
 import com.roomie.app.feature.profile.model.UserMock
 import com.roomie.app.feature.profile.model.UserProfile
-import com.roomie.app.feature.profile.ui.ProfileScreen
 
 @Composable
 fun ProfileAvatar(profile: UserProfile) {

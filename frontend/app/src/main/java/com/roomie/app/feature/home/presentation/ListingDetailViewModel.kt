@@ -2,7 +2,9 @@ package com.roomie.app.feature.home.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.roomie.app.core.data.session.AuthSession
 import com.roomie.app.feature.home.data.HomeRepository
+import com.roomie.app.feature.match.data.MatchRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -10,6 +12,7 @@ import kotlinx.coroutines.launch
 
 class ListingDetailViewModel(
     private val repository: HomeRepository = HomeRepository(),
+    private val matchRepository: MatchRepository = MatchRepository(),
     private val listingId: Int
 ) : ViewModel() {
 
@@ -23,6 +26,13 @@ class ListingDetailViewModel(
     fun onEvent(event: ListingDetailEvent) {
         when (event) {
             ListingDetailEvent.Refresh -> carregarDetalhes()
+            ListingDetailEvent.ShowInterest -> enviarInteresse()
+            ListingDetailEvent.ClearInterestStatus -> {
+                _state.value = _state.value.copy(
+                    interestSent = false,
+                    interestError = null
+                )
+            }
         }
     }
 
@@ -44,6 +54,53 @@ class ListingDetailViewModel(
                         isLoading = false,
                         listing = null,
                         error = exception.message ?: "Erro ao carregar detalhes do anúncio"
+                    )
+                }
+            )
+        }
+    }
+
+    private fun enviarInteresse() {
+        val listing = _state.value.listing
+        val userId = AuthSession.userId
+        val ofertanteId = listing?.idOfertante
+
+        if (userId == null) {
+            _state.value = _state.value.copy(
+                interestError = "Usuário não autenticado"
+            )
+            return
+        }
+
+        if (ofertanteId == null) {
+            _state.value = _state.value.copy(
+                interestError = "Não foi possível identificar o ofertante"
+            )
+            return
+        }
+
+        viewModelScope.launch {
+            _state.value = _state.value.copy(
+                isSendingInterest = true,
+                interestError = null,
+                interestSent = false
+            )
+
+            val result = matchRepository.enviarLike(userId, ofertanteId.toLong())
+
+            result.fold(
+                onSuccess = {
+                    _state.value = _state.value.copy(
+                        isSendingInterest = false,
+                        interestSent = true,
+                        interestError = null
+                    )
+                },
+                onFailure = { exception ->
+                    _state.value = _state.value.copy(
+                        isSendingInterest = false,
+                        interestSent = false,
+                        interestError = exception.message ?: "Erro ao demonstrar interesse"
                     )
                 }
             )

@@ -11,7 +11,15 @@ import org.mapstruct.*;
 public interface AnuncioMapper {
 
     @Named("JpaEntitytoModel")
+    @Mapping(target = "id_usuario_ofertante", ignore = true)
     Anuncio JpaEntitytoModel(AnuncioJpaEntity anunciosJpaEntity);
+
+    @AfterMapping
+    default void setUsuarioOfertanteId(AnuncioJpaEntity source, @MappingTarget Anuncio target) {
+        if (source.getOfertante() != null && source.getOfertante().getId() != null) {
+            target.setId_usuario_ofertante(source.getOfertante().getId());
+        }
+    }
 
     @Named("ModeltoResponseDTO")
     AnuncioResponseDTO ModeltoResponseDTO(Anuncio anuncios);
@@ -23,6 +31,9 @@ public interface AnuncioMapper {
     AnuncioJpaEntity ModeltoJpaEntity(Anuncio anuncios);
 
     @BeanMapping(nullValuePropertyMappingStrategy = NullValuePropertyMappingStrategy.IGNORE)
+    @Mapping(source = "valorAluguel", target = "valor_aluguel")
+    @Mapping(source = "valorContas", target = "valor_contas")
+    @Mapping(source = "vagasDisponiveis", target="vagas_disponiveis")
     void updateAnuncioFromDto(
             AnuncioUpdateDTO dto,
             @MappingTarget Anuncio anuncio

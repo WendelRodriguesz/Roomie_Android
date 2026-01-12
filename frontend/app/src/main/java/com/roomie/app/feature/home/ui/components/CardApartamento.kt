@@ -4,13 +4,14 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ElevatedCard
@@ -18,10 +19,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.LocalInspectionMode
@@ -29,6 +28,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
+import coil3.compose.AsyncImage
 import com.roomie.app.R
 import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
@@ -71,7 +71,9 @@ fun CardApartamento(
 private fun MiniaturaApartamento(anuncio: ListingCard) {
     val corFallback = MaterialTheme.colorScheme.secondary.copy(alpha = 0.12f)
     val shape = RoundedCornerShape(22.dp)
-    val painter = lembrarImagemApartamento(anuncio)
+    val isPreview = LocalInspectionMode.current
+    val photoUrl = anuncio.photos.firstOrNull()
+    val ctx = LocalContext.current
 
     Surface(
         modifier = Modifier
@@ -80,19 +82,58 @@ private fun MiniaturaApartamento(anuncio: ListingCard) {
         shape = shape,
         tonalElevation = 1.dp
     ) {
-        if (painter != null) {
-            Image(
-                painter = painter,
-                contentDescription = anuncio.title,
-                contentScale = ContentScale.Crop
-            )
-        } else {
-            Spacer(
-                modifier = Modifier
-                    .background(corFallback)
-                    .fillMaxWidth()
-                    .height(96.dp)
-            )
+        when {
+            isPreview -> {
+                Image(
+                    painter = painterResource(R.drawable.match1),
+                    contentDescription = anuncio.title,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
+            anuncio.localPhoto != null -> {
+                Image(
+                    painter = painterResource(anuncio.localPhoto),
+                    contentDescription = anuncio.title,
+                    modifier = Modifier.fillMaxSize(),
+                    contentScale = ContentScale.Crop
+                )
+            }
+            !photoUrl.isNullOrBlank() -> {
+                if (photoUrl.startsWith("http://") || photoUrl.startsWith("https://")) {
+                    AsyncImage(
+                        model = photoUrl,
+                        contentDescription = anuncio.title,
+                        modifier = Modifier.fillMaxSize(),
+                        contentScale = ContentScale.Crop,
+                        error = painterResource(R.drawable.match1),
+                        placeholder = painterResource(R.drawable.match1)
+                    )
+                } else {
+                    val id = ctx.resources.getIdentifier(photoUrl, "drawable", ctx.packageName)
+                    if (id != 0) {
+                        Image(
+                            painter = painterResource(id),
+                            contentDescription = anuncio.title,
+                            modifier = Modifier.fillMaxSize(),
+                            contentScale = ContentScale.Crop
+                        )
+                    } else {
+                        Box(
+                            modifier = Modifier
+                                .fillMaxSize()
+                                .background(corFallback)
+                        )
+                    }
+                }
+            }
+            else -> {
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .background(corFallback)
+                )
+            }
         }
     }
 }
@@ -197,22 +238,6 @@ private fun StatusChip(status: ListingStatus) {
     }
 }
 
-@Composable
-private fun lembrarImagemApartamento(anuncio: ListingCard) = when {
-    LocalInspectionMode.current -> painterResource(R.drawable.match1)
-    anuncio.localPhoto != null -> painterResource(anuncio.localPhoto)
-    else -> {
-        val ctx = LocalContext.current
-        val resName = anuncio.photos.firstOrNull()
-        if (resName.isNullOrBlank()) null
-        else {
-            val id = remember(resName) {
-                ctx.resources.getIdentifier(resName, "drawable", ctx.packageName)
-            }
-            if (id != 0) painterResource(id) else null
-        }
-    }
-}
 
 @RoomiePreview
 @Composable

@@ -1,55 +1,40 @@
 package com.roomie.app.feature.profile.ui
 
-import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material3.Text
-import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
-import com.roomie.app.core.ui.preview.RoomiePreview
-import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
-import com.roomie.app.feature.profile.model.UserMock
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.rememberScrollState
-import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Favorite
-import androidx.compose.material.icons.filled.FavoriteBorder
-import androidx.compose.material3.*
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.roomie.app.core.model.ProfileRole
-import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
-import com.roomie.app.feature.profile.model.SleepRoutine
-import com.roomie.app.feature.profile.model.UserProfile
-import coil3.compose.AsyncImage
-import androidx.compose.foundation.layout.FlowRow
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
+import androidx.compose.material3.TopAppBar
+import androidx.compose.material3.TopAppBarDefaults
+import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.unit.dp
+import com.roomie.app.core.ui.preview.RoomiePreview
 import com.roomie.app.core.ui.theme.AppSettings
 import com.roomie.app.core.ui.theme.LocalAppSettings
+import com.roomie.app.core.ui.theme.Roomie_AndroidTheme
+import com.roomie.app.feature.profile.model.UserMock
+import com.roomie.app.feature.profile.model.UserProfile
 import com.roomie.app.feature.profile.ui.components.LifestyleCard
+import com.roomie.app.feature.profile.ui.components.MatchCard
 import com.roomie.app.feature.profile.ui.components.ProfileHeaderCard
 import com.roomie.app.feature.profile.ui.components.SettingsCard
-import com.roomie.app.feature.profile.ui.components.MatchCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ProfileScreen(
     profile: UserProfile,
+    hasInterests: Boolean = true,
     onEditClick: () -> Unit = {},
     onEditPreferencesClick: () -> Unit = {},
     onLogoutClick: () -> Unit = {},
@@ -83,14 +68,8 @@ fun ProfileScreen(
             LifestyleCard(
                 profile = profile,
                 role = profile.role,
+                hasInterests = hasInterests,
                 onEditPreferencesClick = onEditPreferencesClick
-            )
-
-            MatchCard(
-                profile = profile,
-                onMatchesClick = onMatchesClick,
-                onMyListingsClick = onMyListingsClick,
-                onLikedListingsClick = onLikedListingsClick
             )
 
             SettingsCard(profile, onLogoutClick)

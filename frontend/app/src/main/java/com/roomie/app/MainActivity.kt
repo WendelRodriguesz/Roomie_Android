@@ -25,8 +25,7 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         actionBar?.hide()
         installSplashScreen()
-        
-        // Criar canal de notificações ao iniciar o app
+
         NotificationHelper.createNotificationChannel(this)
 
         setContent {

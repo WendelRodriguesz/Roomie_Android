@@ -1,6 +1,5 @@
 package com.roomie.app.feature.edit_profile.ui.components
 
-import android.widget.Switch
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row

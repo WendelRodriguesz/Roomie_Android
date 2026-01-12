@@ -36,6 +36,50 @@ class HomeRepository(
         }
     }
     
+    suspend fun filtrarAnuncios(
+        cidade: String? = null,
+        bairro: String? = null,
+        custoMin: Float? = null,
+        custoMax: Float? = null,
+        tipoImovel: String? = null,
+        vagasMin: Int? = null,
+        aceitaPets: Boolean? = null,
+        aceitaDividirQuarto: Boolean? = null
+    ): Result<List<ListingCard>> {
+        return try {
+            val token = AuthSession.token
+            if (token.isNullOrBlank()) {
+                Result.failure(Exception("Token de autenticação não encontrado. Faça login novamente."))
+            } else {
+                val authHeader = "Bearer $token"
+                val response = api.filtrarAnuncios(
+                    authHeader = authHeader,
+                    cidade = cidade,
+                    bairro = bairro,
+                    custoMin = custoMin,
+                    custoMax = custoMax,
+                    tipoImovel = tipoImovel,
+                    vagasMin = vagasMin,
+                    aceitaPets = aceitaPets,
+                    aceitaDividirQuarto = aceitaDividirQuarto
+                )
+
+                if (response.isSuccessful && response.body() != null) {
+                    val anuncios = response.body()!!
+                    val listings = anuncios.map { it.toListingCard() }
+                    Result.success(listings)
+                } else {
+                    val errorCode = response.code()
+                    val errorMessage = response.errorBody()?.string()
+                        ?: "Erro ao filtrar anúncios (código: $errorCode). Tente novamente."
+                    Result.failure(Exception(errorMessage))
+                }
+            }
+        } catch (e: Exception) {
+            Result.failure(e)
+        }
+    }
+    
     suspend fun buscarAnuncioPorId(idAnuncio: Int): Result<ListingDetail> {
         return try {
             val token = AuthSession.token

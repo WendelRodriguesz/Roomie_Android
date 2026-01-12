@@ -17,6 +17,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URLDecoder;
+import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -50,7 +53,9 @@ public class AnuncioService implements AnuncioPortIn {
 
         UsuarioOfertante usuarioOfertante = usuarioOfertantePortOut.findById(id_usuario);
         usuarioOfertante.setAnuncio(novo_anuncio);
-        usuarioOfertante = usuarioOfertantePortOut.save(usuarioOfertante);
+        usuarioOfertantePortOut.save(usuarioOfertante);
+
+        novo_anuncio.setId_usuario_ofertante(id_usuario);
 
         return novo_anuncio;
     }
@@ -82,6 +87,61 @@ public class AnuncioService implements AnuncioPortIn {
 
         } catch (Exception e) {
             return ResponseEntity.internalServerError().body("Erro: " + e.getMessage());
+        }
+    }
+
+    @Override
+    public ResponseEntity<String> deletarFoto(String urlFoto, Integer id_usuario) {
+        try {
+            UsuarioOfertante usuario = usuarioOfertantePortOut.findById(id_usuario);
+
+            if (usuario == null || usuario.getAnuncio() == null) {
+                return ResponseEntity.badRequest().body("Usuário ou anúncio não encontrado");
+            }
+
+            Anuncio anuncio = usuario.getAnuncio();
+
+            if (anuncio.getFotos() == null) {
+                anuncio.setFotos(new ArrayList<>());
+            }
+
+            String urlDecodificada = URLDecoder.decode(urlFoto, StandardCharsets.UTF_8.toString());
+            
+            urlDecodificada = urlDecodificada.trim();
+            
+            String fotoEncontrada = null;
+            for (String foto : anuncio.getFotos()) {
+                if (foto != null && foto.trim().equals(urlDecodificada)) {
+                    fotoEncontrada = foto;
+                    break;
+                }
+            }
+
+            if (fotoEncontrada == null) {
+                for (String foto : anuncio.getFotos()) {
+                    if (foto != null && foto.trim().equals(urlFoto.trim())) {
+                        fotoEncontrada = foto;
+                        break;
+                    }
+                }
+            }
+
+            if (fotoEncontrada == null) {
+                return ResponseEntity.badRequest().body("Foto não encontrada no anúncio");
+            }
+
+            anuncio.getFotos().remove(fotoEncontrada);
+
+            bucketPortOut.delete(fotoEncontrada);
+
+            anuncioPortOut.save(anuncio);
+            usuario.setAnuncio(anuncio);
+            usuarioOfertantePortOut.save(usuario);
+
+            return ResponseEntity.ok("Foto excluída com sucesso");
+
+        } catch (Exception e) {
+            return ResponseEntity.internalServerError().body("Erro ao excluir foto: " + e.getMessage());
         }
     }
 

@@ -10,7 +10,6 @@ import com.roomie.app.core.model.ProfileRole
 import com.roomie.app.feature.profile.data.ProfileRepository
 import com.roomie.app.feature.profile.model.UserProfile
 import kotlinx.coroutines.launch
-import okhttp3.MultipartBody
 
 data class EditProfileUiState(
     val isLoading: Boolean = false,

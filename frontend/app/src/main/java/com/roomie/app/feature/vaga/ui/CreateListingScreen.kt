@@ -43,7 +43,6 @@ import com.roomie.app.feature.vaga.model.TipoComodo
 import com.roomie.app.feature.vaga.model.TipoImovel
 import com.roomie.app.feature.vaga.presentation.CreateListingEvent
 import com.roomie.app.feature.vaga.presentation.CreateListingState
-import com.roomie.app.feature.vaga.ui.components.ImageGalleryCard
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -54,12 +53,6 @@ fun CreateListingScreen(
     modifier: Modifier = Modifier
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
-
-    val imagePickerLauncher = rememberLauncherForActivityResult(
-        ActivityResultContracts.PickMultipleVisualMedia(maxItems = 10)
-    ) { uris ->
-        onEvent(CreateListingEvent.ImagesSelected(uris))
-    }
 
     LaunchedEffect(state.validationError) {
         state.validationError?.let { error ->
@@ -114,18 +107,6 @@ fun CreateListingScreen(
                 .verticalScroll(rememberScrollState()),
             verticalArrangement = Arrangement.spacedBy(16.dp)
         ) {
-            ImageGalleryCard(
-                images = state.selectedImages,
-                onAddClick = {
-                    imagePickerLauncher.launch(
-                        PickVisualMediaRequest(ActivityResultContracts.PickVisualMedia.ImageOnly)
-                    )
-                },
-                onRemoveClick = { index ->
-                    onEvent(CreateListingEvent.ImageRemoved(index))
-                },
-                maxImages = 10
-            )
 
             SectionCard(title = "Informações básicas") {
                 LabeledOutlinedField(

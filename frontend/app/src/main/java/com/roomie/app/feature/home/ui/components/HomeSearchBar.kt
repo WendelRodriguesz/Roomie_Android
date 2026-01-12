@@ -24,6 +24,7 @@ import androidx.compose.ui.unit.dp
 fun HomeSearchBar(
     query: String,
     isFiltering: Boolean,
+    hasActiveFilters: Boolean,
     onQueryChange: (String) -> Unit,
     onFilterClick: () -> Unit,
     modifier: Modifier = Modifier
@@ -68,12 +69,12 @@ fun HomeSearchBar(
                 .padding(start = 12.dp)
                 .heightIn(min = 54.dp),
             colors = IconButtonDefaults.filledIconButtonColors(
-                containerColor = if (isFiltering) {
+                containerColor = if (isFiltering || hasActiveFilters) {
                     MaterialTheme.colorScheme.primary
                 } else {
                     MaterialTheme.colorScheme.primary.copy(alpha = 0.18f)
                 },
-                contentColor = if (isFiltering) {
+                contentColor = if (isFiltering || hasActiveFilters) {
                     MaterialTheme.colorScheme.onPrimary
                 } else {
                     MaterialTheme.colorScheme.primary

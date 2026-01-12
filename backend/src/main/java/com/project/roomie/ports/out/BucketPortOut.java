@@ -7,4 +7,5 @@ import java.io.IOException;
 public interface BucketPortOut {
 
     String upload(MultipartFile file) throws IOException;
+    void delete(String url) throws IOException;
 }
