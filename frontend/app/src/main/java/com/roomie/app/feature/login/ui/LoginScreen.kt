@@ -146,22 +146,6 @@ fun LoginScreen(navController: NavController) {
                     color = MaterialTheme.colorScheme.primary
                 )
             }
-            
-            Spacer(Modifier.height(28.dp))
-                Row(
-            modifier = Modifier
-                .fillMaxWidth()
-                .wrapContentWidth(Alignment.End),
-            verticalAlignment = Alignment.CenterVertically
-        ) {
-
-            Text(
-                text = "Esqueceu sua senha?",
-                fontSize = 12.sp,
-                color = MaterialTheme.colorScheme.primary,
-                modifier = Modifier.clickable {  }
-            )
-        }
 
         Spacer(Modifier.height(28.dp))
 
